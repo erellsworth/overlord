@@ -8,18 +8,16 @@ import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PhoenicianComponent } from './components/phoenician/phoenician.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    PhoenicianComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseCredentials),
-    AngularFireAuthModule,
+    AngularFireAuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
