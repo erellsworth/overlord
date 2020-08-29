@@ -12,7 +12,11 @@ const redirectLoggedInToDashboard = () => redirectLoggedInTo(['dashboard']);
 const adminOnly = () => pipe(customClaims, map(claims => claims.admin === true ? true : ['login']));
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
+  {
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full'
+  },
   {
     path: 'dashboard',
     canActivate: [AngularFireAuthGuard],

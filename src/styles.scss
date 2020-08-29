@@ -1,1 +1,77 @@
 /* You can add global styles to this file, and also import other style files */
+@import '../node_modules/normalize.css/normalize.css';
+
+// fonts:
+$primary-font: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;
+
+
+// colors:
+$background: #eeeeee;
+$light-gray: #e1e0e0;
+$green: #15a908;
+$red: #a00303;
+
+
+:root {
+  // base styles
+  background: $background;
+  font-family: $primary-font;
+  font-size: 14px;
+
+  //layout
+  .page {
+    padding: 10px;
+  }
+
+  .text {
+    &-center {
+      text-align: center;
+    }
+
+    &-left {
+      text-align: left;
+    }
+
+    &-right {
+      text-align: right;
+    }
+  }
+
+  //UI:
+
+  button,
+  .button {
+    border: none;
+    background: $light-gray;
+    padding: 5px 15px;
+    font-weight: 600;
+    font-size: 1.25em;
+    cursor: pointer;
+    border-radius: 3px;
+
+    &:hover {
+      background: lighten($light-gray, 5);
+    }
+
+    &:focus,
+    &:active {
+      border: none;
+      outline: none;
+    }
+
+    &-green {
+      background: $green;
+      color: #ffffff;
+      &:hover {
+        background: lighten($green, 5);
+      }
+    }
+    &-red {
+      background: $red;
+      color: #ffffff;
+      &:hover {
+        background: lighten($red, 5);
+      }
+    }
+  }
+}
