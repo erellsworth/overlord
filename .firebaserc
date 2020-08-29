@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "er-ellsworth": {
+      "hosting": {
+        "Overlord": [
+          "er-ellsworth"
+        ]
+      }
+    }
+  }
+}
