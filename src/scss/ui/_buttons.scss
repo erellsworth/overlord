@@ -1,0 +1,35 @@
+button,
+.button {
+  border: none;
+  background: $light-gray;
+  padding: 5px 15px;
+  font-weight: 600;
+  font-size: 1.25em;
+  cursor: pointer;
+  border-radius: 3px;
+
+  &:hover {
+    background: lighten($light-gray, 5);
+  }
+
+  &:focus,
+  &:active {
+    border: none;
+    outline: none;
+  }
+
+  &-green {
+    background: $green;
+    color: #ffffff;
+    &:hover {
+      background: lighten($green, 5);
+    }
+  }
+  &-red {
+    background: $red;
+    color: #ffffff;
+    &:hover {
+      background: lighten($red, 5);
+    }
+  }
+}
