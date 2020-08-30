@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'phoenician',
@@ -7,17 +7,12 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 })
 export class PhoenicianComponent implements OnInit {
 
-  @ViewChild("Phoenician") elem: ElementRef;
-
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  ngAfterViewInit() {
-
-    console.log(this.elem);
-    this.elem.nativeElement.innerHTML = "Hello Angular 10!";
-
+  public contentChanged(event: Event) {
+    console.log('contentChanged', event);
   }
 }
