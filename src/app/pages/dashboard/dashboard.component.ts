@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { PhoenicianData } from '../../components/ui/phoenician/phoenician.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+  private contentData: PhoenicianData;
 
   constructor(
     private router: Router,
@@ -17,8 +20,14 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public async logout() {
-    await this.user.logout();
-    this.router.navigate(['login']);
+  /**
+   * contentUpdated
+   */
+  public contentUpdated(data: PhoenicianData) {
+    this.contentData = data;
+  }
+
+  public save() {
+    console.log('save', this.contentData);
   }
 }

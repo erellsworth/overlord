@@ -1,8 +1,7 @@
 <ng-container>
   <app-header></app-header>
   <div class="page">
-    <p>dashboard works!</p>
-    <phoenician></phoenician>
-    <button type="button" (click)="logout()" class="button-red">Log out</button>
+    <label>New Blog Post:</label>
+    <phoenician (onUpdate)="contentUpdated($event)"></phoenician>
   </div>
 </ng-container>
