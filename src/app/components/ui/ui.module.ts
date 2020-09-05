@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { HeaderComponent } from './header/header.component';
 import { PhoenicianComponent } from './phoenician/phoenician.component';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   entryComponents: [
@@ -26,6 +27,7 @@ import { FormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
+    RouterModule,
     QuillModule.forRoot(),
     FormsModule,
     MatInputModule,

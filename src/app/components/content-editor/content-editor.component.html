@@ -21,6 +21,6 @@
   <hr />
 
   <mat-label>Content:</mat-label>
-  <phoenician (onUpdate)="contentUpdated($event)"></phoenician>
+  <phoenician (onUpdate)="contentUpdated($event)" [contentData]="content.data"></phoenician>
   <button type="button" mat-flat-button color="primary" (click)="save()">Save</button>
 </mat-card>

@@ -42,4 +42,8 @@ export class BaseStore {
     const sanitizedItem = JSON.parse(JSON.stringify(item));
     this.collection.doc(item.id).set(sanitizedItem);
   }
+
+  public get(id: string) {
+    return this.collection.doc<Item>(id).get();
+  }
 }

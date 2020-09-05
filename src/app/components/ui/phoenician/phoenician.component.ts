@@ -10,13 +10,18 @@ import { PhoenicianData } from './phoenician.interface';
 })
 export class PhoenicianComponent implements OnInit {
 
-  @Input() content: any = {};
+  @Input() contentData: PhoenicianData;
 
   @Output() onUpdate: EventEmitter<PhoenicianData> = new EventEmitter();
+
+  public contentJson: string = '';
 
   constructor() { }
 
   ngOnInit(): void {
+    if (this.contentData) {
+      this.contentJson = JSON.stringify(this.contentData.content);
+    }
   }
 
   public contentChanged(event: ContentChange) {

@@ -21,7 +21,17 @@ const routes: Routes = [
     path: 'dashboard',
     canActivate: [AngularFireAuthGuard],
     data: { authGuardPipe: adminOnly },
-    loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
+      },
+      {
+        path: 'content/:id',
+        loadChildren: () => import('./pages/dashboard/content/content.module').then(m => m.ContentModule)
+      }
+    ]
+
   },
   {
     path: 'login',

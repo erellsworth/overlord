@@ -1,0 +1,8 @@
+<ng-container>
+  <app-header></app-header>
+  <div *ngIf="content">
+    <app-content-editor (onSave)="save($event)" [content]="content" label="Edit {{content.title}}:">
+    </app-content-editor>
+  </div>
+
+</ng-container>

@@ -18,7 +18,6 @@ export class DashboardComponent implements OnInit {
     private store: ContentStore
   ) {
     this.store.data.subscribe((contents: Content[]) => {
-      console.log('contents', contents);
       this.contentList = contents;
     });
 
@@ -27,8 +26,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void { }
 
   public save(content: Content) {
-    console.log('save', content);
-
     this.store.add(content);
   }
 }
