@@ -18,6 +18,14 @@ button,
     outline: none;
   }
 
+  &-blue {
+    background: $blue;
+    color: #ffffff;
+    &:hover {
+      background: lighten($blue, 5);
+    }
+  }
+
   &-green {
     background: $green;
     color: #ffffff;

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { Router } from '@angular/router';
 import { PhoenicianData } from '../../components/ui/phoenician/phoenician.interface';
+import { Content } from '../../interfaces/content';
+import { User } from '../../interfaces/user';
+import { ContentStore } from '../../commissary/content-store';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,24 +12,50 @@ import { PhoenicianData } from '../../components/ui/phoenician/phoenician.interf
 })
 export class DashboardComponent implements OnInit {
 
-  private contentData: PhoenicianData;
+  private content: Content;
+  private user: User;
 
   constructor(
-    private router: Router,
-    private user: UserService
-  ) { }
+    private store: ContentStore,
+    private userService: UserService
+  ) {
+    this.userService.user.subscribe((user: User) => {
+      this.user = user;
+    });
+
+    this.store.data.subscribe((content: Content[]) => {
+      console.log('contents', content);
+    });
+
+  }
 
   ngOnInit(): void {
+
+  }
+
+  private prepareContent(): void {
+    // if (!this.content && this.user) {
+    //   this.content = {
+    //     id: this.store.createId(),
+    //     title: '',
+    //     slug: '',
+    //     type: 'post',
+    //     authorId: this.user.uid
+    //   }
+    // }
   }
 
   /**
    * contentUpdated
    */
   public contentUpdated(data: PhoenicianData) {
-    this.contentData = data;
+    this.prepareContent();
+    this.content.data = data;
   }
 
   public save() {
-    console.log('save', this.contentData);
+    console.log('save', this.content);
+    // this.store.collection()
+    // this.store.save<Content>('content', this.content);
   }
 }

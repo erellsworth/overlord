@@ -2,6 +2,9 @@
   <app-header></app-header>
   <div class="page">
     <label>New Blog Post:</label>
-    <phoenician (onUpdate)="contentUpdated($event)"></phoenician>
+    <app-content-editor></app-content-editor>
+
+
+    <button type="button" class="button-blue" (click)="save()">Save</button>
   </div>
 </ng-container>

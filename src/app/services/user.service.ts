@@ -22,6 +22,7 @@ export class UserService {
         const token = await this._user.getIdTokenResult();
         this._user.isAdmin = token.claims.admin;
       }
+      this.observer.next(this._user);
     });
   }
 
