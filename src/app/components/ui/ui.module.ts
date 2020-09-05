@@ -7,6 +7,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+
 
 import { HeaderComponent } from './header/header.component';
 import { PhoenicianComponent } from './phoenician/phoenician.component';
@@ -29,7 +32,9 @@ import { FormsModule } from '@angular/forms';
     MatButtonToggleModule,
     MatButtonModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatListModule,
+    MatCardModule
 
   ],
   exports: [
@@ -39,7 +44,9 @@ import { FormsModule } from '@angular/forms';
     MatButtonToggleModule,
     MatButtonModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatListModule,
+    MatCardModule
   ]
 })
 export class UiModule { }

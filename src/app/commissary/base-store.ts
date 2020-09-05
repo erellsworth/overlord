@@ -5,13 +5,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 import { CollectionKey } from '../interfaces/firebase';
 
-type CollectionItem = Content & Taxonomy;
+type Item = Content | Taxonomy;
 
 // @Injectable({
 //   providedIn: 'root'
 // })
 export class BaseStore {
-  private observer: BehaviorSubject<CollectionItem[]>;
+  private observer: BehaviorSubject<Item[]>;
   private collection: AngularFirestoreCollection;
 
   constructor(
@@ -19,11 +19,11 @@ export class BaseStore {
     private key: CollectionKey
   ) {
 
-    this.observer = <BehaviorSubject<CollectionItem[]>>new BehaviorSubject([]);
+    this.observer = <BehaviorSubject<Item[]>>new BehaviorSubject([]);
 
-    this.collection = this.fireStore.collection<CollectionItem>(this.key);
+    this.collection = this.fireStore.collection<Item>(this.key);
 
-    this.collection.valueChanges().subscribe((items: CollectionItem[]) => {
+    this.collection.valueChanges().subscribe((items: Item[]) => {
       this.observer.next(items);
     });
   }
@@ -31,12 +31,15 @@ export class BaseStore {
   /**
   * observable for watching data
   *
-  * @returns {Observable<CollectionItem[]>}
+  * @returns {Observable<Item[]>}
   */
-  public get data(): Observable<CollectionItem[]> {
+  public get data(): Observable<Item[]> {
     return this.observer.asObservable();
   }
 
-  public async add(item: CollectionItem): Promise<void> {
+  public async add(item: Item): Promise<void> {
+    console.log('add item', item);
+    const sanitizedItem = JSON.parse(JSON.stringify(item));
+    this.collection.doc(item.id).set(sanitizedItem);
   }
 }

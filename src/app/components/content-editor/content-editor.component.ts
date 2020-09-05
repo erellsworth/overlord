@@ -13,6 +13,7 @@ export class ContentEditorComponent implements OnInit {
 
   @Input() content: Content;
   @Input() type: ContentTypes = 'post';
+  @Input() label: string = "New Post";
 
   @Output() onSave: EventEmitter<Content> = new EventEmitter();
 

@@ -12,50 +12,23 @@ import { ContentStore } from '../../commissary/content-store';
 })
 export class DashboardComponent implements OnInit {
 
-  private content: Content;
-  private user: User;
+  public contentList: Content[] = [];
 
   constructor(
-    private store: ContentStore,
-    private userService: UserService
+    private store: ContentStore
   ) {
-    this.userService.user.subscribe((user: User) => {
-      this.user = user;
-    });
-
-    this.store.data.subscribe((content: Content[]) => {
-      console.log('contents', content);
+    this.store.data.subscribe((contents: Content[]) => {
+      console.log('contents', contents);
+      this.contentList = contents;
     });
 
   }
 
-  ngOnInit(): void {
-
-  }
-
-  private prepareContent(): void {
-    // if (!this.content && this.user) {
-    //   this.content = {
-    //     id: this.store.createId(),
-    //     title: '',
-    //     slug: '',
-    //     type: 'post',
-    //     authorId: this.user.uid
-    //   }
-    // }
-  }
-
-  /**
-   * contentUpdated
-   */
-  public contentUpdated(data: PhoenicianData) {
-    this.prepareContent();
-    this.content.data = data;
-  }
+  ngOnInit(): void { }
 
   public save(content: Content) {
     console.log('save', content);
-    // this.store.collection()
-    // this.store.save<Content>('content', this.content);
+
+    this.store.add(content);
   }
 }

@@ -1,4 +1,5 @@
-<div class="content-editor" *ngIf="content">
+<mat-card class="content-editor" *ngIf="content">
+  <h2>{{label}}</h2>
   <mat-form-field class="content-editor-field">
     <mat-label>Title</mat-label>
     <input class="content-editor-input" matInput [(ngModel)]="content.title" />
@@ -8,7 +9,6 @@
     <mat-label>Slug</mat-label>
     <input class="content-editor-input" matInput [(ngModel)]="content.slug" />
   </mat-form-field>
-
 
   <mat-label>Status:</mat-label>
   <br />
@@ -20,8 +20,7 @@
 
   <hr />
 
-
   <mat-label>Content:</mat-label>
   <phoenician (onUpdate)="contentUpdated($event)"></phoenician>
   <button type="button" mat-flat-button color="primary" (click)="save()">Save</button>
-</div>
+</mat-card>

@@ -60,8 +60,6 @@ export class UserService {
       });
     });
 
-    console.log('user found', this._user);
-
     return this._user.uid;
   }
 }

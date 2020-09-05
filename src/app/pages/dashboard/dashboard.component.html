@@ -1,7 +1,20 @@
 <ng-container>
   <app-header></app-header>
   <div class="page">
-    <label>New Blog Post:</label>
-    <app-content-editor (onSave)="save($event)"></app-content-editor>
+    <div class="row">
+
+      <div class="col-md">
+        <app-content-editor (onSave)="save($event)" label="New Blog Post:"></app-content-editor>
+      </div>
+
+      <div class="col-md" *ngIf="contentList.length">
+        <mat-card>
+          <h2>Content:</h2>
+          <mat-nav-list>
+            <a mat-list-item href="#" *ngFor="let content of contentList"> {{ content.title }} </a>
+          </mat-nav-list>
+        </mat-card>
+      </div>
+    </div>
   </div>
 </ng-container>
