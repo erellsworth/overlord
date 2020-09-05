@@ -8,3 +8,5 @@ export interface FirebaseCredentials {
   appId: string;
   measurementId: string;
 }
+
+export type CollectionKey = 'content' | 'categories';
