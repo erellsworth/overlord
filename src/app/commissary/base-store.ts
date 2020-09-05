@@ -37,10 +37,14 @@ export class BaseStore {
     return this.observer.asObservable();
   }
 
-  public async add(item: Item): Promise<void> {
-    console.log('add item', item);
+  public add(item: Item): void {
     const sanitizedItem = JSON.parse(JSON.stringify(item));
     this.collection.doc(item.id).set(sanitizedItem);
+  }
+
+  public save(item: Item): void {
+    const sanitizedItem = JSON.parse(JSON.stringify(item));
+    this.collection.doc(item.id).update(sanitizedItem);
   }
 
   public get(id: string) {

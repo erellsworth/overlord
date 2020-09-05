@@ -27,6 +27,6 @@ export class ContentComponent implements OnInit {
   }
 
   public async save(content: Content) {
-    console.log('save', content);
+    this.store.save(content);
   }
 }

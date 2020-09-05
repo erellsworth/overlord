@@ -48,8 +48,8 @@ export class ContentEditorComponent implements OnInit {
     this.content.data = data;
   }
 
-  public statusChange(event) {
-    console.log('event', event);
+  public statusChange(event: any) {
+    this.content.status = event.value;
   }
 
   public save() {
