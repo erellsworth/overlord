@@ -2,9 +2,6 @@
   <app-header></app-header>
   <div class="page">
     <label>New Blog Post:</label>
-    <app-content-editor></app-content-editor>
-
-
-    <button type="button" class="button-blue" (click)="save()">Save</button>
+    <app-content-editor (onSave)="save($event)"></app-content-editor>
   </div>
 </ng-container>

@@ -1,5 +1,27 @@
-<div>
-  <label>Title</label>
-  <input type="text" />
+<div class="content-editor" *ngIf="content">
+  <mat-form-field class="content-editor-field">
+    <mat-label>Title</mat-label>
+    <input class="content-editor-input" matInput [(ngModel)]="content.title" />
+  </mat-form-field>
+
+  <mat-form-field class="content-editor-field">
+    <mat-label>Slug</mat-label>
+    <input class="content-editor-input" matInput [(ngModel)]="content.slug" />
+  </mat-form-field>
+
+
+  <mat-label>Status:</mat-label>
+  <br />
+  <mat-button-toggle-group aria-label="Status" (change)="statusChange($event)">
+    <mat-button-toggle value="draft" [checked]="content.status === 'draft'">Draft</mat-button-toggle>
+    <mat-button-toggle value="published" [checked]="content.status === 'published'">Published</mat-button-toggle>
+    <mat-button-toggle value="trash" [checked]="content.status === 'trash'" *ngIf="!isNew">Delete</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <hr />
+
+
+  <mat-label>Content:</mat-label>
   <phoenician (onUpdate)="contentUpdated($event)"></phoenician>
+  <button type="button" mat-flat-button color="primary" (click)="save()">Save</button>
 </div>

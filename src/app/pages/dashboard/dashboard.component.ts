@@ -53,8 +53,8 @@ export class DashboardComponent implements OnInit {
     this.content.data = data;
   }
 
-  public save() {
-    console.log('save', this.content);
+  public save(content: Content) {
+    console.log('save', content);
     // this.store.collection()
     // this.store.save<Content>('content', this.content);
   }

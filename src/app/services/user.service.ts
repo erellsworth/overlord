@@ -48,4 +48,20 @@ export class UserService {
   public async logout() {
     await this.auth.signOut();
   }
+
+  public async getId(): Promise<string> {
+    if (this._user) {
+      return this._user.uid;
+    }
+
+    this._user = await new Promise((resolve) => {
+      this.auth.user.subscribe((firebaseUser: firebase.User) => {
+        resolve(firebaseUser);
+      });
+    });
+
+    console.log('user found', this._user);
+
+    return this._user.uid;
+  }
 }

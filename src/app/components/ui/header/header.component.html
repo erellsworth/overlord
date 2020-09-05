@@ -1,11 +1,11 @@
-<div class="header">
-  <nav class="header-nav">
-    <div class="header-nav-item">
-      <a routerLink="/dashboard" class="button">Home</a>
-    </div>
+<mat-toolbar class="header" color="primary">
+  <a routerLink="/dashboard" mat-icon-button>
+    <mat-icon>home</mat-icon>
+  </a>
 
-    <div class="header-nav-item">
-      <button type="button" (click)="logout()" class="button-red">Log out</button>
-    </div>
-  </nav>
-</div>
+  <span class="header-spacer"></span>
+
+  <button mat-button class="header-logout" (click)="logout()">
+    Log Out
+  </button>
+</mat-toolbar>

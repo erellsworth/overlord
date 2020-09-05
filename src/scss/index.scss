@@ -3,8 +3,6 @@
 :root {
   // base styles
   background: $background;
-  font-family: $primary-font;
-  font-size: 14px;
 
   @import 'ui/index';
   @import 'layout';

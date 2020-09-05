@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ContentChange } from 'ngx-quill';
 
 import { PhoenicianData } from './phoenician.interface';
@@ -9,6 +9,8 @@ import { PhoenicianData } from './phoenician.interface';
   styleUrls: ['./phoenician.component.scss']
 })
 export class PhoenicianComponent implements OnInit {
+
+  @Input() content: any = {};
 
   @Output() onUpdate: EventEmitter<PhoenicianData> = new EventEmitter();
 
