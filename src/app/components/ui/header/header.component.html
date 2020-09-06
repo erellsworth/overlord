@@ -1,4 +1,16 @@
 <mat-toolbar class="header" color="primary">
+  <button mat-button [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item [routerLink]="['/dashboard', 'contents', 'post']">
+      <mat-icon>article</mat-icon> Posts
+    </button>
+    <button mat-menu-item [routerLink]="['/dashboard', 'contents', 'page']">
+      <mat-icon>article</mat-icon> Pages
+    </button>
+  </mat-menu>
+
   <a [routerLink]="['/dashboard']" mat-icon-button>
     <mat-icon>home</mat-icon>
   </a>

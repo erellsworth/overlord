@@ -3,7 +3,7 @@ import { Content } from '../interfaces/content';
 import { Taxonomy } from '../interfaces/taxonomy';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { CollectionKey } from '../interfaces/firebase';
+import { CollectionKey, WhereFilterOp } from '../interfaces/firebase';
 
 type Item = Content | Taxonomy;
 
@@ -50,4 +50,21 @@ export class BaseStore {
   public get(id: string) {
     return this.collection.doc<Item>(id).get();
   }
+
+  public async search(property: string, comparison: WhereFilterOp, value: any): Promise<Item[]> {
+    const results = await this.collection.ref.where(property, comparison, value).get();
+
+    return results.docs.map((result: firebase.firestore.DocumentData) => {
+      return result.data();
+    });
+  }
 }
+
+
+/**
+ *     public search(key: dataKey, property: string, comparison: WhereFilterOp, value: any): Observable<IBaseData[]> {
+        return this.fireStore.collection<IBaseData>(key, (ref) => {
+            return ref.where(property, comparison, value)
+        }).valueChanges();
+    }
+ */

@@ -10,3 +10,13 @@ export interface FirebaseCredentials {
 }
 
 export type CollectionKey = 'content' | 'categories';
+
+export type WhereFilterOp =
+  | '<'
+  | '<='
+  | '=='
+  | '>='
+  | '>'
+  | 'array-contains'
+  | 'in'
+  | 'array-contains-any';

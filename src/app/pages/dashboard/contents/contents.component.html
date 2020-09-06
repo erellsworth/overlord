@@ -1,0 +1,10 @@
+<ng-container>
+  <app-header></app-header>
+  <mat-card>
+    <h2>{{contentType}}s:</h2>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="['content', content.id]" *ngFor="let content of contents">
+        {{ content.title }} </a>
+    </mat-nav-list>
+  </mat-card>
+</ng-container>
