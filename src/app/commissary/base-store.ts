@@ -59,12 +59,3 @@ export class BaseStore {
     });
   }
 }
-
-
-/**
- *     public search(key: dataKey, property: string, comparison: WhereFilterOp, value: any): Observable<IBaseData[]> {
-        return this.fireStore.collection<IBaseData>(key, (ref) => {
-            return ref.where(property, comparison, value)
-        }).valueChanges();
-    }
- */

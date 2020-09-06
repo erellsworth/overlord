@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { ContentTypes, Content } from '../../../interfaces/content';
 import { ContentStore } from '../../../commissary/content-store';
+import { Utils } from '../../../utils';
 
 @Component({
   selector: 'app-contents',
@@ -16,7 +17,8 @@ export class ContentsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: ContentStore
+    private store: ContentStore,
+    private utils: Utils
   ) {
 
     this.router.events.subscribe(async (event) => {
@@ -29,5 +31,10 @@ export class ContentsComponent implements OnInit {
   }
 
   ngOnInit(): void { }
+
+  public title(): string {
+    if (!this.contentType) { return ''; }
+    return this.utils.titleCase(this.contentType) + 's';
+  }
 
 }
