@@ -13,4 +13,6 @@ export interface Content {
   authorId: string;
   data?: PhoenicianData;
   taxonomies?: Taxonomy[];
+  publicationDate?: Date;
+  modificationDate: Date;
 }

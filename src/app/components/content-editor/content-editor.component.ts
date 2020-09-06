@@ -1,9 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DateTime } from "luxon";
 import { Content, ContentTypes } from '../../interfaces/content';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { UserService } from '../../services/user.service';
 import { PhoenicianData } from '../ui/phoenician/phoenician.interface';
 import { PhoenicianComponent } from '../ui/phoenician/phoenician.component';
+import { ContentStore } from '../../commissary/content-store';
+import { ValidationResult } from '../../interfaces/app';
+import { ErrorComponent } from '../ui/error/error.component';
 
 @Component({
   selector: 'app-content-editor',
@@ -23,8 +26,8 @@ export class ContentEditorComponent implements OnInit {
   public isNew: boolean = false;
 
   constructor(
-    private fireStore: AngularFirestore,
-    private user: UserService
+    private store: ContentStore,
+    private alert: MatSnackBar
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -38,32 +41,39 @@ export class ContentEditorComponent implements OnInit {
     this.content.data = data;
   }
 
-  public statusChange(event: any) {
-    this.content.status = event.value;
+  public statusChange(status: any) {
+
+    if (status.value === 'published'
+      && this.content.status === 'draft'
+      && !this.content.publicationDate) {
+      this.content.publicationDate = DateTime.local().toJSDate();
+    }
+
+    this.content.status = status.value;
   }
 
   public save() {
-    this.onSave.emit(this.content);
+    this.content.modificationDate = DateTime.local().toJSDate();
+    const validation = this.store.validate(this.content);
+    if (validation.isValid) {
+      this.onSave.emit(this.content);
+    } else {
+
+      this.alert.openFromComponent(ErrorComponent, {
+        duration: 5000,
+        data: {
+          errors: validation.errors,
+          close: () => { this.alert.dismiss() }
+        }
+      });
+    }
   }
 
   public async resetData() {
     this.isNew = true;
-    this.content = {
-      id: this.fireStore.createId(),
-      title: '',
-      slug: '',
-      type: this.type,
-      status: 'draft',
-      authorId: await this.user.getId(),
-      data: {
-        html: '',
-        text: '',
-        content: {}
-      }
-    };
+    this.content = await this.store.createDraft(this.type);;
     if (this.phoenician) {
       this.phoenician.reset();
     }
-
   }
 }

@@ -1,0 +1,6 @@
+<ng-container>
+  <ul>
+    <li *ngFor="let error of data.errors">{{error}}</li>
+  </ul>
+  <mat-icon class="error-close" (click)="close()">close</mat-icon>
+</ng-container>

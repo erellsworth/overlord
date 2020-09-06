@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Content } from '../interfaces/content';
 import { Taxonomy } from '../interfaces/taxonomy';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -15,7 +14,7 @@ export class BaseStore {
   private collection: AngularFirestoreCollection;
 
   constructor(
-    private fireStore: AngularFirestore,
+    public fireStore: AngularFirestore,
     private key: CollectionKey
   ) {
 

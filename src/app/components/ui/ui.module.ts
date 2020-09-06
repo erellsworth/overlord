@@ -10,11 +10,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { HeaderComponent } from './header/header.component';
 import { PhoenicianComponent } from './phoenician/phoenician.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   entryComponents: [
@@ -23,7 +25,8 @@ import { RouterModule } from '@angular/router';
   ],
   declarations: [
     HeaderComponent,
-    PhoenicianComponent
+    PhoenicianComponent,
+    ErrorComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,8 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatListModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
   ],
   exports: [
     HeaderComponent,
@@ -49,7 +53,8 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatListModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
   ]
 })
 export class UiModule { }
