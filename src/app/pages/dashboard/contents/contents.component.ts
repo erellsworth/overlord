@@ -13,6 +13,7 @@ export class ContentsComponent implements OnInit {
 
   public contentType: ContentTypes;
   public contents: Content[] = [];
+  public showEditor: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,7 +25,13 @@ export class ContentsComponent implements OnInit {
     this.router.events.subscribe(async (event) => {
       if (event instanceof NavigationEnd) {
         this.contentType = this.route.snapshot.paramMap.get('type') as ContentTypes;
-        this.contents = await this.store.findByType(this.contentType);
+        const action: string = this.route.snapshot.paramMap.get('action');
+        if (action && action === 'create') {
+          this.showEditor = true;
+        } else {
+          this.contents = await this.store.findByType(this.contentType);
+        }
+
       }
     });
 
@@ -37,4 +44,7 @@ export class ContentsComponent implements OnInit {
     return this.utils.titleCase(this.contentType) + 's';
   }
 
+  public save(content: Content) {
+    console.log('save', content);
+  }
 }

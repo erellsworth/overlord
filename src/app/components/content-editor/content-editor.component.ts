@@ -58,7 +58,6 @@ export class ContentEditorComponent implements OnInit {
     if (validation.isValid) {
       this.onSave.emit(this.content);
     } else {
-
       this.alert.openFromComponent(ErrorComponent, {
         duration: 5000,
         data: {

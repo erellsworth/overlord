@@ -2,13 +2,17 @@
   <app-header></app-header>
   <mat-card>
     <h2>{{title()}}:</h2>
-    <mat-nav-list>
+    <mat-nav-list *ngIf="!showEditor">
       <a mat-list-item [routerLink]="['/dashboard','content', content.id]" *ngFor="let content of contents">
         {{ content.title }} </a>
       <span mat-list-item *ngIf="!contents.length">No {{title()}} found</span>
     </mat-nav-list>
+
+    <app-content-editor *ngIf="showEditor" (onSave)="save($event)" label="New Blog Post:"></app-content-editor>
   </mat-card>
-  <button mat-fab color="primary" class="create-content">
+
+  <button *ngIf="!showEditor" mat-fab color="primary" class="create-content" [routerLink]="['create']">
     <mat-icon>add_circle_outline</mat-icon>
   </button>
+
 </ng-container>

@@ -31,11 +31,14 @@ const routes: Routes = [
         loadChildren: () => import('./pages/dashboard/content/content.module').then(m => m.ContentModule)
       },
       {
+        path: 'contents/:type/:action',
+        loadChildren: () => import('./pages/dashboard/contents/contents.module').then(m => m.ContentsModule)
+      },
+      {
         path: 'contents/:type',
         loadChildren: () => import('./pages/dashboard/contents/contents.module').then(m => m.ContentsModule)
       }
     ]
-
   },
   {
     path: 'login',
