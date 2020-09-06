@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { PhoenicianData } from '../../components/ui/phoenician/phoenician.interface';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Content } from '../../interfaces/content';
-import { User } from '../../interfaces/user';
 import { ContentStore } from '../../commissary/content-store';
+import { ContentEditorComponent } from '../../components/content-editor/content-editor.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +9,8 @@ import { ContentStore } from '../../commissary/content-store';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+  @ViewChild(ContentEditorComponent, { static: false }) editor: ContentEditorComponent;
 
   public contentList: Content[] = [];
 
@@ -27,5 +27,6 @@ export class DashboardComponent implements OnInit {
 
   public save(content: Content) {
     this.store.add(content);
+    this.editor.resetData();
   }
 }

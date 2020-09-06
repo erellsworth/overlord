@@ -24,6 +24,10 @@ export class PhoenicianComponent implements OnInit {
     }
   }
 
+  public reset() {
+    this.contentJson = '';
+  }
+
   public contentChanged(event: ContentChange) {
     this.onUpdate.emit({
       content: event.content,

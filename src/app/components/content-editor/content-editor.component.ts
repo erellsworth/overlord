@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
 import { Content, ContentTypes } from '../../interfaces/content';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { UserService } from '../../services/user.service';
 import { PhoenicianData } from '../ui/phoenician/phoenician.interface';
+import { PhoenicianComponent } from '../ui/phoenician/phoenician.component';
 
 @Component({
   selector: 'app-content-editor',
@@ -10,6 +11,8 @@ import { PhoenicianData } from '../ui/phoenician/phoenician.interface';
   styleUrls: ['./content-editor.component.scss']
 })
 export class ContentEditorComponent implements OnInit {
+
+  @ViewChild(PhoenicianComponent, { static: false }) phoenician: PhoenicianComponent;
 
   @Input() content: Content;
   @Input() type: ContentTypes = 'post';
@@ -27,20 +30,7 @@ export class ContentEditorComponent implements OnInit {
   async ngOnInit(): Promise<void> {
 
     if (!this.content) {
-      this.isNew = true;
-      this.content = {
-        id: this.fireStore.createId(),
-        title: '',
-        slug: '',
-        type: this.type,
-        status: 'draft',
-        authorId: await this.user.getId(),
-        data: {
-          html: '',
-          text: '',
-          content: {}
-        }
-      };
+      this.resetData();
     }
   }
 
@@ -54,5 +44,26 @@ export class ContentEditorComponent implements OnInit {
 
   public save() {
     this.onSave.emit(this.content);
+  }
+
+  public async resetData() {
+    this.isNew = true;
+    this.content = {
+      id: this.fireStore.createId(),
+      title: '',
+      slug: '',
+      type: this.type,
+      status: 'draft',
+      authorId: await this.user.getId(),
+      data: {
+        html: '',
+        text: '',
+        content: {}
+      }
+    };
+    if (this.phoenician) {
+      this.phoenician.reset();
+    }
+
   }
 }
