@@ -11,12 +11,15 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 import { HeaderComponent } from './header/header.component';
 import { PhoenicianComponent } from './phoenician/phoenician.component';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ErrorComponent } from './error/error.component';
+import { MediaSelectorComponent } from './media-selector/media-selector.component';
 
 @NgModule({
   entryComponents: [
@@ -26,7 +29,8 @@ import { ErrorComponent } from './error/error.component';
   declarations: [
     HeaderComponent,
     PhoenicianComponent,
-    ErrorComponent
+    ErrorComponent,
+    MediaSelectorComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +45,8 @@ import { ErrorComponent } from './error/error.component';
     MatListModule,
     MatCardModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   exports: [
     HeaderComponent,
@@ -54,7 +59,8 @@ import { ErrorComponent } from './error/error.component';
     MatListModule,
     MatCardModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ]
 })
 export class UiModule { }

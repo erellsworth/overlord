@@ -9,7 +9,7 @@ export interface FirebaseCredentials {
   measurementId: string;
 }
 
-export type CollectionKey = 'content' | 'categories';
+export type CollectionKey = 'content' | 'categories' | 'media';
 
 export type WhereFilterOp =
   | '<'

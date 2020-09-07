@@ -1,14 +1,12 @@
 import { Content } from '../interfaces/content';
 import { Taxonomy } from '../interfaces/taxonomy';
+import { Media } from '../interfaces/media';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 import { CollectionKey, WhereFilterOp } from '../interfaces/firebase';
 
-type Item = Content | Taxonomy;
+type Item = Content | Taxonomy | Media;
 
-// @Injectable({
-//   providedIn: 'root'
-// })
 export class BaseStore {
   private observer: BehaviorSubject<Item[]>;
   private collection: AngularFirestoreCollection;

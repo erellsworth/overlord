@@ -1,3 +1,6 @@
 <div class="phoenician">
-  <quill-editor (onContentChanged)="contentChanged($event)" [(ngModel)]="contentJson" format="json"></quill-editor>
+  <quill-editor (onContentChanged)="contentChanged($event)" [(ngModel)]="contentJson" format="json" [modules]="modules">
+
+
+  </quill-editor>
 </div>
