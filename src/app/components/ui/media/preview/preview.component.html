@@ -1,0 +1,28 @@
+<div *ngIf="preview" class="image-preview">
+  <img class="image-preview-img" [src]="preview.url" />
+
+  <div class="image-preview-buttons">
+    <button mat-flat-button color="primary" (click)="imageSelected()">Select</button>
+    <button mat-icon-button (click)="toggleOptions()">
+      <mat-icon>tune</mat-icon>
+    </button>
+
+    <div class="image-preview-settings" *ngIf="showOptions">
+      <mat-form-field>
+        <mat-label>Select a size</mat-label>
+        <mat-select [(value)]="options.size">
+          <mat-option>None</mat-option>
+          <mat-option value="small">Small</mat-option>
+          <mat-option value="medium">Medium</mat-option>
+          <mat-option value="large">Large</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Alt Text</mat-label>
+        <input matInput [(ngModel)]="preview.options.altText">
+      </mat-form-field>
+    </div>
+  </div>
+
+</div>

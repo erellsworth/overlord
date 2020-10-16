@@ -1,17 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MediaSelectorComponent } from './media-selector.component';
+import { MediaSelectorComponent } from './selector.component';
 
 describe('MediaSelectorComponent', () => {
   let component: MediaSelectorComponent;
   let fixture: ComponentFixture<MediaSelectorComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MediaSelectorComponent ]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [MediaSelectorComponent]
     })
-    .compileComponents();
-  }));
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MediaSelectorComponent);

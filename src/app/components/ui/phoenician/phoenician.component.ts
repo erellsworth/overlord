@@ -3,7 +3,7 @@ import { ContentChange, QuillEditorComponent, QuillModules } from 'ngx-quill';
 import { MatDialog } from '@angular/material/dialog';
 
 import { PhoenicianData } from './phoenician.interface';
-import { MediaSelectorComponent } from '../media-selector/media-selector.component';
+import { MediaSelectorComponent } from '../media/selector/selector.component';
 
 @Component({
   selector: 'phoenician',

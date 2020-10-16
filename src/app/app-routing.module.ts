@@ -8,7 +8,7 @@ import {
 import { pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-const redirectLoggedInToDashboard = () => redirectLoggedInTo(['dashboard']);
+const redirectLoggedInToDashboard = () => redirectLoggedInTo(['']);
 const adminOnly = () => pipe(customClaims, map(claims => claims.admin === true ? true : ['login']));
 
 const routes: Routes = [

@@ -1,0 +1,14 @@
+.media-selector {
+  min-width: 75vw;
+
+  &-preview {
+    width: 25%;
+  }
+
+  &-previews {
+    display: flex;
+    flex-wrap: wrap;
+    height: 45vh;
+    overflow-y: scroll;
+  }
+}

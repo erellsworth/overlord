@@ -1,0 +1,14 @@
+<div class="media-selector">
+  <ngx-dropzone (change)="onDrop($event)" [accept]="fileTypes">
+    <ngx-dropzone-label>Click, or Drop Files Here</ngx-dropzone-label>
+  </ngx-dropzone>
+
+  <div class="media-selector-previews">
+    <app-media-uploader *ngFor="let file of files" [file]="file" (onUploadComplete)="uploadComplete($event)"
+      (onUploadProgress)="uploadProgress($event)">
+    </app-media-uploader>
+    <app-image-preview class="media-selector-preview" *ngFor="let preview of getPreviews()" [preview]="preview"
+      (onSelect)="mediaSelected($event)">
+    </app-image-preview>
+  </div>
+</div>
