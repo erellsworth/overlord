@@ -22,10 +22,9 @@ export class ImagePreviewComponent implements OnInit {
   ngOnInit(): void { }
 
   /**
-   * imageSelected
+   * mediaSelected
    */
-  public imageSelected() {
-    // this.preview.options.size = this.options.size;
+  public mediaSelected() {
     this.onSelect.emit(this.media);
   }
 

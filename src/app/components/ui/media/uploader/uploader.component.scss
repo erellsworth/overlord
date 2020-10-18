@@ -1,0 +1,14 @@
+:host {
+  position: relative;
+
+  .uploader-loading {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background:#00000094;
+    mat-spinner {
+      margin: 10% auto;
+    }
+  }
+}

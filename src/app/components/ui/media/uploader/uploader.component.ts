@@ -14,7 +14,9 @@ export class UploaderComponent implements OnInit {
 
   @Input() file: File;
   @Output() onUploadComplete: EventEmitter<Media> = new EventEmitter();
-  @Output() onUploadProgress: EventEmitter<number> = new EventEmitter();
+
+  @Output() onSelect: EventEmitter<Media> = new EventEmitter();
+
   public media: Media;
 
   public isUploading: boolean = false;
@@ -69,4 +71,11 @@ export class UploaderComponent implements OnInit {
     }
   }
 
+  /**
+ * mediaSelected
+ */
+  public mediaSelected() {
+    // this.preview.options.size = this.options.size;
+    this.onSelect.emit(this.media);
+  }
 }

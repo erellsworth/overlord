@@ -4,7 +4,8 @@
   </ngx-dropzone>
 
   <div class="media-selector-previews" *ngIf="media.length || uploads.length">
-    <app-media-uploader *ngFor="let upload of uploads" [file]="upload" (onSelect)="mediaSelected($event)">
+    <app-media-uploader *ngFor="let upload of uploads" [file]="upload" (onSelect)="mediaSelected($event)"
+      (onUploadComplete)="uploadComplete($event)">
     </app-media-uploader>
 
     <app-image-preview class="media-selector-preview" *ngFor="let media of media" [media]="media"

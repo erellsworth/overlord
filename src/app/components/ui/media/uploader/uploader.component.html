@@ -1,5 +1,7 @@
 <ng-container>
   <app-image-preview *ngIf="media" class="media-selector-preview" [media]="media" (onSelect)="mediaSelected()">
   </app-image-preview>
-  <mat-spinner *ngIf="isUploading"></mat-spinner>
+  <div class="uploader-loading" *ngIf="isUploading">
+    <mat-spinner></mat-spinner>
+  </div>
 </ng-container>

@@ -30,6 +30,11 @@ export class MediaSelectorComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
+  public uploadComplete(media: Media) {
+    console.log('uploadComplete', media);
+    this.changeDetector.detectChanges();
+  }
+
   /**
    * mediaSelected
    */
