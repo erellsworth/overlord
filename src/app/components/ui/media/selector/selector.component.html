@@ -3,11 +3,11 @@
     <ngx-dropzone-label>Click, or Drop Files Here</ngx-dropzone-label>
   </ngx-dropzone>
 
-  <div class="media-selector-previews">
-    <app-media-uploader *ngFor="let file of files" [file]="file" (onUploadComplete)="uploadComplete($event)"
-      (onUploadProgress)="uploadProgress($event)">
+  <div class="media-selector-previews" *ngIf="media.length || uploads.length">
+    <app-media-uploader *ngFor="let upload of uploads" [file]="upload" (onSelect)="mediaSelected($event)">
     </app-media-uploader>
-    <app-image-preview class="media-selector-preview" *ngFor="let preview of getPreviews()" [preview]="preview"
+
+    <app-image-preview class="media-selector-preview" *ngFor="let media of media" [media]="media"
       (onSelect)="mediaSelected($event)">
     </app-image-preview>
   </div>

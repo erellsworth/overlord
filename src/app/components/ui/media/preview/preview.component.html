@@ -1,5 +1,5 @@
-<div *ngIf="preview" class="image-preview">
-  <img class="image-preview-img" [src]="preview.url" />
+<div *ngIf="media" class="image-preview">
+  <img class="image-preview-img" [src]="media.url" />
 
   <div class="image-preview-buttons">
     <button mat-flat-button color="primary" (click)="imageSelected()">Select</button>
@@ -20,7 +20,7 @@
 
       <mat-form-field>
         <mat-label>Alt Text</mat-label>
-        <input matInput [(ngModel)]="preview.options.altText">
+        <input matInput [(ngModel)]="media.options.altText">
       </mat-form-field>
     </div>
   </div>

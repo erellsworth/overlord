@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MediaPreview } from '../../../../interfaces/media';
+import { Media } from '../../../../interfaces/media';
 
 @Component({
   selector: 'app-image-preview',
@@ -8,9 +8,9 @@ import { MediaPreview } from '../../../../interfaces/media';
 })
 export class ImagePreviewComponent implements OnInit {
 
-  @Input() preview: MediaPreview;
+  @Input() media: Media;
 
-  @Output() onSelect: EventEmitter<MediaPreview> = new EventEmitter();
+  @Output() onSelect: EventEmitter<Media> = new EventEmitter();
 
   public showOptions: boolean = false;
   public options = {
@@ -26,7 +26,7 @@ export class ImagePreviewComponent implements OnInit {
    */
   public imageSelected() {
     // this.preview.options.size = this.options.size;
-    this.onSelect.emit(this.preview);
+    this.onSelect.emit(this.media);
   }
 
   /**

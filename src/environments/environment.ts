@@ -7,7 +7,9 @@ import { firebaseCredentials } from '../firebase.config';
 
 export const environment: Environment = {
   production: false,
-  firebaseCredentials: firebaseCredentials
+  firebaseCredentials: firebaseCredentials,
+  cloudFunctionsUrl: 'http://localhost:5001',
+  s3Bucket: 'assets.erellsworth.com'
 };
 
 /*

@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { MediaStore } from '../../../../commissary/media-store';
-import { Media, MediaPreview } from '../../../../interfaces/media';
-import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { MatDialogRef } from '@angular/material/dialog';
+import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
+import { Media } from '../../../../interfaces/media';
 
 @Component({
   selector: 'app-media-selector',
@@ -12,52 +11,30 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class MediaSelectorComponent implements OnInit {
 
   public media: Media[] = [];
-  public previews: { [key: string]: MediaPreview } = {};
-  public files: File[] = [];
-  public fileTypes = 'image/jpg,image/png,image/jpeg,image/svg+xml';
+  public uploads: File[] = [];
 
-  public selectedMedia: Media;
+  public fileTypes = 'image/jpg,image/png,image/jpeg,image/svg+xml';
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private store: MediaStore,
-    public dialogRef: MatDialogRef<MediaSelectorComponent>
-  ) {
-    this.store.data.subscribe((media: Media[]) => {
-      this.media = media;
-    });
-  }
+    public dialogRef: MatDialogRef<MediaSelectorComponent>) {
 
-  ngOnInit(): void {
+    //TODO: fetch existing media from database
 
   }
 
-  public getPreviews(): MediaPreview[] {
-    return Object.keys(this.previews).map((key: string): MediaPreview => {
-      return this.previews[key];
-    });
-  }
+  ngOnInit(): void { }
 
   public onDrop(event: NgxDropzoneChangeEvent) {
-    this.files = this.files.concat(event.addedFiles);
+    this.uploads = this.uploads.concat(event.addedFiles);
     this.changeDetector.detectChanges();
   }
 
   /**
- * mediaSelected
- */
-  public mediaSelected(preview: MediaPreview) {
-
-    this.dialogRef.close(preview);
+   * mediaSelected
+   */
+  public mediaSelected(media: Media) {
+    this.dialogRef.close(media);
   }
 
-  public uploadComplete(preview: MediaPreview) {
-    console.log('uploadComplete', preview);
-    this.changeDetector.detectChanges();
-  }
-
-  public uploadProgress(progress: number) {
-    console.log('uploadProgress', progress);
-    this.changeDetector.detectChanges();
-  }
 }

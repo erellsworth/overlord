@@ -3,16 +3,10 @@ export interface MediaOptions {
   size?: string;
 }
 export interface Media {
-  id: string;
+  id?: string;
+  name: string;
   url: string;
-  crops?: { [key: string]: string };
+  sizes?: { [key: string]: string };
+  type: string;
   options: MediaOptions
-}
-
-
-export interface MediaPreview {
-  file: File;
-  url: string;
-  uploadPercentage: number;
-  uploadSettings?: MediaOptions;
 }
