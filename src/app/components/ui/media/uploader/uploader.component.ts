@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
 import { MediaStore } from '../../../../commissary/media-store';
-import { Media } from '../../../../interfaces/media';
+import { Media, MediaUploadRequest } from '../../../../interfaces/media';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -22,7 +22,7 @@ export class UploaderComponent implements OnInit {
   public isUploading: boolean = false;
   public isUploaded: boolean = false;
 
-  private s3Uploader: (params: any) => Observable<any>;
+  private s3Uploader: (params: MediaUploadRequest) => Observable<string>;
 
   constructor(
     cloudFunctions: AngularFireFunctions,
@@ -32,43 +32,7 @@ export class UploaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    if (this.file) {
-      this.isUploading = true;
-
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-
-        this.media = {
-          url: e.target.result as string,
-          type: this.file.type, // mimetype
-          name: this.file.name,
-          options: {
-            altText: this.file.name
-          }
-        }
-
-        this.s3Uploader({
-          bucket: environment.s3Bucket, // TODO: fetch this dynamically
-          image: e.target.result,
-          type: this.file.type,
-          name: this.file.name
-        }).subscribe((result) => {
-          console.log('upload result', result);
-          this.isUploaded = true;
-          this.isUploading = false;
-          this.onUploadComplete.emit(this.media);
-        });
-
-        // this forces the component to re-render
-        // without this, the image previews will not load until the user
-        // clicks on the div
-        // this.changeDetector.detectChanges();
-      };
-
-      reader.readAsDataURL(this.file);
-    }
+    this.uploadFile();
   }
 
   /**
@@ -77,5 +41,70 @@ export class UploaderComponent implements OnInit {
   public mediaSelected() {
     // this.preview.options.size = this.options.size;
     this.onSelect.emit(this.media);
+  }
+
+  private async uploadFile() {
+    if (!this.file) { return; }
+    this.isUploading = true;
+    await this.prepareMediaRecord();
+
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+
+      this.media = {
+        url: e.target.result as string,
+        type: this.file.type, // mimetype
+        name: this.file.name,
+        options: {
+          altText: this.file.name
+        }
+      }
+
+      const mediaRecord = await this.store.search('name', '==', this.file.name);
+
+      console.log('mediaRecord', mediaRecord);
+
+      if (mediaRecord.length) {
+        // propose new name
+      }
+
+      this.s3Uploader({
+        bucket: environment.s3Bucket, // TODO: fetch this dynamically
+        image: e.target.result as string,
+        type: this.file.type,
+        name: this.file.name
+      }).subscribe((url: string) => {
+        console.log('upload result', url);
+        this.media.url = url;
+        this.store.add(this.media);
+        this.isUploaded = true;
+        this.isUploading = false;
+        this.onUploadComplete.emit(this.media);
+      });
+    };
+
+    reader.readAsDataURL(this.file);
+  }
+
+  private async prepareMediaRecord() {
+    if (!this.media.id) {
+      this.media.id = this.store.fireStore.createId();
+    }
+    
+    const mediaRecord = await this.store.search('name', '==', this.file.name);
+
+    if (mediaRecord.length) { 
+
+      this.file.name 
+      
+    }
+
+    return;
+
+  }
+
+  private incrementFileName() {
+    
   }
 }

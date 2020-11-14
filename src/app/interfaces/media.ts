@@ -10,3 +10,10 @@ export interface Media {
   type: string;
   options: MediaOptions
 }
+
+export interface MediaUploadRequest {
+  bucket: string;
+  image: string;
+  type: string;
+  name: string;
+}

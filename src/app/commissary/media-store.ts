@@ -9,9 +9,7 @@ import { Utils } from '../utils';
 })
 export class MediaStore extends BaseStore {
   constructor(
-    public fireStore: AngularFirestore,
-    private user: UserService,
-    private utils: Utils) {
+    public fireStore: AngularFirestore) {
     super(fireStore, 'media');
   }
 }

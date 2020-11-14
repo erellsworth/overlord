@@ -51,10 +51,7 @@ exports.uploader = functions.https.onCall(async (data: any, context: CallableCon
   try {
     const uploadResult = await uploadObjects;
 
-    return {
-      uploadResult,
-      data
-    };
+    return uploadResult;
 
   } catch (e) {
     return {

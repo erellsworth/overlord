@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,39 @@ export class Utils {
       splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
     }
     return splitStr.join(' ');
+  }
+
+  /**
+   * Add a number to the end of a string,
+   * or increment the number at the end of a string
+   *
+   * @param { string } name
+   *
+   * @returns { string }
+   */
+  public incrementString(name: string): string {
+    if (!name) { return ''; }
+
+    const numbers: string[] = name.split(/\D+/g).filter(Boolean);
+
+    if (!numbers.length) {
+      // there are no numbers in this name,
+      // so just add a number to the end and return
+      return name + '2';
+    }
+
+    const endNumbers: string = numbers.pop();
+    const newEndNumbers: number = parseInt(endNumbers) + 1;
+
+    const characters: string[] = name.split(endNumbers)
+      .filter(Boolean)
+      .map((chars: string): string => {
+        if (chars === endNumbers) {
+          return newEndNumbers.toString()
+        }
+        return chars;
+      });
+
+    return characters.join('');
   }
 }
