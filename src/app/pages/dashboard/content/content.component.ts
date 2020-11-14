@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Content } from '../../../interfaces/content';
 import { ContentStore } from '../../../commissary/content-store';
+import { DocumentData } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-content',
@@ -21,7 +22,7 @@ export class ContentComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.store.get(this.id).subscribe((content: firebase.firestore.DocumentData) => {
+    this.store.get(this.id).subscribe((content: DocumentData) => {
       this.content = content.data();
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import firebase from 'firebase/app';
 
 import { User } from '../interfaces/user';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -15,6 +15,8 @@ export class UserService {
 
   constructor(private auth: AngularFireAuth) {
     this.observer = new BehaviorSubject(this._user);
+
+
 
     this.auth.onAuthStateChanged(async (user: User) => {
       this._user = user;
@@ -42,7 +44,7 @@ export class UserService {
   }
 
   public async login() {
-    await this.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    await this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 
   public async logout() {
@@ -55,7 +57,7 @@ export class UserService {
     }
 
     this._user = await new Promise((resolve) => {
-      this.auth.user.subscribe((firebaseUser: firebase.User) => {
+      this.auth.user.subscribe((firebaseUser: User) => {
         resolve(firebaseUser);
       });
     });

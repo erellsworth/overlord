@@ -1,4 +1,4 @@
-import 'firebase';
+import firebase from 'firebase/app';
 
 export interface IUser extends firebase.User {
   isAdmin?: boolean;

@@ -2,7 +2,7 @@ import { Content } from '../interfaces/content';
 import { Taxonomy } from '../interfaces/taxonomy';
 import { Media } from '../interfaces/media';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestoreCollection, AngularFirestore, DocumentData } from '@angular/fire/firestore';
 import { CollectionKey, WhereFilterOp } from '../interfaces/firebase';
 
 type Item = Content | Taxonomy | Media;
@@ -51,7 +51,7 @@ export class BaseStore {
   public async search(property: string, comparison: WhereFilterOp, value: any): Promise<Item[]> {
     const results = await this.collection.ref.where(property, comparison, value).get();
 
-    return results.docs.map((result: firebase.firestore.DocumentData) => {
+    return results.docs.map((result: DocumentData) => {
       return result.data();
     });
   }
