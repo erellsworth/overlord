@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Tiptap from "../components/TipTap.vue";
+import Tiptap from "../components/editor/TipTap.vue";
 
 export default {
   name: "HomePage",
