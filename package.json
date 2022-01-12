@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "@tiptap/extension-image": "^2.0.0-beta.24",
     "@tiptap/starter-kit": "^2.0.0-beta.164",
     "@tiptap/vue-2": "^2.0.0-beta.73",
     "core-js": "^3.15.1",
