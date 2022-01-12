@@ -1,24 +1,33 @@
 <template>
   <div v-if="editor" class="tiptap-editor box has-background-info-light">
+    <TypeSelector
+      :selectedType="contentType"
+      @onTypeChanged="typeChanged($event)"
+    />
     <ToolBar :editor="editor" @logOutput="output()" />
     <editor-content :editor="editor" class="box" />
+    <b-button>{{ getActionName() }}</b-button>
   </div>
 </template>
 
 <script>
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import StarterKit from "@tiptap/starter-kit";
-import ToolBar from "../editor/ToolBar.vue";
+import Image from "@tiptap/extension-image";
+import ToolBar from "./ToolBar.vue";
+import TypeSelector from "./TypeSelector.vue";
 
 export default {
   components: {
     EditorContent,
     ToolBar,
+    TypeSelector,
   },
-
+  props: ["content", "action", "contentType"],
   data() {
     return {
       editor: null,
+      currentType: this.contentType,
     };
   },
   methods: {
@@ -27,41 +36,18 @@ export default {
 
       console.log(json);
     },
+    getActionName() {
+      return this.action.charAt(0).toUpperCase() + this.action.slice(1);
+    },
+    typeChanged(type) {
+      this.currentType = type;
+    },
   },
 
   mounted() {
     this.editor = new Editor({
-      extensions: [StarterKit],
-      content: `
-        <h2>
-          Hi there,
-        </h2>
-        <p>
-          this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-        </p>
-        <ul>
-          <li>
-            That’s a bullet list with one …
-          </li>
-          <li>
-            … or two list items.
-          </li>
-        </ul>
-        <p>
-          Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-        </p>
-        <pre><code class="language-css">body {
-  display: none;
-}</code></pre>
-        <p>
-          I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-        </p>
-        <blockquote>
-          Wow, that’s amazing. Good work, boy! 👏
-          <br />
-          — Mom
-        </blockquote>
-      `,
+      extensions: [StarterKit, Image],
+      content: this.content,
     });
   },
 
