@@ -14,6 +14,7 @@
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import Video from "./nodes/VideoNode";
 import ToolBar from "./ToolBar.vue";
 import TypeSelector from "./TypeSelector.vue";
 
@@ -46,7 +47,7 @@ export default {
 
   mounted() {
     this.editor = new Editor({
-      extensions: [StarterKit, Image],
+      extensions: [StarterKit, Image, Video],
       content: this.content,
     });
   },
@@ -113,6 +114,25 @@ export default {
       border: none;
       border-top: 2px solid rgba(#0d0d0d, 0.1);
       margin: 2rem 0;
+    }
+    .videoBlock {
+      width: 100%;
+      margin: 15px auto;
+
+      .videoWrap {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 25px;
+        height: 0;
+
+        iframe {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
   }
 }
