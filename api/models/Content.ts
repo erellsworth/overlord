@@ -1,8 +1,11 @@
-import { DataTypes, Model, ModelAttributes, Optional, QueryTypes } from "sequelize";
+import { DataTypes, Model, ModelAttributes, ModelCtor, Optional } from "sequelize";
+import { MediaInterface } from "~/interfaces/media";
 import { PaginatedResults } from "~/interfaces/misc";
 import { TaxonomyQuery } from "~/interfaces/taxonomy";
 import { ContentInterface, ContentQuery } from "../../interfaces/content";
-import { attachImage, attachImages, db } from "../utils";
+import { db } from "../utils";
+import { attachImage, attachImages } from "../utils/media.helper";
+import { Media } from "./Media";
 import { TaxonomyModel } from "./Taxonomy";
 
 // Some fields are optional when calling UserModel.create() or UserModel.build()
@@ -73,10 +76,14 @@ const ContentModel = db.define<ContentInstance>('Content', attributes);
 
 const Content = {
     findAll: async (query: ContentQuery): Promise<PaginatedResults> => {
-        const { limit, page } = query;
+        const { type, limit, page } = query;
         const offset = (parseInt(page.toString()) - 1) * limit;
 
         const { count, rows } = await ContentModel.findAndCountAll({
+            where: {
+                status: 'published',
+                type
+            },
             include: TaxonomyModel,
             order: [['createdAt', 'DESC']],
             limit,
@@ -92,10 +99,12 @@ const Content = {
             total: count,
             page: page
         };
+
     },
     findBySlug: async (slug: string): Promise<ContentInterface> => {
         const content = await ContentModel.findOne({
             where: {
+                status: 'published',
                 slug,
             },
             include: TaxonomyModel,
@@ -110,6 +119,7 @@ const Content = {
 
         const { count, rows } = await ContentModel.findAndCountAll({
             where: {
+                status: 'published',
                 '$Taxonomies.slug$': slug
             },
             include: [{
@@ -130,14 +140,6 @@ const Content = {
             total: count,
             page
         };
-    },
-    getTypes: async (): Promise<string[]> => {
-
-        const types = await db.query('SELECT DISTINCT "type" from "Contents"', { type: QueryTypes.SELECT });
-
-        return types.map((type: any): string => {
-            return type.type as string;
-        });
     }
 };
 

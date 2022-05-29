@@ -6,18 +6,6 @@ import { Content, Taxonomy } from "../models";
 import { notFoundResponse, successResponse } from "../utils/responses";
 import contentRouter from "./router";
 
-contentRouter.get('/types', async (req: Request, res: Response) => {
-
-    let content = await Content.getTypes();
-
-    if (content) {
-        successResponse(res, content);
-    } else {
-        notFoundResponse(res);
-    }
-
-});
-
 contentRouter.get('/:slug?', async (req: Request, res: Response) => {
 
     let content: ContentInterface | PaginatedResults;
@@ -27,9 +15,9 @@ contentRouter.get('/:slug?', async (req: Request, res: Response) => {
     if (slug) {
         content = await Content.findBySlug(slug);
     } else {
-
         const query: ContentQuery = {
-            limit: 10,
+            type: 'post',
+            limit: 6,
             page: 1
         };
 
@@ -46,7 +34,7 @@ contentRouter.get('/:slug?', async (req: Request, res: Response) => {
 
 contentRouter.get('/blog/:page', async (req: Request, res: Response) => {
 
-    let content: ContentInterface | PaginatedResults;
+    let content: PaginatedResults;
     const { page } = req.params;
 
     const query: ContentQuery = {

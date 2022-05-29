@@ -26,7 +26,7 @@ export interface ContentInterface extends baseInterface {
 }
 
 export interface ContentQuery {
-    type?: 'post' | 'page';
+    type: 'post' | 'page';
     limit: number;
     page: number;
 }

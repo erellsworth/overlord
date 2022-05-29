@@ -14,9 +14,9 @@ export interface PaginatedResults {
     page: number;
 }
 
-export interface ApiResponse {
+export interface ApiResponse<T = void> {
     success: boolean;
-    data?: any;
+    data?: T;
     error?: {
         message: string;
         code: number;
@@ -30,3 +30,9 @@ export interface NuxtMeta {
 }
 
 export type ContentWithMedia = ContentInterface | TaxonomyInterface;
+
+export interface SettingInterface {
+    id: number;
+    key: string;
+    value: string;
+}

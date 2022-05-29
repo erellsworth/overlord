@@ -2,6 +2,7 @@ import { Sequelize, Options } from 'sequelize';
 
 const dbOptions: Options = {
     dialect: 'postgres',
+    logging: false
 };
 
 if (process.env.APP_ENV === 'prod') {

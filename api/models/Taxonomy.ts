@@ -1,6 +1,7 @@
 import { DataTypes, Model, ModelAttributes, ModelCtor, Optional } from "sequelize";
 import { TaxonomyInterface } from "~/interfaces/taxonomy";
-import { attachImage, db } from "../utils";
+import { db } from "../utils/db";
+import { attachImage } from "../utils/media.helper";
 
 interface TaxonomyCreationAttributes extends Optional<TaxonomyInterface, "id"> { }
 

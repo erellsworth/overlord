@@ -1,10 +1,10 @@
-import { Response } from "express"
-import { ApiResponse } from "~/interfaces/misc";
+import { Response } from "express";
+import { ApiResponse } from "../../interfaces/misc";
 
-export const successResponse = async (res: Response, data: any) => {
+export const successResponse = async <T>(res: Response, data: T) => {
 
     if (data) {
-        const response: ApiResponse = {
+        const response: ApiResponse<T> = {
             success: Boolean(data),
             data
         };
@@ -17,10 +17,11 @@ export const successResponse = async (res: Response, data: any) => {
 
 export const notFoundResponse = async (res: Response) => {
 
+
     const response: ApiResponse = {
         success: false,
         error: { // TODO: Fetch random 404 messages from database
-            message: 'Where are your dreams? Where is the life they promised you? You follow the rules, you follow the directions, but the destination only recedes as you approach. Where is the content you were seeking? No one knows. This is just a 404 page.',
+            message: 'Page not found',
             code: 404
         }
     };
