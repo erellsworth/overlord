@@ -13,8 +13,6 @@ export default {
     Tiptap,
   },
   async asyncData({ params, $axios, error }) {
-    console.log("params", params);
-
     let content = "";
     let contentType = "post";
 
