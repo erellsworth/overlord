@@ -34,7 +34,7 @@ const attributes: ModelAttributes<ContentInstance, ContentInterface> = {
         allowNull: false
     },
     content: {
-        type: DataTypes.TEXT,
+        type: DataTypes.JSONB,
     },
     text: {
         type: DataTypes.TEXT,
@@ -101,7 +101,7 @@ const Content = {
         };
 
     },
-    findBySlug: async (slug: string): Promise<ContentInterface> => {
+    findBySlug: async (slug: string): Promise<ContentInstance> => {
         const content = await ContentModel.findOne({
             where: {
                 status: 'published',
@@ -111,7 +111,7 @@ const Content = {
             logging: false
         }) as unknown as ContentInterface;
 
-        return await attachImage(content) as ContentInterface;
+        return await attachImage(content) as ContentInstance;
     },
     findByTaxonomy: async (query: TaxonomyQuery): Promise<PaginatedResults> => {
         const { slug, limit, page } = query;

@@ -32,49 +32,20 @@ contentRouter.get('/:slug?', async (req: Request, res: Response) => {
 
 });
 
-contentRouter.get('/blog/:page', async (req: Request, res: Response) => {
+contentRouter.post('/update/:slug', async (req: Request, res: Response) => {
 
-    let content: PaginatedResults;
-    const { page } = req.params;
+    const { slug } = req.params;
 
-    const query: ContentQuery = {
-        type: 'post',
-        limit: 6,
-        page: parseInt(page)
-    };
+    let content = await Content.findBySlug(slug);
 
-    content = await Content.findAll(query);
+    content.content = req.body.json;
+    content.save();
 
-    if (content) {
-        successResponse(res, content);
-    } else {
-        notFoundResponse(res);
-    }
+    res.json(req.body);
 
 });
 
-contentRouter.get('/tag/:slug/:page?', async (req: Request, res: Response) => {
-
-    const { slug, page } = req.params;
-
-    const query: TaxonomyQuery = {
-        slug,
-        limit: 6,
-        page: page ? parseInt(page) : 1
-    };
-
-    let taxonomy = await Taxonomy.findBySlug(slug);
-
-    if (!taxonomy) {
-        notFoundResponse(res);
-        return;
-    }
-
-    let contents = await Content.findByTaxonomy(query);
-
-    taxonomy.content = contents;
-
-    successResponse(res, taxonomy);
+contentRouter.post('/create', async (req: Request, res: Response) => {
 
 });
 

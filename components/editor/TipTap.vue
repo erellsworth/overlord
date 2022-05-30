@@ -5,8 +5,12 @@
       @onTypeChanged="typeChanged($event)"
     />
     <ToolBar :editor="editor" @logOutput="output()" />
+
     <editor-content :editor="editor" class="box" />
-    <b-button>{{ getActionName() }}</b-button>
+
+    <b-button class="is-primary" @click="doTheThing()">{{
+      getActionName()
+    }}</b-button>
   </div>
 </template>
 
@@ -44,6 +48,14 @@ export default {
     },
     typeChanged(type) {
       this.currentType = type;
+    },
+    doTheThing() {
+      const json = this.editor.getJSON();
+      const html = this.editor.getHTML();
+      this.$emit(`on${this.getActionName()}`, {
+        json,
+        html,
+      });
     },
   },
 

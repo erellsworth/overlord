@@ -9,9 +9,11 @@ export default Node.create({
       { tag: 'figure' }
     ];
   },
-  renderHTML({ HTMLAttributes }) {
+  renderHTML() {
     return [
-      'figure', { class: 'image center has_caption' }, 0
+      'figure',
+      { class: 'image center has_caption' },
+      0
     ];
   },
 });

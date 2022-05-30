@@ -10,6 +10,10 @@ export default Node.create({
     ];
   },
   renderHTML() {
-    return ['figcaption', { class: 'caption' }, 0];
+    return [
+      'figcaption',
+      { class: 'caption' },
+      0
+    ];
   }
 });

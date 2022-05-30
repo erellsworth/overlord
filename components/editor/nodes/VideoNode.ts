@@ -33,6 +33,8 @@ export default Node.create<VideoOptions>({
 
     draggable: true,
 
+    atom: true,
+
     addAttributes() {
         return {
             src: {
@@ -66,11 +68,9 @@ export default Node.create<VideoOptions>({
             'div', { class: 'videoBlock' },
             ['div',
                 { class: 'videoWrap' },
-                ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+                ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
             ]
         ];
-
-
     },
     addCommands() {
         return {

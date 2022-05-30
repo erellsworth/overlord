@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <tiptap :action="action" :content="content" :contentType="contentType" />
+    <tiptap
+      :action="action"
+      :content="content"
+      :contentType="contentType"
+      @onUpdate="onUpdate"
+    />
   </div>
 </template>
 
@@ -29,6 +34,11 @@ export default {
       content,
       contentType,
     };
+  },
+  methods: {
+    async onUpdate(data) {
+      await this.$axios.$post(`api/update/${this.$route.params.slug}`, data);
+    },
   },
 };
 </script>
