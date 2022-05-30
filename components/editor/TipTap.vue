@@ -17,6 +17,8 @@ import Image from "@tiptap/extension-image";
 import Video from "./nodes/VideoNode";
 import ToolBar from "./ToolBar.vue";
 import TypeSelector from "./TypeSelector.vue";
+import FigCaption from "./nodes/FigCaption";
+import FigureNode from "./nodes/FigureNode";
 
 export default {
   components: {
@@ -47,7 +49,7 @@ export default {
 
   mounted() {
     this.editor = new Editor({
-      extensions: [StarterKit, Image, Video],
+      extensions: [StarterKit, Video, Image, FigCaption, FigureNode],
       content: this.content,
     });
   },
