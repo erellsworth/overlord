@@ -7,10 +7,6 @@
     <ToolBar :editor="editor" @logOutput="output()" />
 
     <editor-content :editor="editor" class="box" />
-
-    <b-button class="is-primary" @click="doTheThing()">{{
-      getActionName()
-    }}</b-button>
   </div>
 </template>
 
@@ -49,20 +45,23 @@ export default {
     typeChanged(type) {
       this.currentType = type;
     },
-    doTheThing() {
-      const json = this.editor.getJSON();
-      const html = this.editor.getHTML();
-      this.$emit(`on${this.getActionName()}`, {
-        json,
-        html,
-      });
-    },
   },
 
   mounted() {
+    const self = this;
+    const action = this.getActionName();
     this.editor = new Editor({
       extensions: [StarterKit, Video, Image, FigCaption, FigureNode],
       content: this.content,
+      onUpdate({ editor }) {
+        const json = editor.getJSON();
+        const html = editor.getHTML();
+
+        self.$emit(`on${action}`, {
+          json,
+          html,
+        });
+      },
     });
   },
 

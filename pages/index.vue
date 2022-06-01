@@ -1,11 +1,23 @@
 <template>
   <section class="section">
-    <ul>
-      <li v-for="content in contents" :key="content.id">
+    <h3 class="title">Recent content:</h3>
+    <div class="buttons">
+      <b-button
+        size="is-small"
+        type="is-primary"
+        icon-left="pencil"
+        v-for="content in contents"
+        :key="content.id"
+        tag="router-link"
+        :to="`/update/${content.slug}`"
+      >
         {{ content.title }}
-      </li>
-    </ul>
+      </b-button>
+    </div>
+    <hr />
+    <h3 class="title">Create something</h3>
     <tiptap action="create" :content="starterContent" contentType="post" />
+    <b-button class="is-primary" @click="save()">Create</b-button>
   </section>
 </template>
 
@@ -16,6 +28,9 @@ export default {
   name: "HomePage",
   components: {
     Tiptap,
+  },
+  methods: {
+    save() {},
   },
   async asyncData({ $axios }) {
     let response = await $axios.$get("api");
