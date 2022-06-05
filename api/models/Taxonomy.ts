@@ -66,6 +66,9 @@ const Taxonomy = {
         tag = await attachImage(tag) as TaxonomyInterface;
 
         return tag;
+    },
+    findAll: async (): Promise<TaxonomyInterface[]> => {
+        return await TaxonomyModel.findAll();
     }
 };
 
