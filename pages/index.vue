@@ -33,7 +33,7 @@ export default {
     save() {},
   },
   async asyncData({ $axios }) {
-    let response = await $axios.$get("api");
+    let response = await $axios.$get("api/content");
 
     let data = {
       contents: [],

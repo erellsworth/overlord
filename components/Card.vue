@@ -8,18 +8,12 @@
       </header>
       <div class="card-content">
         <div class="content has-text-centered">
-          <b-icon
-            :icon="icon"
-            size="is-large"
-            type="is-primary"
-          />
+          <slot name="content" />
         </div>
       </div>
       <footer class="card-footer">
         <div class="card-footer-item">
-          <span>
-            <slot />
-          </span>
+          <slot name="footer" />
         </div>
       </footer>
     </div>
@@ -31,12 +25,8 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
-    icon: {
-      type: String,
-      required: true
-    }
-  }
-}
+  },
+};
 </script>

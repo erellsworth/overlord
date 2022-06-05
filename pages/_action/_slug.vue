@@ -13,11 +13,21 @@
         <tiptap
           :action="action"
           :content="content"
-          :contentType="contentType"
+          :contentType="contentData.type"
           @onUpdate="onUpdate"
         />
         <hr />
-        <TagSelector :taxonomies="taxonomies" />
+        <TagSelector :taxonomies="contentData.Taxonomies" />
+        <hr />
+
+        <ImageSelector
+          :images="[contentData.image]"
+          limit="1"
+          title="Thumbnail"
+          @onSelect="onImageSelected($event)"
+          @onReplace="onImageSelected($event)"
+          @onRemove="onImageRemove($event)"
+        />
         <hr />
         <b-button class="is-primary" @click="save()">{{
           getActionName
@@ -30,6 +40,7 @@
 <script>
 import Tiptap from "../../components/editor/TipTap.vue";
 import TagSelector from "../../components/TagSelector.vue";
+import ImageSelector from "../../components/media/ImageSelector.vue";
 
 const contentData = {
   data: {},
@@ -40,31 +51,33 @@ export default {
   components: {
     Tiptap,
     TagSelector,
+    ImageSelector,
   },
   data() {
     return {
       contentData,
     };
   },
-  async asyncData({ params, $axios, error }) {
+  async asyncData({ params, $axios }) {
     let content = "";
-    let contentType = "post";
-    let taxonomies = [];
+    let contentData = {
+      type: "post",
+      content: null,
+      html: "",
+    };
 
     if (params.slug && params.action === "update") {
-      const response = await $axios.$get(`api/${params.slug}`);
+      const response = await $axios.$get(`api/content/${params.slug}`);
       if (response.success) {
-        content = response.data.html;
-        contentType = response.data.type;
-        taxonomies = response.data.Taxonomies;
+        contentData = response.data;
+        content = contentData.content ? contentData.content : contentData.html;
       }
     }
 
     return {
+      contentData,
       action: params.action,
       content,
-      taxonomies,
-      contentType,
     };
   },
   computed: {
@@ -73,6 +86,13 @@ export default {
     },
   },
   methods: {
+    onImageSelected(image) {
+      console.log("onImageSelected", image);
+      this.contentData.image = image;
+    },
+    onImageRemove(image) {
+      console.log("onImageRemove", image);
+    },
     onUpdate(data) {
       console.log("content update", data);
       contentData.data = data;
