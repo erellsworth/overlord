@@ -1,11 +1,13 @@
 import express from 'express';
 import contentRouter from './routes/content';
+import mediaRouter from './routes/media';
 
 // Create express instance
 const app = express();
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(contentRouter);
+app.use(mediaRouter);
 
 // Export express app
 module.exports = app;

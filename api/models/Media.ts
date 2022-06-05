@@ -1,12 +1,7 @@
 import { DataTypes, Model, ModelAttributes, Optional } from "sequelize";
-import { MediaInterface } from "~/interfaces/media";
+import { MediaInstance, MediaInterface } from "~/interfaces/media";
+import { PaginatedResults } from "~/interfaces/misc";
 import { db } from "../utils/db";
-
-interface MediaCreationAttributes extends Optional<MediaInterface, "id"> { }
-
-interface MediaInstance
-    extends Model<MediaInterface, MediaCreationAttributes>,
-    MediaInterface { }
 
 const attributes: ModelAttributes<MediaInstance, MediaInterface> = {
     name: {
@@ -53,8 +48,26 @@ const attributes: ModelAttributes<MediaInstance, MediaInterface> = {
 const MediaModel = db.define('Media', attributes);
 
 const Media = {
-    findById: async (id: string): Promise<MediaInterface> => {
-        return await MediaModel.findByPk(id, { logging: false }) as unknown as MediaInterface;
+    findById: async (id: string): Promise<MediaInstance> => {
+        return await MediaModel.findByPk(id, { logging: false }) as unknown as MediaInstance;
+    },
+    findAll: async (page: number): Promise<PaginatedResults<MediaInstance>> => {
+        const limit = 12;
+
+        const offset = (page - 1) * limit;
+        const { count, rows } = await MediaModel.findAndCountAll({
+            order: [['createdAt', 'DESC']],
+            limit,
+            logging: false,
+            distinct: true,
+            offset
+        });
+
+        return {
+            contents: rows,
+            total: count,
+            page: page
+        };
     }
 }
 

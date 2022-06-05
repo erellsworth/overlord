@@ -1,14 +1,13 @@
 import { Request, Response } from "express"
-import { ContentInterface, ContentQuery } from "~/interfaces/content";
+import { ContentInstance, ContentInterface, ContentQuery } from "~/interfaces/content";
 import { PaginatedResults } from "~/interfaces/misc";
-import { TaxonomyQuery } from "~/interfaces/taxonomy";
-import { Content, Taxonomy } from "../models";
+import { Content } from "../models";
 import { notFoundResponse, successResponse } from "../utils/responses";
 import contentRouter from "./router";
 
-contentRouter.get('/:slug?', async (req: Request, res: Response) => {
+contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {
 
-    let content: ContentInterface | PaginatedResults;
+    let content: ContentInstance | PaginatedResults<ContentInstance>;
 
     const { slug } = req.params;
 

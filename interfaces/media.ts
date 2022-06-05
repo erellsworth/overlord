@@ -1,3 +1,5 @@
+import { Model, Optional } from "sequelize";
+
 export interface MediaInterface {
     id: number;
     createdAt: string;
@@ -12,4 +14,11 @@ export interface MediaInterface {
 export interface Image {
     full: string;
     thumbnail: string;
+    data: MediaInterface
 };
+
+interface MediaCreationAttributes extends Optional<MediaInterface, "id"> { }
+
+export interface MediaInstance
+    extends Model<MediaInterface, MediaCreationAttributes>,
+    MediaInterface { }

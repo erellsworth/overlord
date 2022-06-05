@@ -1,4 +1,5 @@
 import { baseInterface } from "./base";
+import { ContentInterface } from "./content";
 import { Image } from "./media";
 import { PaginatedResults } from "./misc";
 
@@ -9,7 +10,7 @@ export interface TaxonomyInterface extends baseInterface {
         text: string;
         media_id: string;
     }
-    content?: PaginatedResults;
+    content?: PaginatedResults<ContentInterface>;
     image?: Image;
 }
 

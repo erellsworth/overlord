@@ -1,20 +1,10 @@
-import { DataTypes, Model, ModelAttributes, ModelCtor, Optional } from "sequelize";
-import { MediaInterface } from "~/interfaces/media";
+import { DataTypes, ModelAttributes } from "sequelize";
 import { PaginatedResults } from "~/interfaces/misc";
 import { TaxonomyQuery } from "~/interfaces/taxonomy";
-import { ContentInterface, ContentQuery } from "../../interfaces/content";
+import { ContentInstance, ContentInterface, ContentQuery } from "../../interfaces/content";
 import { db } from "../utils";
 import { attachImage, attachImages } from "../utils/media.helper";
-import { Media } from "./Media";
 import { TaxonomyModel } from "./Taxonomy";
-
-// Some fields are optional when calling UserModel.create() or UserModel.build()
-interface ContentCreationAttributes extends Optional<ContentInterface, "id"> { Tag: any }
-
-// We need to declare an interface for our model that is basically what our class would be
-interface ContentInstance
-    extends Model<any, ContentCreationAttributes>,
-    ContentInterface { }
 
 const attributes: ModelAttributes<ContentInstance, ContentInterface> = {
     title: {
@@ -75,7 +65,7 @@ const attributes: ModelAttributes<ContentInstance, ContentInterface> = {
 const ContentModel = db.define<ContentInstance>('Content', attributes);
 
 const Content = {
-    findAll: async (query: ContentQuery): Promise<PaginatedResults> => {
+    findAll: async (query: ContentQuery): Promise<PaginatedResults<ContentInstance>> => {
         const { type, limit, page } = query;
         const offset = (parseInt(page.toString()) - 1) * limit;
 
@@ -92,7 +82,7 @@ const Content = {
             offset
         });
 
-        const contents = await attachImages(rows) as ContentInterface[];
+        const contents = await attachImages(rows) as ContentInstance[];
 
         return {
             contents: contents,
@@ -113,7 +103,7 @@ const Content = {
 
         return await attachImage(content) as ContentInstance;
     },
-    findByTaxonomy: async (query: TaxonomyQuery): Promise<PaginatedResults> => {
+    findByTaxonomy: async (query: TaxonomyQuery): Promise<PaginatedResults<ContentInstance>> => {
         const { slug, limit, page } = query;
         const offset = (parseInt(page.toString()) - 1) * limit;
 
@@ -133,7 +123,7 @@ const Content = {
             offset
         });
 
-        const contents = await attachImages(rows) as ContentInterface[];
+        const contents = await attachImages(rows) as ContentInstance[];
 
         return {
             contents,

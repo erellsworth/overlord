@@ -8,8 +8,8 @@ export interface contentResults {
     taxonomy?: TaxonomyInterface;
 }
 
-export interface PaginatedResults {
-    contents: ContentInterface[];
+export interface PaginatedResults<T> {
+    contents: T[];
     total: number;
     page: number;
 }

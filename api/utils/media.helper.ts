@@ -16,6 +16,7 @@ export const attachImage = async (content: ContentWithMedia): Promise<ContentWit
         const basePath = `${process.env.ASSETS_URI}${media.path}/`;
 
         content.image = {
+            data: media,
             full: `${basePath}${media.filename}`,
             thumbnail: `${basePath}thumbs/${media.filename}`
         };
