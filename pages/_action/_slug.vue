@@ -1,65 +1,16 @@
 <template>
-  <div class="container">
-    <div class="columns is-centered">
-      <div
-        class="
-          content
-          dynamic-content
-          column
-          is-two-thirds is-medium
-          has-text-primary-light
-        "
-      >
-        <tiptap
-          :action="action"
-          :content="content"
-          :contentType="contentData.type"
-          @onUpdate="onUpdate"
-        />
-        <hr />
-        <TagSelector :taxonomies="contentData.Taxonomies" />
-        <hr />
-
-        <ImageSelector
-          :images="[contentData.image]"
-          limit="1"
-          title="Thumbnail"
-          @onSelect="onImageSelected($event)"
-          @onReplace="onImageSelected($event)"
-          @onRemove="onImageRemove($event)"
-        />
-        <hr />
-        <b-button class="is-primary" @click="save()">{{
-          getActionName
-        }}</b-button>
-      </div>
-    </div>
-  </div>
+  <ContentForm :action="getActionName" :contentData="contentData" />
 </template>
 
 <script>
-import Tiptap from "../../components/editor/TipTap.vue";
-import TagSelector from "../../components/TagSelector.vue";
-import ImageSelector from "../../components/media/ImageSelector.vue";
-
-const contentData = {
-  data: {},
-};
+import ContentForm from "../../components/ContentForm.vue";
 
 export default {
   name: "Content",
   components: {
-    Tiptap,
-    TagSelector,
-    ImageSelector,
-  },
-  data() {
-    return {
-      contentData,
-    };
+    ContentForm,
   },
   async asyncData({ params, $axios }) {
-    let content = "";
     let contentData = {
       type: "post",
       content: null,
@@ -70,14 +21,12 @@ export default {
       const response = await $axios.$get(`api/content/${params.slug}`);
       if (response.success) {
         contentData = response.data;
-        content = contentData.content ? contentData.content : contentData.html;
       }
     }
 
     return {
       contentData,
       action: params.action,
-      content,
     };
   },
   computed: {
@@ -96,6 +45,12 @@ export default {
     onUpdate(data) {
       console.log("content update", data);
       contentData.data = data;
+    },
+    onTagUpdate(tags) {
+      console.log("onTagUpdate", tags);
+    },
+    onTagAdded(tag) {
+      console.log("onTagAdded", tag);
     },
     save() {
       console.log("save", contentData);

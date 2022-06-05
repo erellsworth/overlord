@@ -1,7 +1,5 @@
 import { Request, Response } from "express"
-import { ContentInterface, ContentQuery } from "~/interfaces/content";
 import { Image, MediaInterface } from "~/interfaces/media";
-import { PaginatedResults } from "~/interfaces/misc";
 import { Media } from "../models";
 import { successResponse } from "../utils/responses";
 import mediaRouter from "./router";

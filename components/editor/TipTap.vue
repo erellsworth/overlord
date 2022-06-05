@@ -21,6 +21,7 @@ import FigCaption from "./nodes/FigCaption";
 import FigureNode from "./nodes/FigureNode";
 
 export default {
+  name: "TipTap",
   components: {
     EditorContent,
     ToolBar,
@@ -39,17 +40,14 @@ export default {
 
       console.log(json);
     },
-    getActionName() {
-      return this.action.charAt(0).toUpperCase() + this.action.slice(1);
-    },
     typeChanged(type) {
       this.currentType = type;
     },
   },
 
   mounted() {
+    console.log("TipTap mounted");
     const self = this;
-    const action = this.getActionName();
     this.editor = new Editor({
       extensions: [StarterKit, Video, Image, FigCaption, FigureNode],
       content: this.content,
@@ -57,7 +55,7 @@ export default {
         const json = editor.getJSON();
         const html = editor.getHTML();
 
-        self.$emit(`on${action}`, {
+        self.$emit(`on${this.action}`, {
           json,
           html,
         });
