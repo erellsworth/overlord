@@ -22,7 +22,7 @@
             <b-button
               type="is-primary is-light"
               icon-right="delete"
-              @click="$emit('onRemove', image)"
+              @click="onRemove(image)"
             >
               Remove
             </b-button>
@@ -69,13 +69,26 @@ export default {
       imageList: this.images.filter((image) => {
         return typeof image === "object";
       }),
+      max: this.limit ? parseInt(this.limit) : 1,
     };
   },
   methods: {
     onSelect(image) {
-      this.imageList.push(image);
-      this.$emit("onSelect", image);
+      if (this.imageList.length >= this.max) {
+        this.imageList.unshift(image);
+        this.imageList.pop();
+      } else {
+        this.imageList.push(image);
+      }
+
+      this.$emit("onSelect", this.imageList);
       this.showLibrary = false;
+    },
+    onRemove(image) {
+      this.imageList = this.imageList.filter((img) => {
+        return img.data.id !== image.data.id;
+      });
+      this.$emit("onRemove", image);
     },
   },
   components: { ImageCard, MediaLibrary },

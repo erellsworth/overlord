@@ -1,5 +1,9 @@
 <template>
-  <ContentForm :action="getActionName" :contentData="contentData" />
+  <ContentForm
+    :action="getActionName"
+    :contentData="contentData"
+    @onSave="save"
+  />
 </template>
 
 <script>
@@ -42,18 +46,14 @@ export default {
     onImageRemove(image) {
       console.log("onImageRemove", image);
     },
-    onUpdate(data) {
-      console.log("content update", data);
-      contentData.data = data;
-    },
     onTagUpdate(tags) {
       console.log("onTagUpdate", tags);
     },
     onTagAdded(tag) {
       console.log("onTagAdded", tag);
     },
-    save() {
-      console.log("save", contentData);
+    save(newData) {
+      console.log("content save", newData);
       //await this.$axios.$post(`api/update/${this.$route.params.slug}`, data);
     },
   },

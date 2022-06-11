@@ -27,6 +27,13 @@
     />
 
     <b-button
+      @click="editor.chain().focus().toggleCodeBlock().run()"
+      :class="{ 'is-info': editor.isActive('codeBlock') }"
+      icon-right="code-not-equal-variant"
+      title="code block"
+    />
+
+    <b-button
       @click="clearFormat"
       icon-right="format-clear"
       title="remove inline formatting"
@@ -83,12 +90,6 @@
       title="Ordered list"
     />
     <b-button
-      @click="editor.chain().focus().toggleCodeBlock().run()"
-      :class="{ 'is-info': editor.isActive('codeBlock') }"
-      icon-right="code-not-equal-variant"
-      title="code block"
-    />
-    <b-button
       @click="editor.chain().focus().toggleBlockquote().run()"
       :class="{ 'is-info': editor.isActive('blockquote') }"
       icon-right="format-quote-close"
@@ -112,17 +113,74 @@
       icon-right="redo"
     />
     <b-button
+      @click="showLibrary = true"
+      icon-right="image"
+      title="Insert image"
+    />
+    <b-button
       @click="buttonClicked('logOutput')"
       title="Show output in console"
       icon-right="console"
     />
+
+    <b-modal
+      v-model="showLibrary"
+      has-modal-card
+      full-screen
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-label="Media Library"
+      close-button-aria-label="Close"
+      aria-modal
+    >
+      <MediaLibrary @onSelect="onMediaSelect" />
+    </b-modal>
+
+    <b-modal
+      v-model="showImageOptions"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-label="Image Options"
+      close-button-aria-label="Close"
+      aria-modal
+    >
+      <ImageCard v-if="selectedFile" :image="selectedFile">
+        <section class="content">
+          <b-field label="Message">
+            <b-input
+              type="textarea"
+              v-model="captions[selectedFile.data.id]"
+            ></b-input>
+          </b-field>
+          <b-button
+            type="is-primary"
+            label="Insert"
+            @click="onMediaInsert(selectedFile)"
+          />
+        </section>
+      </ImageCard>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import MediaLibrary from "../media/MediaLibrary.vue";
+import ImageCard from "../media/ImageCard.vue";
+
 export default {
   name: "ToolBar",
   props: ["editor"],
+  data() {
+    return {
+      showLibrary: false,
+      showImageOptions: false,
+      selectedFile: null,
+      captions: {},
+    };
+  },
   methods: {
     buttonClicked(eventName) {
       this.$emit(eventName);
@@ -134,7 +192,19 @@ export default {
     toggleHeading(level) {
       this.editor.chain().focus().toggleHeading({ level }).run();
     },
-    launchMediaLibrary() {},
+    onMediaSelect(media) {
+      this.showImageOptions = true;
+      this.selectedFile = media;
+    },
+    onMediaInsert(media) {
+      const src = media.full;
+      const alt = media.data.alt;
+      const caption = this.captions[media.data.id];
+      this.editor.commands.setImage({ src, alt, caption });
+      this.showLibrary = false;
+      this.showImageOptions = false;
+    },
   },
+  components: { MediaLibrary, ImageCard },
 };
 </script>

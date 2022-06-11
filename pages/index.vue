@@ -16,7 +16,7 @@
     </div>
     <hr />
     <h3 class="title">Create something</h3>
-    <ContentForm action="create" :contentData="contentData" />
+    <ContentForm action="create" :contentData="contentData" @onSave="save" />
   </section>
 </template>
 
@@ -29,7 +29,9 @@ export default {
     ContentForm,
   },
   methods: {
-    save() {},
+    save(data) {
+      console.log("content data", data);
+    },
   },
   async asyncData({ $axios }) {
     let response = await $axios.$get("api/content");

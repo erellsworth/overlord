@@ -5,7 +5,7 @@
     </header>
     <section class="modal-card-body has-background-dark">
       <b-field class="is-flex is-justify-content-center">
-        <b-upload v-model="dropFiles" multiple drag-drop>
+        <b-upload v-model="dropFiles" multiple drag-drop @input="filesLoaded">
           <section class="section">
             <div class="content has-text-centered">
               <p>
@@ -76,6 +76,9 @@ export default {
     this.total = media.data.total;
   },
   methods: {
+    filesLoaded(files) {
+      console.log("files", files);
+    },
     async loadMore() {
       this.page++;
       const media = await this.$axios.$get(`api/media/${this.page}`);

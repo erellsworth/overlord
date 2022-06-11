@@ -44,7 +44,6 @@
 
       <ImageSelector
         :images="[contentInfo.image]"
-        limit="1"
         title="Thumbnail"
         @onSelect="onImageSelected($event)"
         @onReplace="onImageSelected($event)"
@@ -82,26 +81,27 @@ export default {
     }
   },
   methods: {
-    onImageSelected(image) {
-      this.contentInfo.image = image;
-      console.log("onImageSelected", this.contentInfo);
+    onImageSelected(images) {
+      this.contentInfo.images = images;
     },
     onImageRemove(image) {
       console.log("onImageRemove", image);
     },
-    onUpdate(data) {
-      console.log("content update", data);
-      this.contentInfo.data = data;
+    onUpdate({ html, json }) {
+      this.contentInfo.content = json;
+      this.contentInfo.html = html;
     },
     onTagUpdate(tags) {
-      console.log("onTagUpdate", tags);
+      this.contentInfo.Taxonomies = tags;
     },
     onTagAdded(tag) {
-      console.log("onTagAdded", tag);
+      if (!this.contentInfo.newTags) {
+        this.contentInfo.newTags = [];
+      }
+      this.contentInfo.newTags.push(tag);
     },
     save() {
-      console.log("save", this.contentInfo);
-      //await this.$axios.$post(`api/update/${this.$route.params.slug}`, data);
+      this.$emit("onSave", this.contentInfo);
     },
   },
   components: { TipTap, TagSelector, ImageSelector },

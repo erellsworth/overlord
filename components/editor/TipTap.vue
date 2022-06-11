@@ -4,6 +4,7 @@
       :selectedType="contentType"
       @onTypeChanged="typeChanged($event)"
     />
+
     <ToolBar :editor="editor" @logOutput="output()" />
 
     <editor-content :editor="editor" class="box" />
@@ -13,12 +14,12 @@
 <script>
 import { Editor, EditorContent } from "@tiptap/vue-2";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Video from "./nodes/VideoNode";
 import ToolBar from "./ToolBar.vue";
 import TypeSelector from "./TypeSelector.vue";
 import FigCaption from "./nodes/FigCaption";
 import FigureNode from "./nodes/FigureNode";
+import CustomImage from "./nodes/CustomImage";
 
 export default {
   name: "TipTap",
@@ -46,16 +47,15 @@ export default {
   },
 
   mounted() {
-    console.log("TipTap mounted");
     const self = this;
     this.editor = new Editor({
-      extensions: [StarterKit, Video, Image, FigCaption, FigureNode],
+      extensions: [StarterKit, Video, CustomImage, FigCaption, FigureNode],
       content: this.content,
       onUpdate({ editor }) {
         const json = editor.getJSON();
         const html = editor.getHTML();
 
-        self.$emit(`on${this.action}`, {
+        self.$emit(`on${self.action}`, {
           json,
           html,
         });
