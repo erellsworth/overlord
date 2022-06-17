@@ -1,4 +1,5 @@
 import { Model, Optional } from "sequelize";
+import { GenericResult } from "./misc";
 
 export interface MediaInterface {
     id?: number;
@@ -16,6 +17,10 @@ export interface Image {
     thumbnail: string;
     data: MediaInterface
 };
+
+export interface CreationResult extends GenericResult {
+    image?: Image;
+}
 
 interface MediaCreationAttributes extends Optional<MediaInterface, "id"> { }
 

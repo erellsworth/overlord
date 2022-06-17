@@ -2,7 +2,7 @@ import { S3 } from "aws-sdk";
 import { Error } from "sequelize/types";
 import sharp from 'sharp';
 import concat from 'concat-stream';
-import { MediaInstance, MediaInterface } from "~/interfaces/media";
+import { CreationResult, MediaInstance, MediaInterface } from "~/interfaces/media";
 import { ContentWithMedia, ImageStorageResult, S3UploadResult } from "~/interfaces/misc";
 import { Media, MediaModel } from "../models/Media";
 
@@ -103,16 +103,12 @@ export const storeImage = async (file: Express.Multer.File, thumbSize: { width: 
     });
 }
 
-export const createMediaRecord = async (file: Express.Multer.File, uploadData: any): Promise<{
-    success: boolean,
-    error?: string,
-    media?: MediaInstance
-}> => {
+export const createMediaRecord = async (file: Express.Multer.File, uploadData: any): Promise<CreationResult> => {
 
     if (!file) {
         return {
             success: false,
-            error: "failed to load file"
+            error: { message: "failed to load file" }
         };
     }
 
@@ -127,11 +123,17 @@ export const createMediaRecord = async (file: Express.Multer.File, uploadData: a
     }
 
     try {
-        const media = await MediaModel.create(newMedia);
+        const data = await MediaModel.create(newMedia);
+
+        const basePath = `${process.env.ASSETS_URI}${data.path}/`;
 
         return {
             success: true,
-            media
+            image: {
+                data,
+                full: `${basePath}${data.filename}`,
+                thumbnail: `${basePath}thumbs/${data.filename}`
+            }
         }
 
     } catch (e) {
@@ -139,7 +141,7 @@ export const createMediaRecord = async (file: Express.Multer.File, uploadData: a
 
         return {
             success: false,
-            error: error.message
+            error: error
         };
     }
 

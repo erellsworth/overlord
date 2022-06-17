@@ -77,8 +77,6 @@ export default {
   },
   methods: {
     async filesLoaded(file) {
-      console.log("files", file);
-
       const fd = new FormData();
       fd.append("file", file);
 
@@ -87,7 +85,13 @@ export default {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("result", result);
+
+      if (result.data.success && result.data.data.success) {
+        this.media.unshift(result.data.data.image);
+      } else {
+        alert("upload failed");
+        // TODO: Replace with toast message
+      }
     },
     async loadMore() {
       this.page++;

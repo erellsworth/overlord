@@ -63,12 +63,12 @@ mediaRouter.post('/media/create', upload.single('file'), async (req: Request, re
         return;
     }
 
-    const result = await createMediaRecord(req.file as unknown as Express.Multer.File, req.body.s3Data);
+    const newMedia = await createMediaRecord(req.file as unknown as Express.Multer.File, req.body.s3Data);
 
-    if (result.success) {
-        successResponse(res, result);
+    if (newMedia.success) {
+        successResponse(res, newMedia);
     } else {
-        errorResponse(res, result.error as string);
+        errorResponse(res, newMedia.error?.message as string);
     }
 });
 
