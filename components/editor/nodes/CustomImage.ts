@@ -30,8 +30,6 @@ const CustomImage = Image.extend({
             img,
             ['figcaption', { class: 'caption' }, node.attrs.caption]
         ];
-
-        //return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)];
     },
 
 });

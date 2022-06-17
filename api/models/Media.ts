@@ -1,4 +1,4 @@
-import { DataTypes, Model, ModelAttributes, Optional } from "sequelize";
+import { DataTypes, ModelAttributes } from "sequelize";
 import { MediaInstance, MediaInterface } from "~/interfaces/media";
 import { PaginatedResults } from "~/interfaces/misc";
 import { db } from "../utils/db";
@@ -27,20 +27,21 @@ const attributes: ModelAttributes<MediaInstance, MediaInterface> = {
     },
     id: {
         primaryKey: true,
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
     },
     createdAt: {
         type: DataTypes.DATE,
         get() {
             const rawValue = this.getDataValue('createdAt');
-            return new Date(rawValue).toDateString();
+            return new Date(rawValue as string).toDateString();
         }
     },
     updatedAt: {
         type: DataTypes.DATE,
         get() {
             const rawValue = this.getDataValue('updatedAt');
-            return new Date(rawValue).toDateString();
+            return new Date(rawValue as string).toDateString();
         }
     }
 };

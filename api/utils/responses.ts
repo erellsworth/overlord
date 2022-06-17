@@ -15,16 +15,18 @@ export const successResponse = async <T>(res: Response, data: T) => {
     }
 }
 
-export const notFoundResponse = async (res: Response) => {
-
-
+export const errorResponse = async (res: Response, message: string, code: number = 500) => {
     const response: ApiResponse = {
         success: false,
-        error: { // TODO: Fetch random 404 messages from database
-            message: 'Page not found',
-            code: 404
+        error: {
+            message,
+            code
         }
     };
 
     res.json(response);
+}
+
+export const notFoundResponse = async (res: Response) => {
+    errorResponse(res, 'Page not found', 404);
 }

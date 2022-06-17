@@ -5,13 +5,13 @@
     </header>
     <section class="modal-card-body has-background-dark">
       <b-field class="is-flex is-justify-content-center">
-        <b-upload v-model="dropFiles" multiple drag-drop @input="filesLoaded">
+        <b-upload v-model="dropFiles" drag-drop @input="filesLoaded">
           <section class="section">
             <div class="content has-text-centered">
               <p>
                 <b-icon icon="upload" size="is-large"> </b-icon>
               </p>
-              <p>Drop your files here or click to upload</p>
+              <p>Drop your file here or click to upload</p>
             </div>
           </section>
         </b-upload>
@@ -76,8 +76,18 @@ export default {
     this.total = media.data.total;
   },
   methods: {
-    filesLoaded(files) {
-      console.log("files", files);
+    async filesLoaded(file) {
+      console.log("files", file);
+
+      const fd = new FormData();
+      fd.append("file", file);
+
+      const result = await this.$axios.post("api/media/create", fd, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("result", result);
     },
     async loadMore() {
       this.page++;

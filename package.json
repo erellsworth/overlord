@@ -16,13 +16,16 @@
     "@tiptap/extension-image": "^2.0.0-beta.27",
     "@tiptap/starter-kit": "^2.0.0-beta.185",
     "@tiptap/vue-2": "^2.0.0-beta.79",
+    "aws-sdk": "^2.1153.0",
     "core-js": "^3.22.7",
     "express": "^4.18.1",
+    "multer": "^1.4.5-lts.1",
     "nuxt": "^2.15.8",
     "nuxt-buefy": "^0.4.23",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.20.1"
+    "sequelize": "^6.20.1",
+    "sharp": "^0.30.6"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
@@ -30,6 +33,9 @@
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
+    "@types/concat-stream": "^2.0.0",
+    "@types/multer": "^1.4.7",
+    "@types/sharp": "^0.30.4",
     "chromedriver": "^91.0.1",
     "eslint": "^7.29.0",
     "eslint-plugin-nuxt": "^2.0.0",

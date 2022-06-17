@@ -1,9 +1,9 @@
 import { Model, Optional } from "sequelize";
 
 export interface MediaInterface {
-    id: number;
-    createdAt: string;
-    updatedAt: string;
+    id?: number;
+    createdAt?: string;
+    updatedAt?: string;
     filename: string;
     path: string;
     mimetype: string;
