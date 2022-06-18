@@ -4,10 +4,9 @@ import { Image, MediaInterface } from "~/interfaces/media";
 import { Media } from "../models";
 import { errorResponse, successResponse } from "../utils/responses";
 import mediaRouter from "./router";
-import { createMediaRecord, parseFileName, storeImage } from "../utils/media.helper";
+import { createMediaRecord, removeImage, storeImage } from "../utils/media.helper";
 import { ImageStorageResult } from "~/interfaces/misc";
 
-multer.memoryStorage
 const upload = multer({
     storage: {
         _handleFile: async (req: Request, file: Express.Multer.File, cb: (error?: any, file?: Partial<Express.Multer.File>) => void) => {
@@ -71,5 +70,16 @@ mediaRouter.post('/media/create', upload.single('file'), async (req: Request, re
         errorResponse(res, newMedia.error?.message as string);
     }
 });
+
+mediaRouter.delete('/media/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await removeImage(id);
+
+    if (result.success) {
+        await result.media?.destroy();
+    }
+
+    successResponse(res, result);
+})
 
 export default mediaRouter;

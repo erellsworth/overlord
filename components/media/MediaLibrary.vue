@@ -1,59 +1,54 @@
 <template>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title has-text-dark">Media Library</p>
-    </header>
-    <section class="modal-card-body has-background-dark">
-      <b-field class="is-flex is-justify-content-center">
-        <b-upload v-model="dropFiles" drag-drop @input="filesLoaded">
-          <section class="section">
-            <div class="content has-text-centered">
-              <p>
-                <b-icon icon="upload" size="is-large"> </b-icon>
-              </p>
-              <p>Drop your file here or click to upload</p>
-            </div>
-          </section>
-        </b-upload>
-      </b-field>
+  <div class="media-libary">
+    <b-field class="is-flex is-justify-content-center">
+      <b-upload v-model="dropFiles" drag-drop @input="filesLoaded">
+        <section class="section">
+          <div class="content has-text-centered">
+            <p>
+              <b-icon icon="upload" size="is-large"> </b-icon>
+            </p>
+            <p>Drop your file here or click to upload</p>
+          </div>
+        </section>
+      </b-upload>
+    </b-field>
 
-      <div class="columns is-multiline">
-        <div
-          class="column is-one-third"
-          v-for="file in media"
-          :key="file.data.id"
-        >
-          <ImageCard :image="file">
-            <div class="buttons">
-              <b-button
-                type="is-primary is-light"
-                icon-right="file-swap"
-                @click="$emit('onSelect', file)"
-              >
-                Select
-              </b-button>
-
-              <b-button
-                type="is-primary is-light"
-                icon-right="delete"
-                @click="$emit('onDelete', file)"
-              >
-                Delete
-              </b-button>
-            </div>
-          </ImageCard>
-        </div>
-      </div>
-      <b-button
-        size="is-medium"
-        icon-left="image-plus"
-        @click="loadMore"
-        v-if="showLoadMore"
+    <div class="columns is-multiline">
+      <div
+        class="column is-one-third"
+        v-for="file in media"
+        :key="file.data.id"
       >
-        Load More
-      </b-button>
-      <p></p>
-    </section>
+        <ImageCard :image="file">
+          <div class="buttons">
+            <b-button
+              v-if="!hideSelect"
+              type="is-primary is-light"
+              icon-right="file-swap"
+              @click="$emit('onSelect', file)"
+            >
+              Select
+            </b-button>
+
+            <b-button
+              type="is-primary is-light"
+              icon-right="delete"
+              @click="deleteFile(file)"
+            >
+              Delete
+            </b-button>
+          </div>
+        </ImageCard>
+      </div>
+    </div>
+    <b-button
+      size="is-medium"
+      icon-left="image-plus"
+      @click="loadMore"
+      v-if="showLoadMore"
+    >
+      Load More
+    </b-button>
   </div>
 </template>
 
@@ -62,6 +57,7 @@ import ImageCard from "../media/ImageCard.vue";
 
 export default {
   name: "MediaLibrary",
+  props: ["hideSelect"],
   data() {
     return {
       dropFiles: [],
@@ -97,6 +93,14 @@ export default {
       this.page++;
       const media = await this.$axios.$get(`api/media/${this.page}`);
       this.media = this.media.concat(media.data.images);
+    },
+    async deleteFile(file) {
+      const media = await this.$axios.$delete(`api/media/${file.data.id}`);
+      console.log("delete result", media);
+
+      this.media = this.media.filter(
+        (mediaRecord) => mediaRecord.data.id !== media.data.media.id
+      );
     },
   },
   computed: {

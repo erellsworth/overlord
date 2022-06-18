@@ -5,6 +5,10 @@ import { Content } from "../models";
 import { notFoundResponse, successResponse } from "../utils/responses";
 import contentRouter from "./router";
 
+contentRouter.get('/content/types', async (req: Request, res: Response) => {
+    successResponse(res, ['post', 'page']);
+});
+
 contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {
 
     let content: ContentInstance | PaginatedResults<ContentInstance>;

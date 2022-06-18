@@ -43,6 +43,7 @@ export default {
       seo: {
         description: "",
       },
+      type: "post",
     };
 
     if (response.success) {

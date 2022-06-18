@@ -18,8 +18,12 @@ export interface Image {
     data: MediaInterface
 };
 
-export interface CreationResult extends GenericResult {
+export interface MediaCreationResult extends GenericResult {
     image?: Image;
+}
+
+export interface MediaDeletionResult extends GenericResult {
+    media?: MediaInstance
 }
 
 interface MediaCreationAttributes extends Optional<MediaInterface, "id"> { }

@@ -1,6 +1,6 @@
 import { DataTypes, ModelAttributes } from "sequelize";
 import { MediaInstance, MediaInterface } from "~/interfaces/media";
-import { PaginatedResults } from "~/interfaces/misc";
+import { GenericResult, PaginatedResults } from "~/interfaces/misc";
 import { db } from "../utils/db";
 
 const attributes: ModelAttributes<MediaInstance, MediaInterface> = {
@@ -69,6 +69,21 @@ const Media = {
             total: count,
             page: page
         };
+    },
+    remove: async (id: string): Promise<GenericResult> => {
+        const media = await MediaModel.findByPk(id, { logging: false }) as unknown as MediaInstance;
+
+        if (!media) {
+            return {
+                success: false,
+                error: { message: 'Media not found' }
+            };
+        }
+        await media.destroy();
+
+        return {
+            success: true
+        }
     }
 }
 

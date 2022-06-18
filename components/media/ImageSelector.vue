@@ -50,7 +50,14 @@
         close-button-aria-label="Close"
         aria-modal
       >
-        <MediaLibrary @onSelect="onSelect" />
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title has-text-dark">Media Library</p>
+          </header>
+          <section class="modal-card-body has-background-dark">
+            <MediaLibrary @onSelect="onSelect" />
+          </section>
+        </div>
       </b-modal>
     </div>
   </section>

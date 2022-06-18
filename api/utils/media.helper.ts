@@ -1,10 +1,11 @@
-import { S3 } from "aws-sdk";
+import { AWSError, S3 } from "aws-sdk";
 import { Error } from "sequelize/types";
 import sharp from 'sharp';
 import concat from 'concat-stream';
-import { CreationResult, MediaInstance, MediaInterface } from "~/interfaces/media";
-import { ContentWithMedia, ImageStorageResult, S3UploadResult } from "~/interfaces/misc";
+import { MediaCreationResult, MediaDeletionResult, MediaInterface } from "~/interfaces/media";
+import { ContentWithMedia, GenericResult, ImageStorageResult, S3UploadResult } from "~/interfaces/misc";
 import { Media, MediaModel } from "../models/Media";
+import { DeleteObjectOutput } from "aws-sdk/clients/s3";
 
 const s3 = new S3({
     accessKeyId: process.env.AWS_KEY_ID as string,
@@ -103,7 +104,43 @@ export const storeImage = async (file: Express.Multer.File, thumbSize: { width: 
     });
 }
 
-export const createMediaRecord = async (file: Express.Multer.File, uploadData: any): Promise<CreationResult> => {
+export const removeImage = async (id: string): Promise<MediaDeletionResult> => {
+
+    const media = await Media.findById(id);
+
+    if (!media) {
+        return {
+            success: false,
+            error: { message: 'Media not found' }
+        }
+    }
+
+    return new Promise((resolve, reject) => {
+
+        const Key = `${media.path.replace('/', '')}/${media.filename}`;
+
+        s3.deleteObject({
+            Bucket: process.env.AWS_BUCKET as string,
+            Key
+        }, (err: AWSError, data: DeleteObjectOutput) => {
+            if (err) {
+                resolve({
+                    success: false,
+                    error: { message: err.message }
+                });
+                return;
+            }
+
+            resolve({
+                success: true,
+                media
+            });
+        });
+    });
+
+}
+
+export const createMediaRecord = async (file: Express.Multer.File, uploadData: any): Promise<MediaCreationResult> => {
 
     if (!file) {
         return {
