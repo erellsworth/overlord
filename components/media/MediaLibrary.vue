@@ -173,12 +173,18 @@ export default {
       this.media = this.media.concat(media.data.images);
     },
     async deleteFile(file) {
-      const media = await this.$axios.$delete(`api/media/${file.data.id}`);
-      console.log("delete result", media);
+      this.$buefy.dialog.confirm({
+        message: `Delete ${file.data.filename}?`,
+        onConfirm: async () => {
+          const media = await this.$axios.$delete(`api/media/${file.data.id}`);
 
-      this.media = this.media.filter(
-        (mediaRecord) => mediaRecord.data.id !== media.data.media.id
-      );
+          this.media = this.media.filter(
+            (mediaRecord) => mediaRecord.data.id !== media.data.media.id
+          );
+
+          this.$buefy.toast.open(`${file.data.filename} deleted`);
+        },
+      });
     },
   },
   computed: {
