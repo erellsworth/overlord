@@ -1,7 +1,7 @@
 <template>
   <div class="media-libary">
     <b-field class="is-flex is-justify-content-center">
-      <b-upload v-model="dropFiles" drag-drop @input="filesLoaded">
+      <b-upload v-model="dropFiles" drag-drop @input="fileDropped">
         <section class="section">
           <div class="content has-text-centered">
             <p>
@@ -32,6 +32,14 @@
 
             <b-button
               type="is-primary is-light"
+              icon-left="image-edit"
+              @click="openEditor(file)"
+            >
+              Edit
+            </b-button>
+
+            <b-button
+              type="is-primary is-light"
               icon-right="delete"
               @click="deleteFile(file)"
             >
@@ -49,11 +57,40 @@
     >
       Load More
     </b-button>
+
+    <b-modal
+      v-model="showEditor"
+      has-modal-card
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-label="Edit Media"
+      close-button-aria-label="Close"
+      aria-modal
+    >
+      <div class="modal-card" v-if="imageToEdit">
+        <header class="modal-card-head">
+          <p class="modal-card-title has-text-dark">
+            Edit {{ imageToEdit.data.filename }}
+          </p>
+        </header>
+        <section class="modal-card-body has-background-dark">
+          <ImageEditor :media="imageToEdit" @onSave="saveEdits($event)" />
+        </section>
+      </div>
+    </b-modal>
   </div>
 </template>
 
+<style lang="scss">
+.modal-card {
+  width: 100%;
+}
+</style>
+
 <script>
-import ImageCard from "../media/ImageCard.vue";
+import ImageCard from "./ImageCard.vue";
+import ImageEditor from "./ImageEditor.vue";
 
 export default {
   name: "MediaLibrary",
@@ -64,6 +101,8 @@ export default {
       page: 1,
       media: [],
       total: 1,
+      showEditor: false,
+      imageToEdit: null,
     };
   },
   async mounted() {
@@ -72,9 +111,23 @@ export default {
     this.total = media.data.total;
   },
   methods: {
-    async filesLoaded(file) {
+    openEditor(file) {
+      this.imageToEdit = file;
+      this.showEditor = true;
+    },
+    saveEdits(data) {
+      this.showEditor = false;
+      if (data.isNew) {
+        this.upload(data);
+      } else {
+        // send update request
+      }
+    },
+    async upload(data) {
+      console.log("data", data.crops);
       const fd = new FormData();
-      fd.append("file", file);
+      fd.append("crops", JSON.stringify(data.crops));
+      fd.append("file", data.file);
 
       const result = await this.$axios.post("api/media/create", fd, {
         headers: {
@@ -88,6 +141,31 @@ export default {
         alert("upload failed");
         // TODO: Replace with toast message
       }
+    },
+
+    async fileDropped(file) {
+      console.log("file", file);
+      const newNameResult = await this.$axios.get(
+        `api/media/getValidFileName/${file.name}`
+      );
+
+      const newName = newNameResult.data.data.validName;
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.imageToEdit = {
+          full: reader.result,
+          isNew: true,
+          data: {
+            name: newName,
+            alt: newName,
+            filename: newName,
+          },
+          file: file,
+        };
+        this.showEditor = true;
+      };
+      reader.readAsDataURL(file);
     },
     async loadMore() {
       this.page++;
@@ -108,6 +186,6 @@ export default {
       return this.media.length < this.total;
     },
   },
-  components: { ImageCard },
+  components: { ImageCard, ImageEditor },
 };
 </script>

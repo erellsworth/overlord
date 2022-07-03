@@ -1,8 +1,9 @@
+import path from 'path';
 import { AWSError, S3 } from "aws-sdk";
 import { Error } from "sequelize/types";
 import sharp from 'sharp';
 import concat from 'concat-stream';
-import { MediaCreationResult, MediaDeletionResult, MediaInterface } from "~/interfaces/media";
+import { Crop, MediaCreationResult, MediaDeletionResult, MediaInterface } from "~/interfaces/media";
 import { ContentWithMedia, GenericResult, ImageStorageResult, S3UploadResult } from "~/interfaces/misc";
 import { Media, MediaModel } from "../models/Media";
 import { DeleteObjectOutput } from "aws-sdk/clients/s3";
@@ -44,6 +45,7 @@ export const parseFileName = (name: string): string => {
     return trimmed.replace(/[_-]/g, " ");
 };
 
+
 const uploadToS3 = async (Body: Buffer | Express.Multer.File['stream'], Key: string, ContentType: string): Promise<S3UploadResult> => {
 
     return new Promise((resolve, reject) => {
@@ -71,7 +73,7 @@ const uploadToS3 = async (Body: Buffer | Express.Multer.File['stream'], Key: str
     });
 }
 
-export const storeImage = async (file: Express.Multer.File, thumbSize: { width: number, height: number } = { width: 400, height: 225 }): Promise<ImageStorageResult> => {
+export const storeImage = async (file: Express.Multer.File, crops?: { [key: string]: Crop }, thumbSize: { width: number, height: number } = { width: 400, height: 225 }): Promise<ImageStorageResult> => {
 
     const ContentType = file.mimetype;
     const { width, height } = thumbSize;
@@ -81,12 +83,25 @@ export const storeImage = async (file: Express.Multer.File, thumbSize: { width: 
         try {
             file.stream.pipe(concat({ encoding: 'buffer' }, async (data) => {
 
-                const thumbnail = await sharp(data)
-                    .resize(width, height)
-                    .toBuffer();
+                let fullsize = sharp(data);
+                let thumbnail = sharp(data);
 
-                const fullSizeResult = await uploadToS3(data, `uploads/${file.originalname}`, ContentType);
-                const thumbResult = await uploadToS3(thumbnail, `uploads/thumbs/${file.originalname}`, ContentType);
+                if (crops?.thumb) {
+                    console.log('extract thumb', crops.thumb);
+                    thumbnail = thumbnail.extract(crops.thumb);
+                }
+
+                if (crops?.full) {
+                    console.log('extract full', crops.full);
+
+                    fullsize = fullsize.extract(crops.full);
+                }
+
+                const full = await fullsize.toBuffer();
+                const thumb = await thumbnail.resize(width, height).toBuffer();
+
+                const fullSizeResult = await uploadToS3(full, `uploads/${file.originalname}`, ContentType);
+                const thumbResult = await uploadToS3(thumb, `uploads/thumbs/${file.originalname}`, ContentType);
 
                 resolve({
                     success: fullSizeResult.success && thumbResult.success,
@@ -142,6 +157,8 @@ export const removeImage = async (id: string): Promise<MediaDeletionResult> => {
 
 export const createMediaRecord = async (file: Express.Multer.File, uploadData: any): Promise<MediaCreationResult> => {
 
+    console.log('createMediaRecord');
+
     if (!file) {
         return {
             success: false,
@@ -181,5 +198,27 @@ export const createMediaRecord = async (file: Express.Multer.File, uploadData: a
             error: error
         };
     }
+
+}
+
+export const incrementFileName = (filename: string) => {
+
+    const fileInfo = path.parse(filename);
+    const lastChar = parseInt(fileInfo.name.slice(-1));
+
+    if (isNaN(lastChar)) {
+        return `${fileInfo.name}-2${fileInfo.ext}`;
+    }
+
+    const nameParts = fileInfo.name.split('-');
+
+    if (nameParts.length === 1) {
+        return `${fileInfo.name}-2${fileInfo.ext}`;
+    }
+
+    let lastNum = parseInt(nameParts[nameParts.length - 1]);
+    lastNum++;
+
+    return `${fileInfo.name}-${lastNum}${fileInfo.ext}`;
 
 }

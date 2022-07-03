@@ -148,19 +148,20 @@
       aria-modal
     >
       <ImageCard v-if="selectedFile" :image="selectedFile">
-        <section class="content">
-          <b-field label="Message">
-            <b-input
-              type="textarea"
-              v-model="captions[selectedFile.data.id]"
-            ></b-input>
-          </b-field>
-          <b-button
-            type="is-primary"
-            label="Insert"
-            @click="onMediaInsert(selectedFile)"
-          />
-        </section>
+        <b-field label="Caption">
+          <b-input
+            type="textarea"
+            v-model="images[selectedFile.data.id].caption"
+          ></b-input>
+        </b-field>
+        <b-field label="Alt text">
+          <b-input v-model="images[selectedFile.data.id].alt"></b-input>
+        </b-field>
+        <b-button
+          type="is-primary"
+          label="Insert"
+          @click="onMediaInsert(selectedFile)"
+        />
       </ImageCard>
     </b-modal>
   </div>
@@ -178,7 +179,7 @@ export default {
       showLibrary: false,
       showImageOptions: false,
       selectedFile: null,
-      captions: {},
+      images: {},
     };
   },
   methods: {
@@ -194,12 +195,17 @@ export default {
     },
     onMediaSelect(media) {
       this.showImageOptions = true;
+      if (!this.images[media.data.id]) {
+        this.images[media.data.id] = {
+          caption: "",
+          alt: media.data.alt,
+        };
+      }
       this.selectedFile = media;
     },
     onMediaInsert(media) {
       const src = media.full;
-      const alt = media.data.alt;
-      const caption = this.captions[media.data.id];
+      const { caption, alt } = this.images[media.data.id];
       this.editor.commands.setImage({ src, alt, caption });
       this.showLibrary = false;
       this.showImageOptions = false;

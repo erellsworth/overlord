@@ -18,6 +18,13 @@ export interface Image {
     data: MediaInterface
 };
 
+export interface Crop {
+    height: number;
+    left: number;
+    top: number;
+    width: number;
+}
+
 export interface MediaCreationResult extends GenericResult {
     image?: Image;
 }

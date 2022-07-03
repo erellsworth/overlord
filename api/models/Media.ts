@@ -2,6 +2,7 @@ import { DataTypes, ModelAttributes } from "sequelize";
 import { MediaInstance, MediaInterface } from "~/interfaces/media";
 import { GenericResult, PaginatedResults } from "~/interfaces/misc";
 import { db } from "../utils/db";
+import { incrementFileName } from "../utils/media.helper";
 
 const attributes: ModelAttributes<MediaInstance, MediaInterface> = {
     name: {
@@ -69,6 +70,32 @@ const Media = {
             total: count,
             page: page
         };
+    },
+    getNewFileName: async (filename: string): Promise<string> => {
+        const media = await MediaModel.findOne({
+            where: {
+                filename
+            }
+        });
+
+        if (!media) {
+            return filename;
+        }
+
+        return Media.getNewFileName(incrementFileName(filename));
+    },
+    checkName: async (filename: string): Promise<boolean> => {
+        const media = await MediaModel.findOne({
+            where: {
+                filename
+            }
+        });
+
+        if (media) {
+            return false;
+        }
+
+        return true;
     },
     remove: async (id: string): Promise<GenericResult> => {
         const media = await MediaModel.findByPk(id, { logging: false }) as unknown as MediaInstance;

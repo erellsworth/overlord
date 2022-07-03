@@ -1,12 +1,9 @@
 <template>
   <Card :title="image.data.name">
-    <b-image
-      :src="image.thumbnail"
-      :alt="image.data.alt"
-      slot="content"
-    ></b-image>
-
-    <slot slot="footer" />
+    <div slot="content">
+      <b-image :src="image.thumbnail" :alt="image.data.alt"></b-image>
+      <slot />
+    </div>
   </Card>
 </template>
 

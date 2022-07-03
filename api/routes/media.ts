@@ -11,7 +11,7 @@ const upload = multer({
     storage: {
         _handleFile: async (req: Request, file: Express.Multer.File, cb: (error?: any, file?: Partial<Express.Multer.File>) => void) => {
 
-            req.body.uploadResult = await storeImage(file);
+            req.body.uploadResult = await storeImage(file, JSON.parse(req.body.crops));
 
             cb(null, file);
 
@@ -53,7 +53,16 @@ mediaRouter.get('/media/:page?', async (req: Request, res: Response) => {
 
 });
 
+mediaRouter.get('/media/getValidFileName/:name', async (req: Request, res: Response) => {
+
+    const validName = await Media.getNewFileName(req.params.name);
+
+    successResponse(res, { validName });
+});
+
 mediaRouter.post('/media/create', upload.single('file'), async (req: Request, res: Response) => {
+
+    console.log('media/create');
 
     const uploadResult = req.body.uploadResult as ImageStorageResult;
 
@@ -80,6 +89,6 @@ mediaRouter.delete('/media/:id', async (req: Request, res: Response) => {
     }
 
     successResponse(res, result);
-})
+});
 
 export default mediaRouter;
