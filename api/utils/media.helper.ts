@@ -3,7 +3,7 @@ import { AWSError, S3 } from "aws-sdk";
 import { Error } from "sequelize/types";
 import sharp from 'sharp';
 import concat from 'concat-stream';
-import { Crop, MediaCreationResult, MediaDeletionResult, MediaInterface } from "~/interfaces/media";
+import { Crop, MediaCreationResult, MediaDeletionResult, MediaInstance, MediaInterface } from "~/interfaces/media";
 import { ContentWithMedia, GenericResult, ImageStorageResult, S3UploadResult } from "~/interfaces/misc";
 import { Media, MediaModel } from "../models/Media";
 import { DeleteObjectOutput } from "aws-sdk/clients/s3";
@@ -73,6 +73,54 @@ const uploadToS3 = async (Body: Buffer | Express.Multer.File['stream'], Key: str
     });
 }
 
+const removeFromS3 = async (media: MediaInstance): Promise<GenericResult[]> => {
+    const removeThumb = new Promise<GenericResult>((resolve, reject) => {
+
+        const Key = `${media.path.replace('/', '')}/thumbs/${media.filename}`;
+
+        s3.deleteObject({
+            Bucket: process.env.AWS_BUCKET as string,
+            Key
+        }, (err: AWSError, data: DeleteObjectOutput) => {
+            if (err) {
+                resolve({
+                    success: false,
+                    error: { message: err.message }
+                });
+                return;
+            }
+
+            resolve({
+                success: true
+            });
+        });
+    });
+
+    const removeFull = new Promise<GenericResult>((resolve, reject) => {
+
+        const Key = `${media.path.replace('/', '')}/${media.filename}`;
+
+        s3.deleteObject({
+            Bucket: process.env.AWS_BUCKET as string,
+            Key
+        }, (err: AWSError, data: DeleteObjectOutput) => {
+            if (err) {
+                resolve({
+                    success: false,
+                    error: { message: err.message }
+                });
+                return;
+            }
+
+            resolve({
+                success: true,
+            });
+        });
+    });
+
+    return Promise.all([removeThumb, removeFull]);
+}
+
 export const storeImage = async (file: Express.Multer.File, crops?: { [key: string]: Crop }, thumbSize: { width: number, height: number } = { width: 400, height: 225 }): Promise<ImageStorageResult> => {
 
     const ContentType = file.mimetype;
@@ -87,13 +135,10 @@ export const storeImage = async (file: Express.Multer.File, crops?: { [key: stri
                 let thumbnail = sharp(data);
 
                 if (crops?.thumb) {
-                    console.log('extract thumb', crops.thumb);
                     thumbnail = thumbnail.extract(crops.thumb);
                 }
 
                 if (crops?.full) {
-                    console.log('extract full', crops.full);
-
                     fullsize = fullsize.extract(crops.full);
                 }
 
@@ -130,28 +175,23 @@ export const removeImage = async (id: string): Promise<MediaDeletionResult> => {
         }
     }
 
-    return new Promise((resolve, reject) => {
+    const S3results = await removeFromS3(media);
 
-        const Key = `${media.path.replace('/', '')}/${media.filename}`;
+    const success = S3results.every((result) => result.success);
 
-        s3.deleteObject({
-            Bucket: process.env.AWS_BUCKET as string,
-            Key
-        }, (err: AWSError, data: DeleteObjectOutput) => {
-            if (err) {
-                resolve({
-                    success: false,
-                    error: { message: err.message }
-                });
-                return;
+    if (!success) {
+        return {
+            success,
+            error: {
+                message: 'S3 error'
             }
+        }
+    }
 
-            resolve({
-                success: true,
-                media
-            });
-        });
-    });
+    return {
+        success,
+        media
+    };
 
 }
 

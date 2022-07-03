@@ -30,7 +30,7 @@ export interface MediaCreationResult extends GenericResult {
 }
 
 export interface MediaDeletionResult extends GenericResult {
-    media?: MediaInstance
+    media?: MediaInstance;
 }
 
 interface MediaCreationAttributes extends Optional<MediaInterface, "id"> { }
