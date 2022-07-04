@@ -62,7 +62,6 @@
       v-model="showEditor"
       has-modal-card
       trap-focus
-      :destroy-on-hide="false"
       aria-role="dialog"
       aria-label="Edit Media"
       close-button-aria-label="Close"
@@ -124,7 +123,6 @@ export default {
       }
     },
     async upload(data) {
-      console.log("data", data.crops);
       const fd = new FormData();
       fd.append("crops", JSON.stringify(data.crops));
       fd.append("file", data.file);
@@ -144,7 +142,6 @@ export default {
     },
 
     async fileDropped(file) {
-      console.log("file", file);
       const newNameResult = await this.$axios.get(
         `api/media/getValidFileName/${file.name}`
       );
@@ -152,6 +149,7 @@ export default {
       const newName = newNameResult.data.data.validName;
 
       const reader = new FileReader();
+
       reader.onloadend = () => {
         this.imageToEdit = {
           full: reader.result,

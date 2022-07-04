@@ -197,8 +197,6 @@ export const removeImage = async (id: string): Promise<MediaDeletionResult> => {
 
 export const createMediaRecord = async (file: Express.Multer.File, uploadData: any): Promise<MediaCreationResult> => {
 
-    console.log('createMediaRecord');
-
     if (!file) {
         return {
             success: false,

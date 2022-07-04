@@ -62,8 +62,6 @@ mediaRouter.get('/media/getValidFileName/:name', async (req: Request, res: Respo
 
 mediaRouter.post('/media/create', upload.single('file'), async (req: Request, res: Response) => {
 
-    console.log('media/create');
-
     const uploadResult = req.body.uploadResult as ImageStorageResult;
 
     if (!uploadResult.success) {
