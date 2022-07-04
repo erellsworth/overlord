@@ -136,14 +136,25 @@ export default {
       if (result.data.success && result.data.data.success) {
         this.media.unshift(result.data.data.image);
       } else {
-        alert("upload failed");
-        // TODO: Replace with toast message
+        this.$buefy.toast.open({
+          type: "is-warning",
+          message: "Upload failed",
+        });
       }
     },
     async update(data) {
-      console.log("update", data);
-      const media = await this.$axios.$patch("api/media", data.data);
-      console.log("update result", media);
+      const result = await this.$axios.$patch("api/media", data.data);
+      if (result.success) {
+        this.$buefy.toast.open({
+          type: "is-success",
+          message: "Media updated",
+        });
+      } else {
+        this.$buefy.toast.open({
+          type: "is-warning",
+          message: "Update failed",
+        });
+      }
     },
     async fileDropped(file) {
       const newNameResult = await this.$axios.get(
@@ -184,7 +195,10 @@ export default {
             (mediaRecord) => mediaRecord.data.id !== media.data.media.id
           );
 
-          this.$buefy.toast.open(`${file.data.filename} deleted`);
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: `${file.data.filename} deleted`,
+          });
         },
       });
     },
