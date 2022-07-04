@@ -119,7 +119,7 @@ export default {
       if (data.isNew) {
         this.upload(data);
       } else {
-        // send update request
+        this.update(data);
       }
     },
     async upload(data) {
@@ -140,7 +140,11 @@ export default {
         // TODO: Replace with toast message
       }
     },
-
+    async update(data) {
+      console.log("update", data);
+      const media = await this.$axios.$patch("api/media", data.data);
+      console.log("update result", media);
+    },
     async fileDropped(file) {
       const newNameResult = await this.$axios.get(
         `api/media/getValidFileName/${file.name}`

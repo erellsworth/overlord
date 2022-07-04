@@ -50,7 +50,7 @@ const attributes: ModelAttributes<MediaInstance, MediaInterface> = {
 const MediaModel = db.define('Media', attributes);
 
 const Media = {
-    findById: async (id: string): Promise<MediaInstance> => {
+    findById: async (id: number): Promise<MediaInstance> => {
         return await MediaModel.findByPk(id, { logging: false }) as unknown as MediaInstance;
     },
     findAll: async (page: number): Promise<PaginatedResults<MediaInstance>> => {

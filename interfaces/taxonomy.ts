@@ -8,7 +8,7 @@ export interface TaxonomyInterface extends baseInterface {
     description: string;
     metaData: {
         text: string;
-        media_id: string;
+        media_id: number;
     }
     content?: PaginatedResults<ContentInterface>;
     image?: Image;

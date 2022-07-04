@@ -80,13 +80,35 @@ mediaRouter.post('/media/create', upload.single('file'), async (req: Request, re
 
 mediaRouter.delete('/media/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await removeImage(id);
+    const result = await removeImage(parseInt(id));
 
     if (result.success) {
         await result.media?.destroy();
     }
 
     successResponse(res, result);
+});
+
+mediaRouter.patch('/media', async (req: Request, res: Response) => {
+
+    const updatedMedia = { ...req.body } as MediaInterface;
+
+    if (!updatedMedia.id) {
+        errorResponse(res, 'Missing id');
+        return;
+    }
+
+    const media = await Media.findById(updatedMedia.id);
+
+    delete updatedMedia.updatedAt;
+    delete updatedMedia.createdAt;
+
+    media.set(updatedMedia);
+
+    await media.save();
+
+    successResponse(res, { media });
+
 });
 
 export default mediaRouter;

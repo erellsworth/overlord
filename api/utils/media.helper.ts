@@ -164,7 +164,7 @@ export const storeImage = async (file: Express.Multer.File, crops?: { [key: stri
     });
 }
 
-export const removeImage = async (id: string): Promise<MediaDeletionResult> => {
+export const removeImage = async (id: number): Promise<MediaDeletionResult> => {
 
     const media = await Media.findById(id);
 
