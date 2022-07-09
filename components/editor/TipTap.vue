@@ -7,7 +7,7 @@
 
     <ToolBar :editor="editor" @logOutput="output()" />
 
-    <editor-content :editor="editor" class="box" />
+    <editor-content :editor="editor" class="box editor-box" />
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
     ToolBar,
     TypeSelector,
   },
-  props: ["content", "action", "contentType"],
+  props: ["content", "contentType"],
   data() {
     return {
       editor: null,
@@ -55,7 +55,7 @@ export default {
         const json = editor.getJSON();
         const html = editor.getHTML();
 
-        self.$emit(`on${self.action}`, {
+        self.$emit("onUpdate", {
           json,
           html,
         });
@@ -73,6 +73,14 @@ export default {
 /* Basic editor styles */
 .tiptap-editor {
   .ProseMirror {
+    min-height: 50vh;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 1px 1px 3px #ccc;
+      padding: 5px;
+    }
+
     > * + * {
       margin-top: 0.75em;
     }

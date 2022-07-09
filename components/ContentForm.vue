@@ -10,7 +10,7 @@
       "
     >
       <b-field label="Title">
-        <b-input v-model="contentInfo.title"></b-input>
+        <b-input v-model="contentInfo.title" required ref="title"></b-input>
       </b-field>
 
       <b-field label="Slug">
@@ -19,7 +19,6 @@
 
       <TipTap
         v-if="content"
-        :action="action"
         :content="content"
         :contentType="contentInfo.type"
         @onUpdate="onUpdate"
@@ -29,6 +28,8 @@
         <b-input
           v-model="contentInfo.seo.description"
           type="textarea"
+          required
+          ref="description"
         ></b-input>
       </b-field>
 
@@ -47,12 +48,13 @@
         title="Thumbnail"
         @onSelect="onImageSelected($event)"
         @onReplace="onImageSelected($event)"
-        @onRemove="onImageRemove($event)"
       />
 
       <hr />
 
-      <b-button class="is-primary" @click="save()">{{ action }}</b-button>
+      <b-button class="is-primary" @click="save()">{{
+        getButtonText
+      }}</b-button>
     </div>
   </div>
 </template>
@@ -80,12 +82,22 @@ export default {
       this.content = " ";
     }
   },
+  watch: {
+    "contentInfo.title"(title) {
+      this.contentInfo.slug = this.$helpers.slugify(title);
+    },
+  },
+  computed: {
+    getButtonText() {
+      if (!this.$helpers) {
+        return this.action;
+      }
+      return this.$helpers.getTitleCase(this.action);
+    },
+  },
   methods: {
     onImageSelected(images) {
       this.contentInfo.images = images;
-    },
-    onImageRemove(image) {
-      console.log("onImageRemove", image);
     },
     onUpdate({ html, json }) {
       this.contentInfo.content = json;
@@ -101,7 +113,19 @@ export default {
       this.contentInfo.newTags.push(tag);
     },
     save() {
-      this.$emit("onSave", this.contentInfo);
+      const validations = [
+        this.$refs.title.checkHtml5Validity(),
+        this.$refs.description.checkHtml5Validity(),
+      ];
+
+      if (validations.includes(false)) {
+        this.$buefy.toast.open({
+          type: "is-danger",
+          message: "Missing required fields",
+        });
+      } else {
+        this.$emit("onSave", this.contentInfo);
+      }
     },
   },
   components: { TipTap, TagSelector, ImageSelector },

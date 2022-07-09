@@ -1,7 +1,8 @@
 import { Request, Response } from "express"
-import { ContentInstance, ContentInterface, ContentQuery } from "~/interfaces/content";
+import { ContentCreation, ContentInstance, ContentQuery } from "~/interfaces/content";
 import { PaginatedResults } from "~/interfaces/misc";
-import { Content } from "../models";
+import { Content, Taxonomy } from "../models";
+import { ContentModel } from "../models/Content";
 import { notFoundResponse, successResponse } from "../utils/responses";
 import contentRouter from "./router";
 
@@ -20,7 +21,7 @@ contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {
     } else {
         const query: ContentQuery = {
             type: 'post',
-            limit: 6,
+            limit: 9,
             page: 1
         };
 
@@ -48,8 +49,33 @@ contentRouter.post('/update/:slug', async (req: Request, res: Response) => {
 
 });
 
-contentRouter.post('/create', async (req: Request, res: Response) => {
+contentRouter.post('/content', async (req: Request, res: Response) => {
 
+    const newContent = { ...req.body, ...{ text: '', status: 'draft', metaData: {} } } as ContentCreation;
+
+    delete newContent.id;
+    delete newContent.newTags;
+    delete newContent.createdAt;
+    delete newContent.updatedAt;
+
+    if (!newContent.Taxonomies) {
+        newContent.Taxonomies = [];
+    }
+
+    if (req.body.newTags && req.body.newTags.length) {
+        const newTags = await Taxonomy.bulkCreate(req.body.newTags);
+        newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
+    }
+
+    console.log('newContent', newContent);
+
+    const content = ContentModel.build(newContent);
+
+    console.log('content', content);
+
+    content.save();
+
+    successResponse(res, content);
 });
 
 export default contentRouter;

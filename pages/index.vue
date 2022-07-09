@@ -29,8 +29,10 @@ export default {
     ContentForm,
   },
   methods: {
-    save(data) {
-      console.log("content data", data);
+    async save(data) {
+      console.log("save data", data);
+      const result = await this.$axios.$post("api/content", data);
+      console.log("result", result);
     },
   },
   async asyncData({ $axios }) {

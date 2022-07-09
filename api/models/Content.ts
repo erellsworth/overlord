@@ -44,7 +44,8 @@ const attributes: ModelAttributes<ContentInstance, ContentInterface> = {
     // standard attributes:
     id: {
         primaryKey: true,
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
+        autoIncrement: true
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -71,7 +72,6 @@ const Content = {
 
         const { count, rows } = await ContentModel.findAndCountAll({
             where: {
-                status: 'published',
                 type
             },
             include: TaxonomyModel,

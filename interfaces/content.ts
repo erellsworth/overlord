@@ -26,6 +26,10 @@ export interface ContentInterface extends baseInterface {
     image?: Image;
 }
 
+export interface ContentCreation extends ContentInterface {
+    newTags?: string[];
+}
+
 // Some fields are optional when calling UserModel.create() or UserModel.build()
 interface ContentCreationAttributes extends Optional<ContentInterface, "id"> { Tag: any }
 
