@@ -15,10 +15,12 @@ const CustomImage = Image.extend({
             caption: {
                 default: null,
             },
+            id: {
+                default: null
+            }
         }
     },
     renderHTML({ node, HTMLAttributes }) {
-        // console.log('node', node);
         const img: DOMOutputSpecArray = ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)];
 
         if (!node.attrs.caption) {

@@ -134,7 +134,14 @@
       close-button-aria-label="Close"
       aria-modal
     >
-      <MediaLibrary @onSelect="onMediaSelect" />
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title has-text-dark">Media Library</p>
+        </header>
+        <section class="modal-card-body has-background-dark">
+          <MediaLibrary @onSelect="onMediaSelect" />
+        </section>
+      </div>
     </b-modal>
 
     <b-modal
@@ -206,7 +213,9 @@ export default {
     onMediaInsert(media) {
       const src = media.full;
       const { caption, alt } = this.images[media.data.id];
-      this.editor.commands.setImage({ src, alt, caption });
+      const { id } = media.data;
+
+      this.editor.commands.setImage({ src, alt, caption, id });
       this.showLibrary = false;
       this.showImageOptions = false;
     },
