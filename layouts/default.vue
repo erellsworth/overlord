@@ -3,6 +3,7 @@
     <b-navbar type="is-dark">
       <template #start>
         <b-navbar-item tag="nuxt-link" to="/"> Home </b-navbar-item>
+        <b-navbar-item tag="nuxt-link" to="/content"> Content </b-navbar-item>
         <b-navbar-item tag="nuxt-link" to="/media"> Media </b-navbar-item>
       </template>
     </b-navbar>

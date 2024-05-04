@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
-import { ContentCreation, ContentInstance, ContentQuery } from "~/interfaces/content";
+import { ContentCreation, ContentInstance, ContentQuery, ContentQueryParams, ContentType } from "~/interfaces/content";
 import { PaginatedResults } from "~/interfaces/misc";
+import { TaxonomyInterface } from "~/interfaces/taxonomy";
 import { Content, Taxonomy } from "../models";
 import { ContentModel } from "../models/Content";
 import { notFoundResponse, successResponse } from "../utils/responses";
@@ -19,7 +20,7 @@ contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {
     if (slug) {
         content = await Content.findBySlug(slug);
     } else {
-        const query: ContentQuery = {
+        const query: ContentQueryParams = {
             type: 'post',
             limit: 9,
             page: 1
@@ -36,27 +37,65 @@ contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {
 
 });
 
+contentRouter.get('/contents/:type?', async (req: Request, res: Response) => {
+
+    let content: PaginatedResults<ContentInstance>;
+
+    const { type } = req.params;
+
+    const query: ContentQueryParams = {
+        noPagination: true
+    };
+
+    if (type) {
+        query.type = type as ContentType;
+    }
+
+    content = await Content.findAll(query);
+
+    if (content) {
+        successResponse(res, content);
+    } else {
+        notFoundResponse(res);
+    }
+
+});
+
 contentRouter.post('/update/:slug', async (req: Request, res: Response) => {
+
+    const contentUpdate = { ...req.body };
+
+    delete contentUpdate.updatedAt;
+    delete contentUpdate.createdAt;
 
     const { slug } = req.params;
 
     let content = await Content.findBySlug(slug);
 
-    content.content = req.body.json;
-    content.save();
+    let newContent = await content.update(contentUpdate);
 
-    res.json(req.body);
+    if (contentUpdate.Taxonomies) {
+        const tagIds = contentUpdate.Taxonomies.map((tag: TaxonomyInterface) => {
+            return tag.id;
+        });
+
+        // @ts-ignore
+        newContent.addTaxonomies(tagIds);
+    }
+
+    successResponse(res, newContent);
 
 });
 
 contentRouter.post('/content', async (req: Request, res: Response) => {
 
-    const newContent = { ...req.body, ...{ text: '', status: 'draft', metaData: {} } } as ContentCreation;
+    const newContent = { ...req.body, ...{ text: '', status: 'draft' } } as ContentCreation;
 
     delete newContent.id;
     delete newContent.newTags;
     delete newContent.createdAt;
     delete newContent.updatedAt;
+    delete newContent.image;
 
     if (!newContent.Taxonomies) {
         newContent.Taxonomies = [];
@@ -67,13 +106,14 @@ contentRouter.post('/content', async (req: Request, res: Response) => {
         newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
     }
 
-    console.log('newContent', newContent);
+    const tagIds = newContent.Taxonomies.map((tag: TaxonomyInterface) => {
+        return tag.id;
+    });
 
-    const content = ContentModel.build(newContent);
+    const content = await ContentModel.create(newContent);
 
-    console.log('content', content);
-
-    content.save();
+    // @ts-ignore
+    content.addTaxonomies(tagIds);
 
     successResponse(res, content);
 });

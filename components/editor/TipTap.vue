@@ -38,7 +38,6 @@ export default {
   methods: {
     output() {
       const json = this.editor.getJSON();
-
       console.log(json);
     },
     typeChanged(type) {
@@ -54,10 +53,12 @@ export default {
       onUpdate({ editor }) {
         const json = editor.getJSON();
         const html = editor.getHTML();
+        const text = editor.state.doc.textContent;
 
         self.$emit("onUpdate", {
           json,
           html,
+          text,
         });
       },
     });

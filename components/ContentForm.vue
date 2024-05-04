@@ -69,7 +69,7 @@ export default {
   props: ["contentData", "action"],
   data() {
     return {
-      contentInfo: this.contentData,
+      contentInfo: { ...{ content: {} }, ...this.contentData },
       content: null,
     };
   },
@@ -97,20 +97,35 @@ export default {
   },
   methods: {
     onImageSelected(images) {
-      this.contentInfo.images = images;
+      const image = images[0];
+
+      this.contentInfo.image = image;
+
+      const media_id = image.data.id;
+
+      if (!this.contentInfo.metaData) {
+        this.contentInfo.metaData = {
+          media_id,
+        };
+      }
+
+      this.contentInfo.metaData.media_id = media_id;
     },
-    onUpdate({ html, json }) {
+    onUpdate({ html, json, text }) {
       this.contentInfo.content = json;
       this.contentInfo.html = html;
+      this.contentInfo.text = text;
     },
     onTagUpdate(tags) {
-      this.contentInfo.Taxonomies = tags;
+      this.contentInfo.Taxonomies = tags.filter((tag) => tag);
     },
     onTagAdded(tag) {
       if (!this.contentInfo.newTags) {
         this.contentInfo.newTags = [];
       }
-      this.contentInfo.newTags.push(tag);
+      if (!this.contentInfo.Taxonomies.some((tax) => tax.name === tag)) {
+        this.contentInfo.newTags.push(tag);
+      }
     },
     save() {
       const validations = [

@@ -1,7 +1,7 @@
-import { DataTypes, ModelAttributes } from "sequelize";
+import { DataTypes, FindAndCountOptions, ModelAttributes, WhereOptions } from "sequelize";
 import { PaginatedResults } from "~/interfaces/misc";
 import { TaxonomyQuery } from "~/interfaces/taxonomy";
-import { ContentInstance, ContentInterface, ContentQuery } from "../../interfaces/content";
+import { ContentInstance, ContentInterface, ContentQuery, ContentQueryParams } from "../../interfaces/content";
 import { db } from "../utils";
 import { attachImage, attachImages } from "../utils/media.helper";
 import { TaxonomyModel } from "./Taxonomy";
@@ -66,35 +66,44 @@ const attributes: ModelAttributes<ContentInstance, ContentInterface> = {
 const ContentModel = db.define<ContentInstance>('Content', attributes);
 
 const Content = {
-    findAll: async (query: ContentQuery): Promise<PaginatedResults<ContentInstance>> => {
-        const { type, limit, page } = query;
-        const offset = (parseInt(page.toString()) - 1) * limit;
+    findAll: async (query: ContentQueryParams): Promise<PaginatedResults<ContentInstance>> => {
 
-        const { count, rows } = await ContentModel.findAndCountAll({
-            where: {
-                type
-            },
+        const page = query.page ? query.page : 1;
+
+        const options: FindAndCountOptions = {
+            where: {},
             include: TaxonomyModel,
             order: [['createdAt', 'DESC']],
-            limit,
             logging: false,
             distinct: true,
-            offset
-        });
+        };
+
+        if (!query.noPagination) {
+
+            options.limit = query.limit ? query.limit : 9;
+            options.offset = (parseInt(page.toString()) - 1) * options.limit;
+        }
+
+        if (query.type) {
+            options.where = {
+                type: query.type
+            }
+        }
+
+        const { count, rows } = await ContentModel.findAndCountAll(options);
 
         const contents = await attachImages(rows) as ContentInstance[];
 
         return {
-            contents: contents,
+            contents,
             total: count,
-            page: page
+            page
         };
 
     },
     findBySlug: async (slug: string): Promise<ContentInstance> => {
         const content = await ContentModel.findOne({
             where: {
-                status: 'published',
                 slug,
             },
             include: TaxonomyModel,

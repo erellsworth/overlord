@@ -39,7 +39,11 @@ export interface ContentInstance
     ContentInterface { }
 
 export interface ContentQuery {
-    type: 'post' | 'page';
-    limit: number;
-    page: number;
+    type?: ContentType;
+}
+
+export interface ContentQueryParams extends ContentQuery {
+    limit?: number;
+    page?: number;
+    noPagination?: boolean;
 }

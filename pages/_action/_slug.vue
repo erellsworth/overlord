@@ -52,9 +52,11 @@ export default {
     onTagAdded(tag) {
       console.log("onTagAdded", tag);
     },
-    save(newData) {
-      console.log("content save", newData);
-      //await this.$axios.$post(`api/update/${this.$route.params.slug}`, data);
+    async save(newData) {
+      const result = await this.$axios.$post(
+        `api/update/${this.$route.params.slug}`,
+        newData
+      );
     },
   },
 };
