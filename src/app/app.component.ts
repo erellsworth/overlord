@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NgxTiptapModule } from 'ngx-tiptap';
 
 @Component({
   selector: 'app-root',
