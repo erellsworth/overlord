@@ -1,0 +1,10 @@
+:host {
+    ::ng-deep {
+        .tiptap {
+            &:focus-visible {
+                outline: none;
+            }
+        }
+
+    }
+}

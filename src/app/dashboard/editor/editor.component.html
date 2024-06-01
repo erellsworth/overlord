@@ -1,1 +1,8 @@
-<tiptap-editor [editor]="editor" [(ngModel)]="content"></tiptap-editor>
+<p-panel>
+    <ng-template pTemplate="header">
+        <app-toolbar [editor]="editor"></app-toolbar>
+    </ng-template>
+    <div class="p-1 border-solid border-200 surface-100">
+        <tiptap-editor [editor]="editor" [(ngModel)]="content"></tiptap-editor>
+    </div>
+</p-panel>
