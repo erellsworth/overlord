@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Button, ButtonModule } from 'primeng/button';
 import { Editor } from '@tiptap/core';
 import { Level } from '@tiptap/extension-heading';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -22,8 +22,8 @@ export class ToolbarComponent {
     return this.editor.chain().focus();
   }
 
-  public buttonSeverity(style: string, attributes?: {}): string {
-    return this.editor.isActive(style, attributes) ? 'success' : '';
+  public buttonSeverity(style: string, attributes?: {}): Button['severity'] {
+    return this.editor.isActive(style, attributes) ? 'success' : undefined;
   }
 
   public logOutput(): void {

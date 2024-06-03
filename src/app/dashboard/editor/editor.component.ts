@@ -4,7 +4,6 @@ import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import { NgxTiptapModule } from 'ngx-tiptap';
 import { PanelModule } from 'primeng/panel';
-import { SharedModule } from '../../modules/shared/shared.module';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
 @Component({
