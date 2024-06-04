@@ -1,14 +1,13 @@
 import path from 'path';
-import { AWSError } from "aws-sdk";
 import { fromEnv } from "@aws-sdk/credential-providers";
-import { S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import { Error } from "sequelize/types";
 import sharp from 'sharp';
 import concat from 'concat-stream';
 import { Crop, MediaCreationResult, MediaDeletionResult, MediaInstance, MediaInterface } from "../../interfaces/media"
 import { ContentWithMedia, GenericResult, ImageStorageResult, S3UploadResult } from "../../interfaces/misc";
 import { Media, MediaModel } from "../models/Media";
-import { DeleteObjectOutput } from "aws-sdk/clients/s3";
 
 const s3 = new S3Client({
     credentials: fromEnv()
@@ -48,74 +47,83 @@ export const parseFileName = (name: string): string => {
 
 const uploadToS3 = async (Body: Buffer | Express.Multer.File['stream'], Key: string, ContentType: string): Promise<S3UploadResult> => {
 
-    return new Promise((resolve, reject) => {
-        s3.upload({
-            Bucket: process.env.AWS_BUCKET as string,
-            Body,
-            Key,
-            ContentType
-        }, (error: Error, data: S3.ManagedUpload.SendData) => {
-            if (error) {
-                reject({
-                    success: false,
-                    error
-                });
+    return new Promise(async (resolve, reject) => {
+        try {
+            const params = {
+                Bucket: process.env.AWS_BUCKET as string,
+                Key,
+                Body,
+                ContentType
+            };
 
-                return;
-            }
+            const upload = new Upload({
+                client: s3,
+                params
+            });
+
+            const data = await upload.done();
 
             resolve({
                 success: true,
                 data
             });
 
-        });
+        } catch (error) {
+            reject({
+                success: false,
+                error
+            });
+            return;
+        }
     });
 }
 
 const removeFromS3 = async (media: MediaInstance): Promise<GenericResult[]> => {
-    const removeThumb = new Promise<GenericResult>((resolve, reject) => {
+    const removeThumb = new Promise<GenericResult>(async (resolve, reject) => {
 
         const Key = `${media.path.replace('/', '')}/thumbs/${media.filename}`;
 
-        s3.deleteObject({
-            Bucket: process.env.AWS_BUCKET as string,
-            Key
-        }, (err: AWSError, data: DeleteObjectOutput) => {
-            if (err) {
-                resolve({
-                    success: false,
-                    error: { message: err.message }
-                });
-                return;
-            }
+        try {
+            const deleteObject = new DeleteObjectCommand({
+                Bucket: process.env.AWS_BUCKET as string,
+                Key
+            });
 
+            await s3.send(deleteObject);
             resolve({
                 success: true
             });
-        });
+
+        } catch (e) {
+            resolve({
+                success: false,
+                error: { message: (e as Error).message }
+            });
+        }
     });
 
-    const removeFull = new Promise<GenericResult>((resolve, reject) => {
+    const removeFull = new Promise<GenericResult>(async (resolve, reject) => {
 
         const Key = `${media.path.replace('/', '')}/${media.filename}`;
 
-        s3.deleteObject({
-            Bucket: process.env.AWS_BUCKET as string,
-            Key
-        }, (err: AWSError, data: DeleteObjectOutput) => {
-            if (err) {
-                resolve({
-                    success: false,
-                    error: { message: err.message }
-                });
-                return;
-            }
 
-            resolve({
-                success: true,
+        try {
+            const deleteObject = new DeleteObjectCommand({
+                Bucket: process.env.AWS_BUCKET as string,
+                Key
             });
-        });
+
+            await s3.send(deleteObject);
+            resolve({
+                success: true
+            });
+
+        } catch (e) {
+            resolve({
+                success: false,
+                error: { message: (e as Error).message }
+            });
+        }
     });
 
     return Promise.all([removeThumb, removeFull]);
