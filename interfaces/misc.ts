@@ -1,6 +1,7 @@
 import { S3 } from "aws-sdk";
 import { ContentInterface } from "./content";
 import { TaxonomyInterface } from "./taxonomy";
+import { CompleteMultipartUploadOutput } from "aws-sdk/clients/s3";
 
 export interface contentResults {
     results: ContentInterface[];
@@ -28,7 +29,7 @@ export interface ApiResponse<T = void> extends GenericResult {
 }
 
 export interface S3UploadResult extends GenericResult {
-    data?: S3.ManagedUpload.SendData
+    data?: CompleteMultipartUploadOutput
 }
 
 export interface ImageStorageResult extends GenericResult {
