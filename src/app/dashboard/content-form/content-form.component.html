@@ -1,0 +1,19 @@
+<div [formGroup]="formGroup">
+
+    <p-card>
+        <p-floatLabel>
+            <input id="title" type="text" class="w-full" pInputText formControlName="title" />
+            <label for="title">Title</label>
+        </p-floatLabel>
+
+        <p-floatLabel class="mt-4 block">
+            <input id="slug" type="text" class="w-full" pInputText formControlName="slug" />
+            <label for="slug">Slug</label>
+        </p-floatLabel>
+    </p-card>
+
+    <app-editor></app-editor>
+    <p-card>
+        <p-button [label]="buttonText" (onClick)="save()" />
+    </p-card>
+</div>

@@ -18,8 +18,8 @@ export interface ContentInterface extends baseInterface {
         [key: string]: string
     };
     metaData: {
-        text: string;
-        media_id: number;
+        media_id?: number;
+        [key: string]: string | number | undefined;
     };
     Taxonomies?: TaxonomyInterface[];
     Tag?: any;
