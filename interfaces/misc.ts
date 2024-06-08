@@ -28,6 +28,10 @@ export interface ApiResponse<T = void> extends GenericResult {
     data?: T;
 }
 
+export interface PaginatedApiResponse<T = void> extends GenericResult {
+    data?: PaginatedResults<T>
+}
+
 export interface S3UploadResult extends GenericResult {
     data?: CompleteMultipartUploadOutput
 }

@@ -1,10 +1,16 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Editor } from '@tiptap/core';
+import { Content, Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import { NgxTiptapModule } from 'ngx-tiptap';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import CustomImage from './nodes/CustomImage';
+import Video from './nodes/VideoNode';
+import FigCaption from './nodes/FigCaption';
+import FigureNode from './nodes/FigureNode';
+
+
 
 @Component({
   selector: 'app-editor',
@@ -15,11 +21,14 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 })
 export class EditorComponent implements OnDestroy {
 
-  public content = '';
+  @Input({ required: true }) content!: Content;
 
   public editor = new Editor({
-    extensions: [StarterKit]
-  })
+    extensions: [CustomImage, StarterKit, Video, FigCaption, FigureNode],
+    content: this.content
+  });
+
+  constructor() { }
 
   ngOnDestroy(): void {
     this.editor.destroy();

@@ -3,7 +3,11 @@ import { baseInterface } from "./base"
 import { Image } from "./media";
 import { TaxonomyInterface } from "./taxonomy";
 
-export type ContentType = 'post' | 'page';
+export enum ContentTypes {
+    POST = 'post',
+    PAGE = 'page'
+};
+export type ContentType = `${ContentTypes}`;
 export type ContentStatus = 'published' | 'draft';
 
 export interface ContentInterface extends baseInterface {
