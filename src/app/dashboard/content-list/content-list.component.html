@@ -1,0 +1,8 @@
+@if (content$ | async; as contents) {
+<p-listbox styleClass="h-full" scrollHeight="auto" [options]="contents">
+    <ng-template let-content pTemplate="item">
+        <a class="p-button p-button-link block w-full text-left no-underline"
+            routerLink="/edit/{{content.slug}}">{{content.title}}</a>
+    </ng-template>
+</p-listbox>
+}
