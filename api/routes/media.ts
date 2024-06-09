@@ -35,7 +35,7 @@ mediaRouter.get('/media/:page?', async (req: Request, res: Response) => {
 
     const { total } = media;
 
-    const images: Image[] = media.contents.map((image: MediaInterface) => {
+    const contents: Image[] = media.contents.map((image: MediaInterface) => {
         const basePath = `${process.env.ASSETS_URI}${image.path}/`;
 
         return {
@@ -46,7 +46,7 @@ mediaRouter.get('/media/:page?', async (req: Request, res: Response) => {
     });
 
     successResponse(res, {
-        images,
+        contents,
         total,
         page: parseInt(page)
     });

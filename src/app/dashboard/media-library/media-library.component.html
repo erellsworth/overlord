@@ -1,0 +1,12 @@
+<p-fileUpload (uploadHandler)="handleUpload($event)" [multiple]="true" [auto]="true" [customUpload]="true"
+    accept="image/*"></p-fileUpload>
+
+<section class="flex flex-wrap gap-3">
+    @for (media of mediaList; track $index) {
+    <p-card>
+        <div (click)="selectImage(media)" class="cursor-pointer">
+            <p-image [src]="media.thumbnail"></p-image>
+        </div>
+    </p-card>
+    }
+</section>
