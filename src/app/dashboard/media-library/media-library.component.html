@@ -3,10 +3,6 @@
 
 <section class="flex flex-wrap gap-3">
     @for (media of mediaList; track $index) {
-    <p-card>
-        <div (click)="selectImage(media)" class="cursor-pointer">
-            <p-image [src]="media.thumbnail"></p-image>
-        </div>
-    </p-card>
+    <app-image-card [image]="media" (imageSelected)="selectImage($event)"></app-image-card>
     }
 </section>

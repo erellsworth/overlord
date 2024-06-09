@@ -1,0 +1,27 @@
+<p-image [src]="image.thumbnail"></p-image>
+
+@if (formGroup) {
+<div [formGroup]="formGroup">
+    <h3 class="py-2">Image Info:</h3>
+
+    <p-floatLabel>
+        <input id="title" type="text" class="w-full" pInputText formControlName="name" />
+        <label for="title">Name</label>
+    </p-floatLabel>
+
+    <p-divider styleClass="py-1" />
+
+    <p-floatLabel>
+        <input id="title" type="text" class="w-full" pInputText formControlName="alt" />
+        <label for="title">Alt Text</label>
+    </p-floatLabel>
+
+    <p-divider styleClass="py-1" />
+
+    <p-floatLabel>
+        <textarea id="description" class="w-full" rows="5" pInputTextarea formControlName="caption">
+            </textarea>
+        <label for="title">Caption</label>
+    </p-floatLabel>
+</div>
+}

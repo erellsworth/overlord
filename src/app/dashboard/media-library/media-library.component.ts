@@ -6,11 +6,12 @@ import { MediaService } from '../../services/media.service';
 import { Image } from '../../../../interfaces/media';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { ImageCardComponent } from './image-card/image-card.component';
 
 @Component({
   selector: 'app-media-library',
   standalone: true,
-  imports: [CardModule, CommonModule, ImageModule, FileUploadModule],
+  imports: [CommonModule, FileUploadModule, ImageCardComponent],
   templateUrl: './media-library.component.html',
   styleUrl: './media-library.component.scss'
 })

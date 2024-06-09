@@ -1,0 +1,21 @@
+<p-card>
+    <p-image [src]="image.thumbnail"></p-image>
+
+    <ng-template pTemplate="footer">
+        <div class="flex gap-3 mt-1">
+            <p-button label="Insert" (click)="imageSelected.emit(image)" class="w-full" styleClass="w-full">
+                <fa-icon [icon]="icons.insert"></fa-icon>
+            </p-button>
+            <p-button label="Edit" severity="success" class="w-full" styleClass="w-full" (onClick)="showEditor = true">
+                <fa-icon [icon]="icons.edit"></fa-icon>
+            </p-button>
+            <p-button label="Delete" severity="danger" class="w-full" styleClass="w-full">
+                <fa-icon [icon]="icons.delete"></fa-icon>
+            </p-button>
+        </div>
+    </ng-template>
+</p-card>
+
+<p-dialog #dialog [(visible)]="showEditor" [maximizable]="true" [modal]="true">
+    <app-image-editor [image]="image"></app-image-editor>
+</p-dialog>
