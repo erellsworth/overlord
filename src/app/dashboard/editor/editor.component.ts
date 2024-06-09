@@ -9,8 +9,9 @@ import CustomImage from './nodes/CustomImage';
 import Video from './nodes/VideoNode';
 import FigCaption from './nodes/FigCaption';
 import FigureNode from './nodes/FigureNode';
-
-
+import { MediaService } from '../../services/media.service';
+import { Subscription } from 'rxjs';
+import { Image } from '../../../../interfaces/media';
 
 @Component({
   selector: 'app-editor',
@@ -19,18 +20,34 @@ import FigureNode from './nodes/FigureNode';
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.scss'
 })
-export class EditorComponent implements OnDestroy {
+export class EditorComponent implements OnInit, OnDestroy {
 
   @Input({ required: true }) content!: Content;
 
   public editor = new Editor({
     extensions: [CustomImage, StarterKit, Video, FigCaption, FigureNode],
-    content: this.content
+    content: this.content,
   });
 
-  constructor() { }
+  private subs: Subscription[] = [];
+
+  constructor(private media: MediaService) { }
+
+  ngOnInit(): void {
+    this.subs.push(this.media.selectedImage.subscribe((image: Image) => {
+      if (!image.data) { return; }
+      const src = image.full;
+      const caption = 'test caption';
+      const alt = 'test alt';
+      const { id } = image.data;
+      if (id) {
+        this.editor.commands.setCustomImage({ src, alt, caption, id });
+      }
+    }))
+  }
 
   ngOnDestroy(): void {
     this.editor.destroy();
+    this.subs.forEach(sub => sub.unsubscribe());
   }
 }

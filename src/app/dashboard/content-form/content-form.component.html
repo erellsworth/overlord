@@ -1,6 +1,6 @@
+@if (formGroup$ | async; as formGroup) {
 <div [formGroup]="formGroup">
-
-    <p-card>
+    <p-card header="Create new {{contentType}}">
         <p-floatLabel>
             <input id="title" type="text" class="w-full" pInputText formControlName="title" />
             <label for="title">Title</label>
@@ -12,8 +12,23 @@
         </p-floatLabel>
     </p-card>
 
-    <app-editor></app-editor>
+    <app-editor [content]="getContent(formGroup)"></app-editor>
+
+    <p-card formGroupName="seo">
+        <p-floatLabel>
+            <textarea id="description" class="w-full" rows="5" pInputTextarea formControlName="description">
+                </textarea>
+            <label for="description">Description</label>
+        </p-floatLabel>
+    </p-card>
+
     <p-card>
-        <p-button [label]="buttonText" (onClick)="save()" />
+        <div class="flex justify-content-left gap-3">
+            <p-button [label]="buttonText" (onClick)="save(formGroup)" />
+            @if(content.status === 'draft' && formGroup.valid){
+            <p-button label="Publish" (onClick)="save(formGroup)" />
+            }
+        </div>
     </p-card>
 </div>
+}

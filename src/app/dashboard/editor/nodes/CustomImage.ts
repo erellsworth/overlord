@@ -1,6 +1,17 @@
 import Image from "@tiptap/extension-image";
 import { mergeAttributes } from '@tiptap/core';
 
+declare module '@tiptap/core' {
+    interface Commands<ReturnType> {
+        customImage: {
+            /**
+             * Comments will be added to the autocomplete.
+             */
+            setCustomImage: (options: { src: string, id: number, alt?: string, caption?: string, title?: string }) => ReturnType,
+        }
+    }
+}
+
 const CustomImage = Image.extend({
     name: 'customImage',
     addAttributes() {
@@ -31,6 +42,17 @@ const CustomImage = Image.extend({
             img,
             ['figcaption', { class: 'caption' }, node.attrs.caption]
         ];
+    },
+
+    addCommands() {
+        return {
+            setCustomImage: options => ({ commands }) => {
+                return commands.insertContent({
+                    type: this.name,
+                    attrs: options,
+                })
+            },
+        }
     },
 
 });
