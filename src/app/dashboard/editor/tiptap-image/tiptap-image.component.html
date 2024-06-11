@@ -1,0 +1,13 @@
+<div class="relative" (mouseenter)="showButtons = true" (mouseleave)="showButtons=false">
+    <p-image [src]="node.attrs.src" [alt]="node.attrs.alt"></p-image>
+
+    @if (showButtons) {
+    <div class="card flex justify-content-center absolute top-0 left-0 right-0">
+        <p-buttonGroup>
+            <p-button>
+                <fa-icon [icon]="editIcon"></fa-icon>
+            </p-button>
+        </p-buttonGroup>
+    </div>
+    }
+</div>

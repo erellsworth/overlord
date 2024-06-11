@@ -12,7 +12,7 @@
         </p-floatLabel>
     </p-card>
 
-    <app-editor [content]="getContent(formGroup)"></app-editor>
+    <app-editor [content]="getContent(formGroup)" [formGroup]="formGroup"></app-editor>
 
     <p-card formGroupName="seo">
         <p-floatLabel>

@@ -1,3 +1,4 @@
+import { Injector } from '@angular/core';
 import { Node, mergeAttributes } from '@tiptap/core'
 
 interface VideoOptions {
@@ -12,75 +13,78 @@ declare module '@tiptap/core' {
         }
     }
 }
+const VideoNode = (injector: Injector): Node => {
+    return Node.create<VideoOptions>({
+        name: 'videoBlock',
 
-export default Node.create<VideoOptions>({
-    name: 'videoBlock',
-
-    addOptions() {
-        return {
-            inline: false,
-            HTMLAttributes: {},
-        }
-    },
-
-    inline() {
-        return this.options.inline
-    },
-
-    group() {
-        return this.options.inline ? 'inline' : 'block'
-    },
-
-    draggable: true,
-
-    atom: true,
-
-    addAttributes() {
-        return {
-            src: {
-                default: null,
-            },
-            title: {
-                default: null,
-            },
-            frameborder: {
-                default: '0',
-            },
-            allow: {
-                default: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-            },
-            allowfullscreen: {
-                default: 'allowfullscreen'
+        addOptions() {
+            return {
+                inline: false,
+                HTMLAttributes: {},
             }
-        }
-    },
+        },
 
-    parseHTML() {
-        return [
-            {
-                tag: 'iframe[src]',
-            },
-        ]
-    },
+        inline() {
+            return this.options.inline
+        },
 
-    renderHTML({ HTMLAttributes }) {
-        return [
-            'div', { class: 'videoBlock' },
-            ['div',
-                { class: 'videoWrap' },
-                ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+        group() {
+            return this.options.inline ? 'inline' : 'block'
+        },
+
+        draggable: true,
+
+        atom: true,
+
+        addAttributes() {
+            return {
+                src: {
+                    default: null,
+                },
+                title: {
+                    default: null,
+                },
+                frameborder: {
+                    default: '0',
+                },
+                allow: {
+                    default: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                },
+                allowfullscreen: {
+                    default: 'allowfullscreen'
+                }
+            }
+        },
+
+        parseHTML() {
+            return [
+                {
+                    tag: 'iframe[src]',
+                },
             ]
-        ];
-    },
-    addCommands() {
-        return {
-            setExternalVideo: (options: any) => ({ commands }) => {
-                return commands.insertContent({
-                    type: this.name,
-                    attrs: options,
-                })
-            },
-        }
-    },
+        },
 
-})
+        renderHTML({ HTMLAttributes }) {
+            return [
+                'div', { class: 'videoBlock' },
+                ['div',
+                    { class: 'videoWrap' },
+                    ['iframe', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+                ]
+            ];
+        },
+        addCommands() {
+            return {
+                setExternalVideo: (options: any) => ({ commands }) => {
+                    return commands.insertContent({
+                        type: this.name,
+                        attrs: options,
+                    })
+                },
+            }
+        },
+
+    })
+}
+
+export default VideoNode;

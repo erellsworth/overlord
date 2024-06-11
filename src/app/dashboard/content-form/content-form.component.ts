@@ -95,6 +95,6 @@ export class ContentFormComponent {
   }
 
   public save(formGroup: FormGroup): void {
-    console.log('save', formGroup.value);
+    console.log('save', formGroup.value.content);
   }
 }
