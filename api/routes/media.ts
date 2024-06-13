@@ -23,6 +23,28 @@ const upload = multer({
     }
 });
 
+
+mediaRouter.get('/media/image/:id', async (req: Request, res: Response) => {
+    let { id } = req.params;
+
+
+    const data = await Media.findById(parseInt(id));
+
+    if (data) {
+        const basePath = `${process.env.ASSETS_URI}${data.path}/`;
+
+        successResponse(res, {
+            data,
+            full: `${basePath}${data.filename}`,
+            thumbnail: `${basePath}thumbs/${data.filename}`
+        });
+    } else {
+        errorResponse(res, 'Image not found', 404);
+    }
+
+});
+
+
 mediaRouter.get('/media/:page?', async (req: Request, res: Response) => {
 
     let { page } = req.params;
