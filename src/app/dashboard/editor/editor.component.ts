@@ -33,6 +33,8 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.push(this.media.selectedImage.subscribe((data: { image: Image }) => {
+      if (!data.image.data) { return; }
+
       const { image } = data;
       const { alt, caption, id } = image.data;
 
