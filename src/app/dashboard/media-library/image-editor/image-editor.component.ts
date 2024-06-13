@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
 import { InplaceModule } from 'primeng/inplace';
@@ -28,7 +28,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './image-editor.component.html',
   styleUrl: './image-editor.component.scss'
 })
-export class ImageEditorComponent implements OnInit {
+export class ImageEditorComponent implements OnInit, OnChanges {
   @Input({ required: true }) image!: Image;
 
   public editIcon = faEdit;
@@ -38,6 +38,14 @@ export class ImageEditorComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.buildFormGroup();
+  }
+
+  ngOnChanges(): void {
+    this.buildFormGroup();
+  }
+
+  private buildFormGroup(): void {
     this.formGroup = this.fb.group({
       alt: this.image.data.alt,
       caption: this.image.data.caption,

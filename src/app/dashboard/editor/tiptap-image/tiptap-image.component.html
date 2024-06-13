@@ -4,10 +4,19 @@
     @if (showButtons) {
     <div class="card flex justify-content-center absolute top-0 left-0 right-0">
         <p-buttonGroup>
-            <p-button>
-                <fa-icon [icon]="editIcon"></fa-icon>
+            <p-button (onClick)="launchEditor()" title="Edit">
+                <fa-icon [icon]="icons.edit"></fa-icon>
+            </p-button>
+            <p-button (onClick)="launchMediaLibrary()" title="Replace">
+                <fa-icon [icon]="icons.replace"></fa-icon>
             </p-button>
         </p-buttonGroup>
     </div>
     }
 </div>
+
+@if (image) {
+<p-dialog [(visible)]="showEditor" [maximizable]="true" [modal]="true">
+    <app-image-editor [image]="image"></app-image-editor>
+</p-dialog>
+}

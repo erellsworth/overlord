@@ -32,15 +32,16 @@ export class EditorComponent implements OnInit, OnDestroy {
   constructor(private injector: Injector, private media: MediaService) { }
 
   ngOnInit(): void {
-    this.subs.push(this.media.selectedImage.subscribe((image: Image) => {
-      if (!image.data) { return; }
+    this.subs.push(this.media.selectedImage.subscribe((data: { image: Image }) => {
+      const { image } = data;
+      const { alt, caption, id } = image.data;
+
+      if (!id) { return; }
+
       const src = image.full;
-      const caption = 'test caption';
-      const alt = 'test alt';
-      const { id } = image.data;
-      if (id) {
-        this.editor.commands.setCustomImage({ src, alt, caption, id });
-      }
+
+      this.editor.commands.setCustomImage({ src, alt, caption, id });
+
     }));
   }
 

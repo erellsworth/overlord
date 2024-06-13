@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CardModule } from 'primeng/card';
-import { ImageModule } from 'primeng/image';
 import { FileUploadHandlerEvent, FileUploadModule } from 'primeng/fileupload';
 import { MediaService } from '../../services/media.service';
 import { Image } from '../../../../interfaces/media';
-import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ImageCardComponent } from './image-card/image-card.component';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-media-library',
@@ -17,11 +15,13 @@ import { ImageCardComponent } from './image-card/image-card.component';
 })
 export class MediaLibraryComponent implements OnInit {
 
-  private subs: Subscription[] = [];
-
-  constructor(private media: MediaService) { }
+  constructor(private config: DynamicDialogConfig<{
+    selectedImage: Image,
+    position: number
+  }>, private media: MediaService) { }
 
   ngOnInit(): void {
+    console.log('config', this.config.data);
     if (!this.media.hasInitiated) {
       this.media.loadMedia();
     }
@@ -44,7 +44,7 @@ export class MediaLibraryComponent implements OnInit {
   }
 
   public selectImage(image: Image): void {
-    this.media.selectedImage.next(image);
+    this.media.selectedImage.next({ image, position: this.config.data?.position });
     this.media.closeLibrary();
   }
 }
