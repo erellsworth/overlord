@@ -28,8 +28,6 @@ export class ImageCardComponent {
 
   @Output() imageSelected = new EventEmitter<Image>();
 
-  @ViewChild(Dialog) dialog!: Dialog;
-
   public icons = {
     delete: faTrash,
     edit: faPenToSquare,
@@ -37,4 +35,5 @@ export class ImageCardComponent {
   };
 
   public showEditor = false;
+
 }

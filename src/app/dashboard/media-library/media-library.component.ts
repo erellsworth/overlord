@@ -21,7 +21,6 @@ export class MediaLibraryComponent implements OnInit {
   }>, private media: MediaService) { }
 
   ngOnInit(): void {
-    console.log('config', this.config.data);
     if (!this.media.hasInitiated) {
       this.media.loadMedia();
     }

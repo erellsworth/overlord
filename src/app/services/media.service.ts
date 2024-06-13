@@ -31,7 +31,6 @@ export class MediaService {
   }
 
   public launchLibrary(service: DialogService, data?: { selectedImage: Image, position: number }): void {
-    console.log('data', data);
     this.ref = service.open(MediaLibraryComponent, { header: 'Select an Image', data });
   }
 
