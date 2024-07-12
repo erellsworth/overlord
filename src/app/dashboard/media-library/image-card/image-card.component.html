@@ -17,5 +17,5 @@
 </p-card>
 
 <p-dialog [(visible)]="showEditor" [maximizable]="true" [modal]="true">
-    <app-image-editor [image]="image"></app-image-editor>
+    <app-image-editor [image]="image" (saved)="handleImageEdit($event)"></app-image-editor>
 </p-dialog>

@@ -27,6 +27,8 @@ export class ImageCardComponent {
   @Input({ required: true }) image!: Image;
 
   @Output() imageSelected = new EventEmitter<Image>();
+  @Output() imageEdited = new EventEmitter();
+
 
   public icons = {
     delete: faTrash,
@@ -35,5 +37,14 @@ export class ImageCardComponent {
   };
 
   public showEditor = false;
+
+  public handleImageEdit(event: {
+    name: string;
+    alt: string;
+    caption?: string;
+  }): void {
+    this.imageEdited.emit(event);
+    this.showEditor = false;
+  }
 
 }

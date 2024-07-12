@@ -16,7 +16,7 @@ export interface MediaInterface {
 export interface Image {
     full: string;
     thumbnail: string;
-    data: MediaInterface
+    data: MediaInterface;
 };
 
 export interface Crop {

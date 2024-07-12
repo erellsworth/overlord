@@ -1,19 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AngularNodeViewComponent } from 'ngx-tiptap';
 import { ButtonModule } from 'primeng/button';
-import { ImageModule } from 'primeng/image';
 import { ButtonGroupModule } from 'primeng/buttongroup';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEdit, faRightLeft } from '@fortawesome/free-solid-svg-icons';
-import { MediaService } from '../../../services/media.service';
-import { Image } from '../../../../../interfaces/media';
-import { Subscription } from 'rxjs';
-import { DialogService } from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
 import { ImageEditorComponent } from '../../media-library/image-editor/image-editor.component';
+import { ImageModule } from 'primeng/image';
+import { DialogService } from 'primeng/dynamicdialog';
+import { faEdit, faRightLeft } from '@fortawesome/free-solid-svg-icons';
+import { Image } from '../../../../../interfaces/media';
+import { MediaService } from '../../../services/media.service';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-tiptap-image',
+  selector: 'app-tiptap-figure',
   standalone: true,
   imports: [
     ButtonModule,
@@ -23,12 +23,11 @@ import { ImageEditorComponent } from '../../media-library/image-editor/image-edi
     ImageEditorComponent,
     ImageModule
   ],
-  templateUrl: './tiptap-image.component.html',
-  styleUrl: './tiptap-image.component.scss',
+  templateUrl: './tiptap-figure.component.html',
+  styleUrl: './tiptap-figure.component.scss',
   providers: [DialogService]
 })
-export class TiptapImageComponent extends AngularNodeViewComponent implements OnInit, OnDestroy {
-
+export class TiptapFigureComponent extends AngularNodeViewComponent implements OnInit, OnDestroy {
   public icons = {
     edit: faEdit,
     replace: faRightLeft
@@ -45,10 +44,11 @@ export class TiptapImageComponent extends AngularNodeViewComponent implements On
 
   ngOnInit(): void {
     this.subs.push(
-      this.media.getImageById$(this.node.attrs.id).subscribe(
+      this.media.getImageById$(this.node.attrs.imageId).subscribe(
         (result) => {
           if (result.success) {
             this.image = result.data as Image;
+            this.image.data.caption = this.node.attrs.caption
           }
         }
       )
@@ -69,7 +69,9 @@ export class TiptapImageComponent extends AngularNodeViewComponent implements On
   public launchEditor(): void {
     this.showEditor = true;
   }
+
   public launchMediaLibrary(): void {
     this.media.launchLibrary(this.dialogService, { selectedImage: this.image, position: this.getPos() });
   }
+
 }

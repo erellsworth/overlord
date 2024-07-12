@@ -34,6 +34,14 @@ export class MediaLibraryComponent implements OnInit {
     this.media.closeLibrary();
   }
 
+  public editImage(image: Image, event: {
+    name: string;
+    alt: string;
+    caption?: string;
+  }): void {
+
+  }
+
   public handleUpload(event: FileUploadHandlerEvent): void {
     console.log('upload', event);
   }

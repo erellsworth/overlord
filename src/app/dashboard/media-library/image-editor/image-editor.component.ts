@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
 import { InplaceModule } from 'primeng/inplace';
@@ -10,11 +10,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Image } from '../../../../../interfaces/media';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-image-editor',
   standalone: true,
   imports: [
+    ButtonModule,
     DividerModule,
     FloatLabelModule,
     FontAwesomeModule,
@@ -30,6 +32,8 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 })
 export class ImageEditorComponent implements OnInit, OnChanges {
   @Input({ required: true }) image!: Image;
+
+  @Output() saved = new EventEmitter();
 
   public editIcon = faEdit;
   public formGroup!: FormGroup;
@@ -52,4 +56,5 @@ export class ImageEditorComponent implements OnInit, OnChanges {
       name: this.image.data.name
     });
   }
+
 }

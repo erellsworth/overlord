@@ -3,6 +3,7 @@
 
 <section class="flex flex-wrap gap-3">
     @for (media of mediaList; track $index) {
-    <app-image-card [image]="media" (imageSelected)="selectImage($event)"></app-image-card>
+    <app-image-card [image]="media" (imageSelected)="selectImage($event)"
+        (imageEdited)="editImage(media, $event)"></app-image-card>
     }
 </section>

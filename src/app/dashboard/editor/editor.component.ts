@@ -42,7 +42,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
       const src = image.full;
 
-      this.editor.commands.setCustomImage({ src, alt, caption, id });
+      this.editor.commands.setCustomImage({ src, alt, caption, imageId: id });
 
     }));
   }

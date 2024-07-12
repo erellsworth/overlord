@@ -1,5 +1,11 @@
-<div class="relative" (mouseenter)="showButtons = true" (mouseleave)="showButtons=false">
+<figure class="relative text-center" (mouseenter)="showButtons = true" (mouseleave)="showButtons=false">
     <p-image [src]="node.attrs.src" [alt]="node.attrs.alt"></p-image>
+
+    @if(node.attrs.caption) {
+    <figcaption>
+        {{node.attrs.caption}}
+    </figcaption>
+    }
 
     @if (showButtons) {
     <div class="card flex justify-content-center absolute top-0 left-0 right-0">
@@ -13,7 +19,7 @@
         </p-buttonGroup>
     </div>
     }
-</div>
+</figure>
 
 @if (image) {
 <p-dialog [(visible)]="showEditor" [maximizable]="true" [modal]="true">

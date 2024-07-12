@@ -23,5 +23,10 @@
             </textarea>
         <label for="title">Caption</label>
     </p-floatLabel>
+
+    <p-divider styleClass="py-1" />
+
+    <p-button label="Save" (onClick)="saved.emit(formGroup.value)" />
+
 </div>
 }
