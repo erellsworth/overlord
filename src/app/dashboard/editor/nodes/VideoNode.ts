@@ -9,7 +9,7 @@ interface VideoOptions {
 declare module '@tiptap/core' {
     interface Commands<ReturnType> {
         videoBlock: {
-            setExternalVideo: (options: any) => ReturnType,
+            setExternalVideo: (attrs: { src?: string, title?: string }) => ReturnType,
         }
     }
 }
@@ -75,10 +75,10 @@ const VideoNode = (injector: Injector): Node => {
         },
         addCommands() {
             return {
-                setExternalVideo: (options: any) => ({ commands }) => {
+                setExternalVideo: attrs => ({ commands }) => {
                     return commands.insertContent({
                         type: this.name,
-                        attrs: options,
+                        attrs
                     })
                 },
             }

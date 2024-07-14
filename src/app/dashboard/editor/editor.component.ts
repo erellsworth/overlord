@@ -29,17 +29,21 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private subs: Subscription[] = [];
 
-  constructor(private injector: Injector, private media: MediaService) { }
+  constructor(
+    private injector: Injector,
+    private media: MediaService) { }
 
   ngOnInit(): void {
     if (typeof this.content === 'object') {
-      const images = (this.content as JSONContent).content?.filter(content => content.type === 'ImageFigure');
+      // pre-populate captions in media library based on content;
+      const images = (this.content as JSONContent).content?.filter(content => content.type === 'imageFigure');
       images?.forEach(image => {
         if (image.attrs && image.attrs.caption) {
           this.media.imageCaptions[image.attrs.imageId] = image.attrs.caption;
         }
-      })
+      });
     }
+
     this.subs.push(this.media.selectedImage.subscribe((data: {
       caption?: string;
       image: Image;

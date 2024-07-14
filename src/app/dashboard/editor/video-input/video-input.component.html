@@ -1,0 +1,11 @@
+<p-floatLabel>
+    <!-- TODO: make this a required field and perform validation -->
+    <input id="URL" type="text" class="w-full" pInputText [(ngModel)]="url" />
+    <label for="URL">Video URL</label>
+</p-floatLabel>
+
+<p-divider styleClass="py-1" />
+
+<p-button label="Insert" (click)="close()">
+    <fa-icon class="block pr-1" [icon]="icon"></fa-icon>
+</p-button>

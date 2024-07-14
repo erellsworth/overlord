@@ -6,6 +6,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icons } from './toolbar.icons';
 import { MediaService } from '../../../services/media.service';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { VideoInputComponent } from '../video-input/video-input.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-toolbar',
@@ -20,6 +22,8 @@ export class ToolbarComponent {
 
   public headingLevels = [...Array(6).keys()].map((level) => level + 1 as Level);
   public icons = Icons;
+
+  private subs: Subscription[] = [];
 
   constructor(private dialogService: DialogService, private media: MediaService) { }
 
@@ -37,6 +41,13 @@ export class ToolbarComponent {
 
   public showImageLibrary(): void {
     this.media.launchLibrary(this.dialogService);
+  }
+
+  public showVideoInput(): void {
+    const ref = this.dialogService.open(VideoInputComponent, { header: 'Video URL' });
+    this.subs.push(ref.onClose.subscribe(src => {
+      this.editor.commands.setExternalVideo({ src });
+    }));
   }
 
 }

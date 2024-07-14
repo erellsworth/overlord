@@ -53,8 +53,11 @@
 <p-button title="Redo" (onClick)="focus.redo().run()">
   <fa-icon [icon]="icons.redo"></fa-icon>
 </p-button>
-<p-button icon-right="image" title="Insert image" (onClick)="showImageLibrary()">
+<p-button title="Insert image" (onClick)="showImageLibrary()">
   <fa-icon [icon]="icons.image"></fa-icon>
+</p-button>
+<p-button title="Insert video" (onClick)="showVideoInput()">
+  <fa-icon [icon]="icons.video"></fa-icon>
 </p-button>
 <p-button title="Show output in console" (onClick)="logOutput()">
   <fa-icon [icon]="icons.console"></fa-icon>
