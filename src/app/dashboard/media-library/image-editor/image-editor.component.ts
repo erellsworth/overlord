@@ -52,7 +52,6 @@ export class ImageEditorComponent implements OnInit, OnChanges {
   private buildFormGroup(): void {
     this.formGroup = this.fb.group({
       alt: this.image.data.alt,
-      caption: this.image.data.caption,
       name: this.image.data.name
     });
   }

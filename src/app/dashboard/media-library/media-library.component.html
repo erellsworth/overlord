@@ -1,9 +1,11 @@
 <p-fileUpload (uploadHandler)="handleUpload($event)" [multiple]="true" [auto]="true" [customUpload]="true"
     accept="image/*"></p-fileUpload>
 
-<section class="flex flex-wrap gap-3">
+<section class="flex flex-wrap">
     @for (media of mediaList; track $index) {
-    <app-image-card [image]="media" (imageSelected)="selectImage($event)"
-        (imageEdited)="editImage(media, $event)"></app-image-card>
+    <div class="w-4">
+        <app-image-card [image]="media" (imageSelected)="selectImage($event)"
+            (imageEdited)="editImage(media, $event)"></app-image-card>
+    </div>
     }
 </section>

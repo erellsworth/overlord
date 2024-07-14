@@ -10,7 +10,6 @@ export interface MediaInterface {
     mimetype: string;
     name: string;
     alt: string;
-    caption?: string;
 }
 
 export interface Image {

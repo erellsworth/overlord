@@ -1,9 +1,9 @@
 <figure class="relative text-center" (mouseenter)="showButtons = true" (mouseleave)="showButtons=false">
-    <p-image [src]="node.attrs.src" [alt]="node.attrs.alt"></p-image>
+    <p-image [src]="image.full" [alt]="image.data.alt"></p-image>
 
-    @if(node.attrs.caption) {
+    @if(caption) {
     <figcaption>
-        {{node.attrs.caption}}
+        {{caption}}
     </figcaption>
     }
 

@@ -13,7 +13,11 @@ export class MediaService {
 
   public hasInitiated = false;
   public media = signal<Image[]>([]);
-  public selectedImage = new BehaviorSubject<{ image: Image; position?: number }>({ image: {} as Image });
+  public selectedImage = new BehaviorSubject<{
+    caption?: string;
+    image: Image;
+    position?: number
+  }>({ image: {} as Image });
 
   private ref!: DynamicDialogRef;
 

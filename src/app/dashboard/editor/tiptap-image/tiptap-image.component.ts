@@ -28,6 +28,7 @@ import { Subscription } from 'rxjs';
   providers: [DialogService]
 })
 export class TiptapImageComponent extends AngularNodeViewComponent implements OnInit, OnDestroy {
+  public caption!: string;
   public icons = {
     edit: faEdit,
     replace: faRightLeft
@@ -48,7 +49,7 @@ export class TiptapImageComponent extends AngularNodeViewComponent implements On
         (result) => {
           if (result.success) {
             this.image = result.data as Image;
-            this.image.data.caption = this.node.attrs.caption
+            this.caption = this.node.attrs.caption
           }
         }
       )

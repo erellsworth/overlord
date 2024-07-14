@@ -1,16 +1,23 @@
 <p-card>
-    <p-image [src]="image.thumbnail"></p-image>
+    <p-image [src]="image.thumbnail" imageClass="w-full"></p-image>
+    <p-divider styleClass="py-1" />
+
+    <p-floatLabel>
+        <textarea id="description" class="w-full" rows="2" pInputTextarea [(ngModel)]="caption">
+            </textarea>
+        <label for="title">Caption</label>
+    </p-floatLabel>
 
     <ng-template pTemplate="footer">
-        <div class="flex gap-3 mt-1">
-            <p-button label="Insert" (click)="imageSelected.emit(image)" class="w-full" styleClass="w-full">
-                <fa-icon [icon]="icons.insert"></fa-icon>
+        <div class="card flex justify-content-center gap-2">
+            <p-button label="Insert" size="small" (click)="imageSelected.emit({image, caption})">
+                <fa-icon class="block pr-1" [icon]="icons.insert"></fa-icon>
             </p-button>
-            <p-button label="Edit" severity="success" class="w-full" styleClass="w-full" (onClick)="showEditor = true">
-                <fa-icon [icon]="icons.edit"></fa-icon>
+            <p-button label="Edit" severity="success" size="small" (onClick)="showEditor = true">
+                <fa-icon class="block pr-1" [icon]="icons.edit"></fa-icon>
             </p-button>
-            <p-button label="Delete" severity="danger" class="w-full" styleClass="w-full">
-                <fa-icon [icon]="icons.delete"></fa-icon>
+            <p-button label="Delete" severity="danger" size="small">
+                <fa-icon class="block pr-1" [icon]="icons.delete"></fa-icon>
             </p-button>
         </div>
     </ng-template>

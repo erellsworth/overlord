@@ -18,14 +18,6 @@
 
     <p-divider styleClass="py-1" />
 
-    <p-floatLabel>
-        <textarea id="description" class="w-full" rows="5" pInputTextarea formControlName="caption">
-            </textarea>
-        <label for="title">Caption</label>
-    </p-floatLabel>
-
-    <p-divider styleClass="py-1" />
-
     <p-button label="Save" (onClick)="saved.emit(formGroup.value)" />
 
 </div>

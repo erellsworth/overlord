@@ -39,7 +39,7 @@ export class MediaLibraryComponent implements OnInit {
     alt: string;
     caption?: string;
   }): void {
-
+    console.log('edit', image, event);
   }
 
   public handleUpload(event: FileUploadHandlerEvent): void {
@@ -50,8 +50,9 @@ export class MediaLibraryComponent implements OnInit {
     this.media.loadMedia();
   }
 
-  public selectImage(image: Image): void {
-    this.media.selectedImage.next({ image, position: this.config.data?.position });
+  public selectImage(event: { image: Image, caption?: string }): void {
+    const { caption, image } = event;
+    this.media.selectedImage.next({ caption, image, position: this.config.data?.position });
     this.media.closeLibrary();
   }
 }
