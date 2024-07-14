@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 export class MediaService {
 
   public hasInitiated = false;
+  public imageCaptions: { [key: number]: string; } = {}; //TODO: This should probably be stored in the database
   public media = signal<Image[]>([]);
   public selectedImage = new BehaviorSubject<{
     caption?: string;

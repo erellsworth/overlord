@@ -1,6 +1,6 @@
 import { Component, Injector, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormsModule } from '@angular/forms';
-import { Content, Editor } from '@tiptap/core';
+import { Content, Editor, JSONContent } from '@tiptap/core';
 import { NgxTiptapModule } from 'ngx-tiptap';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarComponent } from './toolbar/toolbar.component';
@@ -32,6 +32,14 @@ export class EditorComponent implements OnInit, OnDestroy {
   constructor(private injector: Injector, private media: MediaService) { }
 
   ngOnInit(): void {
+    if (typeof this.content === 'object') {
+      const images = (this.content as JSONContent).content?.filter(content => content.type === 'ImageFigure');
+      images?.forEach(image => {
+        if (image.attrs && image.attrs.caption) {
+          this.media.imageCaptions[image.attrs.imageId] = image.attrs.caption;
+        }
+      })
+    }
     this.subs.push(this.media.selectedImage.subscribe((data: {
       caption?: string;
       image: Image;
@@ -45,9 +53,11 @@ export class EditorComponent implements OnInit, OnDestroy {
 
       const src = image.full;
 
-
       this.editor.commands.setCustomImage({ src, alt, caption, imageId: id });
 
+      if (caption) {
+        this.media.imageCaptions[id] = caption;
+      }
     }));
   }
 

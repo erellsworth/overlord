@@ -42,6 +42,11 @@ export class MediaLibraryComponent implements OnInit {
     console.log('edit', image, event);
   }
 
+  public getCaption(id?: number): string {
+    if (!id) { return ''; }
+    return this.media.imageCaptions[id] || '';
+  }
+
   public handleUpload(event: FileUploadHandlerEvent): void {
     console.log('upload', event);
   }
