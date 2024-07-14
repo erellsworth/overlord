@@ -32,4 +32,15 @@ export class ContentService {
       });
     }
   }
+
+  public createContent(content: ContentInterface): Observable<ApiResponse<ContentInterface>> {
+    try {
+      return this.http.post<ApiResponse<ContentInterface>>(`api/content/`, content);
+    } catch (e) {
+      return of({
+        success: false,
+        error: e as Error
+      });
+    }
+  }
 }

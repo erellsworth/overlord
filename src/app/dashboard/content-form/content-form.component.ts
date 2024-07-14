@@ -10,7 +10,7 @@ import { Content } from '@tiptap/core';
 import { EditorComponent } from '../editor/editor.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContentInterface, ContentType, ContentTypes } from '../../../../interfaces/content';
-import { Observable, map, of } from 'rxjs';
+import { Observable, firstValueFrom, map, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 
@@ -94,7 +94,14 @@ export class ContentFormComponent {
     return formGroup.value.content || formGroup.value.html;
   }
 
-  public save(formGroup: FormGroup): void {
-    console.log('save', formGroup.value.content);
+  public async save(formGroup: FormGroup): Promise<void> {
+    console.log('save', this._slug, formGroup.value);
+
+    if (this._slug) {
+
+    } else {
+      const response = await firstValueFrom(this.contentService.createContent(formGroup.value));
+      console.log('response', response);
+    }
   }
 }
