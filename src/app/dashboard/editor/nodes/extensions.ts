@@ -8,11 +8,11 @@ import Image from "@tiptap/extension-image";
 
 const Extensions = (injector: Injector): Node[] => {
     return [
+        StarterKit as Node,
         Image,
         FigCaption(injector),
         FigureNode(injector),
         VideoNode(injector),
-        StarterKit as Node
     ]
 }
 

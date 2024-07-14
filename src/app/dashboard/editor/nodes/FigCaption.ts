@@ -6,8 +6,12 @@ import { TiptapFigureComponent } from '../tiptap-figure/tiptap-figure.component'
 const FigCaption = (injector: Injector): Node => {
   return Node.create({
     name: 'figCaption',
-    group: 'caption',
     content: 'inline*',
+    addOptions() {
+      return {
+        HTMLAttributes: {},
+      }
+    },
     addAttributes() {
       return {
         caption: {
