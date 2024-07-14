@@ -13,16 +13,15 @@ export class MediaService {
 
   public hasInitiated = false;
   public imageCaptions: { [key: number]: string; } = {}; //TODO: This should probably be stored in the database
-  public media = signal<Image[]>([]);
+  public media = signal<{ [key: number]: Image[] }>({});
   public selectedImage = new BehaviorSubject<{
     caption?: string;
     image: Image;
     position?: number
   }>({ image: {} as Image });
+  public totalImages = 0;
 
   private ref!: DynamicDialogRef;
-
-  private currentPage = 1;
 
   constructor(private http: HttpClient) { }
 
@@ -39,11 +38,14 @@ export class MediaService {
     this.ref = service.open(MediaLibraryComponent, { header: 'Select an Image', data });
   }
 
-  public async loadMedia(): Promise<void> {
-    const result = await firstValueFrom(this.http.get<PaginatedApiResponse<Image>>(`api/media/${this.currentPage}`))
-    this.currentPage++;
+  public async loadMedia(page: number): Promise<void> {
+    const result = await firstValueFrom(this.http.get<PaginatedApiResponse<Image>>(`api/media/${page}`))
     if (result.success) {
-      this.media.update((media) => media.concat(result.data?.contents || []));
+      this.media.update((media) => {
+        media[page] = result.data?.contents || [];
+        return media;
+      });
+      this.totalImages = result.data?.total as number;
       this.hasInitiated = true;
     }
   }
