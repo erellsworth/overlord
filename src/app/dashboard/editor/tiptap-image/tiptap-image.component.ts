@@ -13,7 +13,7 @@ import { MediaService } from '../../../services/media.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-tiptap-figure',
+  selector: 'app-tiptap-image',
   standalone: true,
   imports: [
     ButtonModule,
@@ -23,11 +23,11 @@ import { Subscription } from 'rxjs';
     ImageEditorComponent,
     ImageModule
   ],
-  templateUrl: './tiptap-figure.component.html',
-  styleUrl: './tiptap-figure.component.scss',
+  templateUrl: './tiptap-image.component.html',
+  styleUrl: './tiptap-image.component.scss',
   providers: [DialogService]
 })
-export class TiptapFigureComponent extends AngularNodeViewComponent implements OnInit, OnDestroy {
+export class TiptapImageComponent extends AngularNodeViewComponent implements OnInit, OnDestroy {
   public icons = {
     edit: faEdit,
     replace: faRightLeft

@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core';
-import { mergeAttributes, Node, nodeInputRule } from '@tiptap/core'
+import { mergeAttributes, Node } from '@tiptap/core'
 import { AngularNodeViewRenderer } from 'ngx-tiptap';
-import { TiptapFigureComponent } from '../tiptap-figure/tiptap-figure.component';
+import { TiptapImageComponent } from '../tiptap-image/tiptap-image.component';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -71,7 +71,7 @@ const ImageFigure = (injector: Injector): Node => {
       }
     },
     addNodeView() {
-      return AngularNodeViewRenderer(TiptapFigureComponent, { injector });
+      return AngularNodeViewRenderer(TiptapImageComponent, { injector });
     },
   });
 }

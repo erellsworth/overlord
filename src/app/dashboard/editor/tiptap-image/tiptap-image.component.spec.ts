@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TiptapFigureComponent } from './tiptap-figure.component';
+import { TiptapImageComponent } from './tiptap-image.component';
 
-describe('TiptapFigureComponent', () => {
-  let component: TiptapFigureComponent;
-  let fixture: ComponentFixture<TiptapFigureComponent>;
+describe('TiptapImageComponent', () => {
+  let component: TiptapImageComponent;
+  let fixture: ComponentFixture<TiptapImageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TiptapFigureComponent]
+      imports: [TiptapImageComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(TiptapFigureComponent);
+    fixture = TestBed.createComponent(TiptapImageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
