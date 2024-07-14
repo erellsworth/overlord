@@ -5,15 +5,15 @@ import { TiptapFigureComponent } from '../tiptap-figure/tiptap-figure.component'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    FigureNode: {
+    ImageFigure: {
       setCustomImage: (options: { src?: string, imageId?: number, alt?: string, caption?: string }) => ReturnType,
     }
   }
 }
 
-const FigureNode = (injector: Injector): Node => {
+const ImageFigure = (injector: Injector): Node => {
   return Node.create({
-    name: 'figureNode',
+    name: 'imageFigure',
     group: 'block',
     addOptions() {
       return {
@@ -76,4 +76,4 @@ const FigureNode = (injector: Injector): Node => {
   });
 }
 
-export default FigureNode;
+export default ImageFigure;
