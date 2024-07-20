@@ -76,6 +76,10 @@ export class TaxonomyInputComponent implements OnInit, OnDestroy {
     return this._newTaxonomies.value.map(tag => tag.toLowerCase());
   }
 
+  public checkCurrentFilter(): boolean {
+    return this._newTagNames.includes(this.currentFilter.toLowerCase());
+  }
+
   public createNewTag(): void {
     if (!this._newTagNames.includes(this.currentFilter.toLowerCase())) {
       const tagNames = this._newTaxonomies.value;
@@ -87,18 +91,15 @@ export class TaxonomyInputComponent implements OnInit, OnDestroy {
   }
 
   public filterTaxonomies(event: AutoCompleteCompleteEvent): void {
-    console.log('filter', this.selectedTag);
     this.currentFilter = event.query.toLowerCase();
   }
 
-  public checkCurrentFilter(): boolean {
-
-    return this._newTagNames.includes(this.currentFilter.toLowerCase());
+  public getChipClass(name: string): string {
+    return this._newTagNames.includes(name.toLowerCase()) ? 'bg-primary' : '';
   }
 
   public taxonomySelected(event?: AutoCompleteSelectEvent): void {
     if (!event) { return; }
-    console.log('tag selected', event);
     const idControl = this.formGroup.get('taxonomyIds');
     const ids = idControl?.value;
     if (!ids?.length) { return; }
@@ -107,7 +108,6 @@ export class TaxonomyInputComponent implements OnInit, OnDestroy {
     idControl?.setValue(ids);
 
     this.selectedTag = '';
-
   }
 
   private placeholderTag(name: string): TaxonomyInterface {

@@ -30,7 +30,7 @@ export interface ContentInterface extends baseInterface {
 }
 
 export interface ContentCreation extends ContentInterface {
-    newTags?: string[];
+    newTaxonomies?: string[];
 }
 
 // Some fields are optional when calling UserModel.create() or UserModel.build()
