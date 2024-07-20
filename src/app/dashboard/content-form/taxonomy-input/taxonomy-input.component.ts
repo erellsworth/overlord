@@ -102,7 +102,7 @@ export class TaxonomyInputComponent implements OnInit, OnDestroy {
     if (!event) { return; }
     const idControl = this.formGroup.get('taxonomyIds');
     const ids = idControl?.value;
-    if (!ids?.length) { return; }
+    if (!ids) { return; }
 
     ids.push(event.value.id);
     idControl?.setValue(ids);
