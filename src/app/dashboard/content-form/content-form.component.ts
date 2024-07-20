@@ -75,7 +75,10 @@ export class ContentFormComponent {
 
       const formData: ContentForm = {
         title: this.fb.nonNullable.control(content?.title, Validators.required),
-        slug: this.fb.nonNullable.control(content?.slug, Validators.required),
+        slug: this.fb.nonNullable.control({
+          value: content?.slug,
+          disabled: Boolean(slug)
+        }, Validators.required),
         type: this.fb.nonNullable.control(content.type, Validators.required),
         status: this.fb.nonNullable.control(content.status, Validators.required),
         text: this.fb.nonNullable.control(content.text),
@@ -109,9 +112,12 @@ export class ContentFormComponent {
 
   public async save(formGroup: FormGroup): Promise<void> {
     console.log('save', this._slug, formGroup.value);
-    return;
+    if (formGroup.invalid) {
+      //show errors
+      return;
+    }
     if (this._slug) {
-
+      // update
     } else {
       const response = await firstValueFrom(this.contentService.createContent(formGroup.value));
       console.log('response', response);

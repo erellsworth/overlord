@@ -18,7 +18,8 @@
 
     <p-card>
         <div class="flex justify-content-left gap-3">
-            <p-button [label]="buttonText" (onClick)="save(formGroup)" />
+            <p-button [label]="buttonText" (onClick)="save(formGroup)" [disabled]="formGroup.invalid" />
+
             @if(content.status === 'draft' && formGroup.valid){
             <p-button label="Publish" (onClick)="save(formGroup)" />
             }

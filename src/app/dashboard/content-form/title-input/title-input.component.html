@@ -6,8 +6,19 @@
     </p-floatLabel>
 
     <p-floatLabel class="mt-4 block">
-        <input id="slug" type="text" class="w-full" pInputText formControlName="slug" />
-        <label for="slug">Slug</label>
+        <p-inputGroup class="w-full">
+
+            <input id="slug" type="text" class="w-full" pInputText formControlName="slug" />
+            <label for="slug">Slug</label>
+            <button type="button" pButton
+                [class]="formGroup.get('slug')?.disabled ? 'p-button-warning' : 'p-button-success'"
+                (click)="toggleSlugField()">
+                <fa-icon [icon]="slugIcon"></fa-icon>
+            </button>
+
+        </p-inputGroup>
+
     </p-floatLabel>
+
 </ng-container>
 }
