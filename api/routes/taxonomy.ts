@@ -11,7 +11,7 @@ taxonomyRouter.get('/tags', async (req: Request, res: Response) => {
 
 });
 
-taxonomyRouter.post('/tags/create', async (req: Request, res: Response) => {
+taxonomyRouter.post('/tags', async (req: Request, res: Response) => {
 
 });
 

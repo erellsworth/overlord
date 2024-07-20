@@ -95,7 +95,6 @@ contentRouter.post('/content', async (req: Request, res: Response) => {
     delete newContent.newTags;
     delete newContent.createdAt;
     delete newContent.updatedAt;
-    delete newContent.image;
 
     if (!newContent.Taxonomies) {
         newContent.Taxonomies = [];

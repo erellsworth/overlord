@@ -1,18 +1,12 @@
 @if (formGroup$ | async; as formGroup) {
 <div [formGroup]="formGroup">
     <p-card header="Create new {{contentType}}">
-        <p-floatLabel>
-            <input id="title" type="text" class="w-full" pInputText formControlName="title" />
-            <label for="title">Title</label>
-        </p-floatLabel>
-
-        <p-floatLabel class="mt-4 block">
-            <input id="slug" type="text" class="w-full" pInputText formControlName="slug" />
-            <label for="slug">Slug</label>
-        </p-floatLabel>
+        <app-title-input [formGroup]="formGroup"></app-title-input>
     </p-card>
 
     <app-editor [content]="getContent(formGroup)" [formGroup]="formGroup"></app-editor>
+
+    <app-taxonomy-input [formGroup]="formGroup"></app-taxonomy-input>
 
     <p-card formGroupName="seo">
         <p-floatLabel>

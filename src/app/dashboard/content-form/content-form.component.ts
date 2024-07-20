@@ -13,6 +13,9 @@ import { ContentInterface, ContentType, ContentTypes } from '../../../../interfa
 import { Observable, firstValueFrom, map, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ContentService } from '../../services/content.service';
+import { ContentForm } from './content-form.interface';
+import { TitleInputComponent } from './title-input/title-input.component';
+import { TaxonomyInputComponent } from './taxonomy-input/taxonomy-input.component';
 
 @Component({
   selector: 'app-content-form',
@@ -25,14 +28,17 @@ import { ContentService } from '../../services/content.service';
     FloatLabelModule,
     InputTextareaModule,
     InputTextModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    TaxonomyInputComponent,
+    TitleInputComponent
+  ],
   templateUrl: './content-form.component.html',
   styleUrl: './content-form.component.scss'
 })
 export class ContentFormComponent {
 
   public content!: ContentInterface;
-  public formGroup$!: Observable<FormGroup>;
+  public formGroup$!: Observable<FormGroup<ContentForm>>;
 
   private defaultContent: ContentInterface = {
     title: '',
@@ -46,6 +52,7 @@ export class ContentFormComponent {
       description: ''
     },
     metaData: {
+      media_id: 0
     }
   };
 
@@ -64,14 +71,20 @@ export class ContentFormComponent {
       const content = result.success && result.data ? result.data : this.defaultContent;
 
       this.content = content;
+      const taxonomyIds = content.Taxonomies ? content.Taxonomies.filter(tax => tax.id).map(tax => tax.id as number) : [];
 
-      const formData = {
-        ...content, ...{
-          title: [content?.title, Validators.required],
-          slug: [content?.slug, Validators.required],
-          seo: this.fb.group(content?.seo || { description: '' }),
-          metaData: this.fb.group(content?.metaData || {})
-        }
+      const formData: ContentForm = {
+        title: this.fb.nonNullable.control(content?.title, Validators.required),
+        slug: this.fb.nonNullable.control(content?.slug, Validators.required),
+        type: this.fb.nonNullable.control(content.type, Validators.required),
+        status: this.fb.nonNullable.control(content.status, Validators.required),
+        text: this.fb.nonNullable.control(content.text),
+        html: this.fb.nonNullable.control(content.html),
+        content: this.fb.control(content.content, Validators.required),
+        seo: this.fb.nonNullable.group(content?.seo || { description: '' }),
+        metaData: this.fb.nonNullable.group(content?.metaData || { media_id: 0 }),
+        taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
+        newTaxonomies: this.fb.nonNullable.control([])
       };
 
       return this.fb.group(formData);
@@ -96,7 +109,7 @@ export class ContentFormComponent {
 
   public async save(formGroup: FormGroup): Promise<void> {
     console.log('save', this._slug, formGroup.value);
-
+    return;
     if (this._slug) {
 
     } else {

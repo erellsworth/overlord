@@ -2,6 +2,7 @@ import { Model, Optional } from "sequelize";
 import { baseInterface } from "./base"
 import { Image } from "./media";
 import { TaxonomyInterface } from "./taxonomy";
+import { Content } from '@tiptap/core';
 
 export enum ContentTypes {
     POST = 'post',
@@ -16,7 +17,7 @@ export interface ContentInterface extends baseInterface {
     status: ContentStatus;
     text: string;
     html: string;
-    content: any;
+    content: Content;
     seo: {
         description: string;
         [key: string]: string
@@ -26,8 +27,6 @@ export interface ContentInterface extends baseInterface {
         [key: string]: string | number | undefined;
     };
     Taxonomies?: TaxonomyInterface[];
-    Tag?: any;
-    image?: Image;
 }
 
 export interface ContentCreation extends ContentInterface {

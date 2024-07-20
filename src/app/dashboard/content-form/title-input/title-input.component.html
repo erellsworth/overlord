@@ -1,0 +1,13 @@
+@if(formGroup) {
+<ng-container [formGroup]="formGroup">
+    <p-floatLabel>
+        <input id="title" type="text" class="w-full" pInputText formControlName="title" />
+        <label for="title">Title</label>
+    </p-floatLabel>
+
+    <p-floatLabel class="mt-4 block">
+        <input id="slug" type="text" class="w-full" pInputText formControlName="slug" />
+        <label for="slug">Slug</label>
+    </p-floatLabel>
+</ng-container>
+}
