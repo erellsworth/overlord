@@ -71,6 +71,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public handleContentChange(): void {
-    this.formGroup.controls['content'].setValue(this.editor.getJSON());
+    this.formGroup.get('content')?.setValue(this.editor.getJSON());
+    this.formGroup.get('html')?.setValue(this.editor.getHTML());
+    this.formGroup.get('text')?.setValue(this.editor.getText());
   }
 }
