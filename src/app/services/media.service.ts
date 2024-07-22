@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { MediaLibraryComponent } from '../dashboard/media-library/media-library.component';
+import { MediaLibraryComponent, SelectedImageConfig } from '../dashboard/media-library/media-library.component';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse, PaginatedApiResponse } from '../../../interfaces/misc';
 import { Image } from '../../../interfaces/media';
@@ -14,17 +14,12 @@ export class MediaService {
   public hasInitiated = false;
   public imageCaptions: { [key: number]: string; } = {}; //TODO: This should probably be stored in the database
   public media = signal<{ [key: number]: Image[] }>({});
-  public selectedImage = new BehaviorSubject<{
-    caption?: string;
-    image: Image;
-    position?: number
-  }>({ image: {} as Image });
+  public selectedImage = new BehaviorSubject({} as SelectedImageConfig);
   public totalImages = 0;
 
   private ref!: DynamicDialogRef;
 
   constructor(private http: HttpClient) { }
-
 
   public closeLibrary(): void {
     if (this.ref) { this.ref.close(); }
@@ -34,7 +29,10 @@ export class MediaService {
     return this.http.get<ApiResponse<Image>>(`api/media/image/${id}`);
   }
 
-  public launchLibrary(service: DialogService, data?: { selectedImage: Image, position: number }): void {
+  public launchLibrary(
+    service: DialogService,
+    data: SelectedImageConfig
+  ): void {
     this.ref = service.open(MediaLibraryComponent, { header: 'Select an Image', data });
   }
 

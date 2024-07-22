@@ -92,7 +92,7 @@ contentRouter.post('/content', async (req: Request, res: Response) => {
     const newContent = { ...req.body, ...{ text: '', status: 'draft' } } as ContentCreation;
 
     delete newContent.id;
-    delete newContent.newTags;
+    delete newContent.newTaxonomies;
     delete newContent.createdAt;
     delete newContent.updatedAt;
 
@@ -101,7 +101,7 @@ contentRouter.post('/content', async (req: Request, res: Response) => {
     }
 
     if (req.body.newTags && req.body.newTags.length) {
-        const newTags = await Taxonomy.bulkCreate(req.body.newTags);
+        const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
         newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
     }
 

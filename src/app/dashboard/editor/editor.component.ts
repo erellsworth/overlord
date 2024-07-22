@@ -9,11 +9,13 @@ import { Subscription } from 'rxjs';
 import { Image } from '../../../../interfaces/media';
 import { ButtonModule } from 'primeng/button';
 import Extensions from './nodes/extensions';
+import { CardModule } from 'primeng/card';
+import { SelectedImageConfig } from '../media-library/media-library.component';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [ButtonModule, FormsModule, NgxTiptapModule, PanelModule, ToolbarComponent],
+  imports: [ButtonModule, CardModule, FormsModule, NgxTiptapModule, PanelModule, ToolbarComponent],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.scss'
 })
@@ -44,11 +46,8 @@ export class EditorComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.subs.push(this.media.selectedImage.subscribe((data: {
-      caption?: string;
-      image: Image;
-    }) => {
-      if (!data.image.data) { return; }
+    this.subs.push(this.media.selectedImage.subscribe((data: SelectedImageConfig) => {
+      if (!data.image?.data || data.source !== 'editor') { return; }
 
       const { caption, image } = data;
       const { alt, id } = image.data;

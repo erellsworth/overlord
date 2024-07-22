@@ -16,6 +16,8 @@ import { ContentService } from '../../services/content.service';
 import { ContentForm } from './content-form.interface';
 import { TitleInputComponent } from './title-input/title-input.component';
 import { TaxonomyInputComponent } from './taxonomy-input/taxonomy-input.component';
+import { ImageSelectorComponent } from './image-selector/image-selector.component';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
   selector: 'app-content-form',
@@ -24,8 +26,10 @@ import { TaxonomyInputComponent } from './taxonomy-input/taxonomy-input.componen
     ButtonModule,
     CardModule,
     CommonModule,
+    DividerModule,
     EditorComponent,
     FloatLabelModule,
+    ImageSelectorComponent,
     InputTextareaModule,
     InputTextModule,
     ReactiveFormsModule,
@@ -111,7 +115,8 @@ export class ContentFormComponent {
   }
 
   public async save(formGroup: FormGroup): Promise<void> {
-    console.log('save', this._slug, formGroup.value);
+    console.log('save', this._slug, formGroup);
+    return;
     if (formGroup.invalid) {
       //show errors
       return;

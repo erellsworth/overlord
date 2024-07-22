@@ -32,7 +32,7 @@ export class ToolbarComponent {
   }
 
   public buttonSeverity(style: string, attributes?: {}): Button['severity'] {
-    return this.editor.isActive(style, attributes) ? 'success' : undefined;
+    return this.editor.isActive(style, attributes) ? 'info' : undefined;
   }
 
   public logOutput(): void {
@@ -40,7 +40,9 @@ export class ToolbarComponent {
   }
 
   public showImageLibrary(): void {
-    this.media.launchLibrary(this.dialogService);
+    this.media.launchLibrary(this.dialogService, {
+      source: 'editor'
+    });
   }
 
   public showVideoInput(): void {

@@ -7,6 +7,13 @@ import { CommonModule } from '@angular/common';
 import { ImageCardComponent } from './image-card/image-card.component';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
+export interface SelectedImageConfig {
+  image?: Image,
+  position?: number,
+  source: 'editor' | 'selector' | 'imageCard',
+  caption?: string;
+}
+
 @Component({
   selector: 'app-media-library',
   standalone: true,
@@ -22,10 +29,9 @@ export class MediaLibraryComponent implements OnInit {
 
   private currentPage = 1;
 
-  constructor(private config: DynamicDialogConfig<{
-    selectedImage: Image,
-    position: number
-  }>, private media: MediaService) { }
+  constructor(
+    private config: DynamicDialogConfig<SelectedImageConfig>,
+    private media: MediaService) { }
 
   ngOnInit(): void {
     if (!this.media.hasInitiated) {
@@ -70,8 +76,10 @@ export class MediaLibraryComponent implements OnInit {
   }
 
   public selectImage(event: { image: Image, caption?: string }): void {
+    if (!this.config.data) { return; }
     const { caption, image } = event;
-    this.media.selectedImage.next({ caption, image, position: this.config.data?.position });
+    const { position, source } = this.config.data;
+    this.media.selectedImage.next({ caption, image, position, source });
     this.media.closeLibrary();
   }
 }

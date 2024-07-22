@@ -11,6 +11,7 @@ import { faEdit, faRightLeft } from '@fortawesome/free-solid-svg-icons';
 import { Image } from '../../../../../interfaces/media';
 import { MediaService } from '../../../services/media.service';
 import { Subscription } from 'rxjs';
+import { SelectedImageConfig } from '../../media-library/media-library.component';
 
 @Component({
   selector: 'app-tiptap-image',
@@ -55,9 +56,9 @@ export class TiptapImageComponent extends AngularNodeViewComponent implements On
       )
     );
 
-    this.subs.push(this.media.selectedImage.subscribe((data: { image: Image; position?: number }) => {
-      const { image, position } = data;
-      if (position === this.getPos()) {
+    this.subs.push(this.media.selectedImage.subscribe((data: SelectedImageConfig) => {
+      const { image, position, source } = data;
+      if (image && source === 'imageCard' && position === this.getPos()) {
         this.image = image;
       }
     }));
@@ -72,7 +73,11 @@ export class TiptapImageComponent extends AngularNodeViewComponent implements On
   }
 
   public launchMediaLibrary(): void {
-    this.media.launchLibrary(this.dialogService, { selectedImage: this.image, position: this.getPos() });
+    this.media.launchLibrary(this.dialogService, {
+      image: this.image,
+      position: this.getPos(),
+      source: 'imageCard'
+    });
   }
 
 }

@@ -1,9 +1,8 @@
-<p-panel>
-    <ng-template pTemplate="header">
-        <app-toolbar [editor]="editor"></app-toolbar>
-    </ng-template>
-    <div class="p-1 border-solid border-200 surface-100">
+<p-card>
+    <app-toolbar [editor]="editor"></app-toolbar>
+
+    <div class="px-3 py-1 border-solid border-200 surface-100">
         <tiptap-editor [editor]="editor" [(ngModel)]="content" (ngModelChange)="handleContentChange()">
         </tiptap-editor>
     </div>
-</p-panel>
+</p-card>

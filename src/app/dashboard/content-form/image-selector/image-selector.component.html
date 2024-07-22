@@ -1,0 +1,8 @@
+<p class="mt-0">Content image:</p>
+@if (image) {
+<p-image [src]="image.thumbnail"></p-image>
+} @else {
+<p>No Image Selected for this content</p>
+}
+
+<p-button label="Select Image" styleClass="block mt-2" severity="info" (onClick)="showImageLibrary()" />
