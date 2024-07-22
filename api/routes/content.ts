@@ -4,7 +4,7 @@ import { PaginatedResults } from "../../interfaces/misc";
 import { TaxonomyInterface } from "../../interfaces/taxonomy";
 import { Content, Taxonomy } from "../models";
 import { ContentModel } from "../models/Content";
-import { notFoundResponse, successResponse } from "../utils/responses";
+import { errorResponse, notFoundResponse, successResponse } from "../utils/responses";
 import contentRouter from "./router";
 
 contentRouter.get('/content/types', async (req: Request, res: Response) => {
@@ -61,16 +61,28 @@ contentRouter.get('/contents/:type?', async (req: Request, res: Response) => {
 
 });
 
-contentRouter.post('/update/:slug', async (req: Request, res: Response) => {
+contentRouter.put('/update', async (req: Request, res: Response) => {
 
-    const contentUpdate = { ...req.body };
+    const contentUpdate = { ...req.body } as ContentCreation;
 
+    if (!contentUpdate.id) {
+        return errorResponse(res, 'Content ID missing', 400);
+    }
+
+    delete contentUpdate.newTaxonomies;
     delete contentUpdate.updatedAt;
     delete contentUpdate.createdAt;
 
-    const { slug } = req.params;
+    if (!contentUpdate.Taxonomies) {
+        contentUpdate.Taxonomies = [];
+    }
 
-    let content = await Content.findBySlug(slug);
+    if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
+        const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
+        contentUpdate.Taxonomies = contentUpdate.Taxonomies.concat(newTags);
+    }
+
+    let content = await Content.findById(contentUpdate.id);
 
     let newContent = await content.update(contentUpdate);
 
@@ -100,7 +112,7 @@ contentRouter.post('/content', async (req: Request, res: Response) => {
         newContent.Taxonomies = [];
     }
 
-    if (req.body.newTags && req.body.newTags.length) {
+    if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
         const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
         newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
     }

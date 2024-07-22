@@ -43,4 +43,15 @@ export class ContentService {
       });
     }
   }
+
+  public updateContent(content: ContentInterface): Observable<ApiResponse<ContentInterface>> {
+    try {
+      return this.http.put<ApiResponse<ContentInterface>>(`api/update`, content);
+    } catch (e) {
+      return of({
+        success: false,
+        error: e as Error
+      });
+    }
+  }
 }

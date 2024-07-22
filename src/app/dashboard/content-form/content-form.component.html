@@ -2,8 +2,6 @@
 <p-card header="Create new {{contentType}}" [formGroup]="formGroup">
     <app-title-input [formGroup]="formGroup"></app-title-input>
 
-
-
     <app-editor [content]="getContent(formGroup)" [formGroup]="formGroup"></app-editor>
 
     <div formGroupName="seo">
@@ -27,9 +25,11 @@
     <div class="flex justify-content-left gap-3">
         <p-button [label]="buttonText" (onClick)="save(formGroup)" [disabled]="formGroup.invalid" />
 
-        @if(content.status === 'draft' && formGroup.valid){
-        <p-button label="Publish" (onClick)="save(formGroup)" />
+        @if(content.status === 'draft'){
+        <p-button label="Publish" (onClick)="publish(formGroup)" [disabled]="formGroup.invalid" />
         }
     </div>
 </p-card>
 }
+
+<p-toast />

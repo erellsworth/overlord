@@ -6,18 +6,21 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ToastModule } from 'primeng/toast';
 import { Content } from '@tiptap/core';
 import { EditorComponent } from '../editor/editor.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContentInterface, ContentType, ContentTypes } from '../../../../interfaces/content';
 import { Observable, firstValueFrom, map, of } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 import { ContentForm } from './content-form.interface';
 import { TitleInputComponent } from './title-input/title-input.component';
 import { TaxonomyInputComponent } from './taxonomy-input/taxonomy-input.component';
 import { ImageSelectorComponent } from './image-selector/image-selector.component';
 import { DividerModule } from 'primeng/divider';
+import { ApiResponse } from '../../../../interfaces/misc';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-content-form',
@@ -34,10 +37,14 @@ import { DividerModule } from 'primeng/divider';
     InputTextModule,
     ReactiveFormsModule,
     TaxonomyInputComponent,
-    TitleInputComponent
+    TitleInputComponent,
+    ToastModule
   ],
   templateUrl: './content-form.component.html',
-  styleUrl: './content-form.component.scss'
+  styleUrl: './content-form.component.scss',
+  providers: [
+    MessageService
+  ]
 })
 export class ContentFormComponent {
 
@@ -99,7 +106,11 @@ export class ContentFormComponent {
     }));
   }
 
-  constructor(private contentService: ContentService, private fb: FormBuilder) { }
+  constructor(
+    private contentService: ContentService,
+    private fb: FormBuilder,
+    private messageService: MessageService
+  ) { }
 
   public get buttonText(): string {
     return this._slug ? 'Update' : 'Create';
@@ -114,18 +125,42 @@ export class ContentFormComponent {
     return formGroup.value.content || formGroup.value.html;
   }
 
-  public async save(formGroup: FormGroup): Promise<void> {
+  public publish(formGroup: FormGroup): void {
+    formGroup.get('status')?.setValue('published');
+    this.save(formGroup, true);
+  }
+
+  public async save(formGroup: FormGroup, isPublish: boolean = false): Promise<void> {
     console.log('save', this._slug, formGroup);
-    return;
     if (formGroup.invalid) {
       //show errors
       return;
     }
+
+    let response: ApiResponse<ContentInterface>;
+    let action: string;
     if (this._slug) {
-      // update
+      action = 'Updated';
+      response = await firstValueFrom(this.contentService.updateContent(formGroup.getRawValue()));
     } else {
-      const response = await firstValueFrom(this.contentService.createContent(formGroup.value));
-      console.log('response', response);
+      action = 'Created';
+      response = await firstValueFrom(this.contentService.createContent(formGroup.getRawValue()));
+    }
+
+    if (isPublish) { action = 'Published'; }
+
+    if (response.success) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Noice!',
+        detail: `${new TitleCasePipe().transform(formGroup.value.type)} ${action}`
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Oh shit!',
+        detail: response.error?.message
+      });
     }
   }
 }

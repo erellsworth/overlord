@@ -101,6 +101,17 @@ const Content = {
         };
 
     },
+    findById: async (id: number): Promise<ContentInstance> => {
+        const content = await ContentModel.findOne({
+            where: {
+                id,
+            },
+            include: TaxonomyModel,
+            logging: false
+        }) as unknown as ContentInterface;
+
+        return await attachImage(content) as ContentInstance;
+    },
     findBySlug: async (slug: string): Promise<ContentInstance> => {
         const content = await ContentModel.findOne({
             where: {
