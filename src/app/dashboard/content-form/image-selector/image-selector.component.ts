@@ -24,7 +24,7 @@ import { ButtonModule } from 'primeng/button';
 export class ImageSelectorComponent implements OnInit {
   @Input({ required: true }) formGroup!: FormGroup;
 
-  public image!: Image;
+  public image!: Image | null;
 
   private subs: Subscription[] = [];
 
@@ -51,9 +51,14 @@ export class ImageSelectorComponent implements OnInit {
     return this.formGroup.get('metaData')?.get('media_id');
   }
 
+  public removeImage(): void {
+    this.mediaIdControl?.setValue(0);
+    this.image = null;
+  }
+
   public showImageLibrary(): void {
     this.media.launchLibrary(this.dialogService, {
-      image: this.image,
+      image: this.image as Image,
       source: 'selector'
     });
   }
