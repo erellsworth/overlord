@@ -1,5 +1,17 @@
 @if (formGroup$ | async; as formGroup) {
-<p-card header="Create new {{contentType}}" [formGroup]="formGroup">
+<p-card [formGroup]="formGroup">
+
+    <ng-template pTemplate="title">
+        Create new <p-inplace closable="closable">
+            <ng-template pTemplate="display">
+                {{getContentType(formGroup)}}
+            </ng-template>
+            <ng-template pTemplate="content">
+                <p-dropdown formControlName="type" [options]="contentTypes" />
+            </ng-template>
+        </p-inplace>
+    </ng-template>
+
     <app-title-input [formGroup]="formGroup"></app-title-input>
 
     <app-editor [content]="getContent(formGroup)" [formGroup]="formGroup"></app-editor>

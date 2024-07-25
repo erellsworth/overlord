@@ -1,6 +1,6 @@
 
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
@@ -21,6 +21,8 @@ import { ImageSelectorComponent } from './image-selector/image-selector.componen
 import { DividerModule } from 'primeng/divider';
 import { ApiResponse } from '../../../../interfaces/misc';
 import { MessageService } from 'primeng/api';
+import { InplaceModule } from 'primeng/inplace';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-content-form',
@@ -30,9 +32,11 @@ import { MessageService } from 'primeng/api';
     CardModule,
     CommonModule,
     DividerModule,
+    DropdownModule,
     EditorComponent,
     FloatLabelModule,
     ImageSelectorComponent,
+    InplaceModule,
     InputTextareaModule,
     InputTextModule,
     ReactiveFormsModule,
@@ -49,6 +53,7 @@ import { MessageService } from 'primeng/api';
 export class ContentFormComponent {
 
   public content!: ContentInterface;
+  public contentTypes = Object.values(ContentTypes);
   public formGroup$!: Observable<FormGroup<ContentForm>>;
 
   private defaultContent: ContentInterface = {
@@ -67,13 +72,7 @@ export class ContentFormComponent {
     }
   };
 
-  private _contentType: ContentType = 'post';
   private _slug: string = '';
-
-  @Input()
-  set contentType(contentType: ContentType) {
-    if (contentType) { this._contentType = contentType }
-  }
 
   @Input()
   set slug(slug: string) {
@@ -116,9 +115,10 @@ export class ContentFormComponent {
     return this._slug ? 'Update' : 'Create';
   }
 
-  public get contentType(): ContentType {
+  public getContentType(formGroup: FormGroup): ContentType {
+    const contentType = formGroup.get('type')?.value;
     const types = Object.values(ContentTypes) as ContentType[];
-    return types.includes(this._contentType) ? this._contentType : 'post';
+    return types.includes(contentType) ? contentType : 'post';
   }
 
   public getContent(formGroup: FormGroup): Content {
@@ -131,7 +131,7 @@ export class ContentFormComponent {
   }
 
   public async save(formGroup: FormGroup, isPublish: boolean = false): Promise<void> {
-    console.log('save', this._slug, formGroup);
+
     if (formGroup.invalid) {
       //show errors
       return;
