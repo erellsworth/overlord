@@ -1,15 +1,19 @@
 import { Injector } from "@angular/core";
-import { Node } from '@tiptap/core';
+import { Extension, Mark, Node } from '@tiptap/core';
 import ImageFigure from "./ImageFigure";
 import FigCaption from "./FigCaption";
 import VideoNode from "./VideoNode";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 
-const Extensions = (injector: Injector): Node[] => {
+type ExtensionTypes = Node | Mark | Extension;
+
+const Extensions = (injector: Injector): ExtensionTypes[] => {
     return [
-        StarterKit as Node,
+        StarterKit,
         Image,
+        Link,
         FigCaption(injector),
         ImageFigure(injector),
         VideoNode(injector),

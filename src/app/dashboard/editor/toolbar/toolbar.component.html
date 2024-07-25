@@ -44,7 +44,7 @@
     <fa-icon [icon]="icons.blockQuote"></fa-icon>
   </p-button>
 
-  <p-button title="---">
+  <p-button title="Horizontal Rule" (onClick)="focus.setHorizontalRule().run()">
     ---
   </p-button>
 
@@ -53,6 +53,9 @@
   </p-button>
   <p-button title="Redo" (onClick)="focus.redo().run()">
     <fa-icon [icon]="icons.redo"></fa-icon>
+  </p-button>
+  <p-button [severity]="buttonSeverity('link')" title="Link" (onClick)="showLinkInput()">
+    <fa-icon [icon]="icons.link"></fa-icon>
   </p-button>
   <p-button title="Insert image" (onClick)="showImageLibrary()">
     <fa-icon [icon]="icons.image"></fa-icon>

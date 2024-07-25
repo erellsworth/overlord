@@ -1,4 +1,4 @@
-import { faBold, faCode, faFileCode, faImage, faItalic, faList, faListOl, faParagraph, faQuoteLeft, faRedo, faRemoveFormat, faRotateLeft, faStrikethrough, faTerminal, faUndo, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faBold, faCode, faFileCode, faImage, faItalic, faLink, faList, faListOl, faParagraph, faQuoteLeft, faRedo, faRemoveFormat, faRotateLeft, faStrikethrough, faTerminal, faUndo, faVideo } from '@fortawesome/free-solid-svg-icons';
 
 export const Icons = {
     blockQuote: faQuoteLeft,
@@ -10,6 +10,7 @@ export const Icons = {
     image: faImage,
     italic: faItalic,
     orderedList: faListOl,
+    link: faLink,
     paragraph: faParagraph,
     redo: faRedo,
     removeFormating: faRemoveFormat,

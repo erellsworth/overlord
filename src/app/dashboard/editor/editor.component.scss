@@ -8,11 +8,10 @@
 
                 &.ProseMirror {
                     min-height: 50vh;
+                    padding: 5px 10px;
 
                     &:focus-visible {
                         outline: none;
-                        box-shadow: 1px 1px 3px #ccc;
-                        padding: 5px;
                     }
 
                     >*+* {

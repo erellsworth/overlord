@@ -1,7 +1,7 @@
 <p-card>
     <app-toolbar [editor]="editor"></app-toolbar>
 
-    <div class="px-3 py-1 border-solid border-200 surface-100">
+    <div class="surface-100">
         <tiptap-editor [editor]="editor" [(ngModel)]="content" (ngModelChange)="handleContentChange()">
         </tiptap-editor>
     </div>
