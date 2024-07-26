@@ -40,7 +40,13 @@
         @if(content.status === 'draft'){
         <p-button label="Publish" (onClick)="publish(formGroup)" [disabled]="formGroup.invalid" />
         }
+
+        @if(content.status === 'published'){
+        <p-button label="Unpublish" (onClick)="unpublish(formGroup)" [disabled]="formGroup.invalid" />
+        }
     </div>
+
+
 </p-card>
 }
 

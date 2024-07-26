@@ -1,12 +1,11 @@
 import { Component, Injector, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormsModule } from '@angular/forms';
-import { Content, Editor, JSONContent } from '@tiptap/core';
+import { Content, Editor, generateJSON, JSONContent } from '@tiptap/core';
 import { NgxTiptapModule } from 'ngx-tiptap';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MediaService } from '../../services/media.service';
 import { Subscription } from 'rxjs';
-import { Image } from '../../../../interfaces/media';
 import { ButtonModule } from 'primeng/button';
 import Extensions from './nodes/extensions';
 import { CardModule } from 'primeng/card';
@@ -36,6 +35,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     private media: MediaService) { }
 
   ngOnInit(): void {
+
+    if (typeof this.content === 'string') {
+      this.editor.commands.setContent(generateJSON(this.content, Extensions(this.injector)));
+      this.handleContentChange();
+    }
     if (typeof this.content === 'object') {
       // pre-populate captions in media library based on content;
       const images = (this.content as JSONContent).content?.filter(content => content.type === 'imageFigure');

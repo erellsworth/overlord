@@ -4,7 +4,7 @@ import { ContentStatus } from "aws-sdk/clients/wisdom";
 import { Content } from '@tiptap/core';
 
 export interface ContentForm {
-    id?: FormControl<number>;
+    id?: FormControl<number | undefined>;
     slug: FormControl<string>;
     title: FormControl<string>;
     type: FormControl<ContentType>;

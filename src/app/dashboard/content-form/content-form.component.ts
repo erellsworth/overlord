@@ -84,6 +84,7 @@ export class ContentFormComponent {
       const taxonomyIds = content.Taxonomies ? content.Taxonomies.filter(tax => tax.id).map(tax => tax.id as number) : [];
 
       const formData: ContentForm = {
+        id: this.fb.nonNullable.control(content.id),
         title: this.fb.nonNullable.control(content?.title, Validators.required),
         slug: this.fb.nonNullable.control({
           value: content?.slug,
@@ -125,29 +126,40 @@ export class ContentFormComponent {
     return formGroup.value.content || formGroup.value.html;
   }
 
-  public publish(formGroup: FormGroup): void {
+  public async publish(formGroup: FormGroup): Promise<void> {
     formGroup.get('status')?.setValue('published');
-    this.save(formGroup, true);
+    if (await this.save(formGroup, 'Published')) {
+      this.content.status = 'published';
+    }
   }
 
-  public async save(formGroup: FormGroup, isPublish: boolean = false): Promise<void> {
+  public async unpublish(formGroup: FormGroup): Promise<void> {
+    formGroup.get('status')?.setValue('draft');
+    if (await this.save(formGroup, 'Unpublished')) {
+      this.content.status = 'draft';
+    }
+  }
+
+  public async save(formGroup: FormGroup, action?: string): Promise<boolean> {
 
     if (formGroup.invalid) {
-      //show errors
-      return;
+      console.error('save error', formGroup);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Oh shit!',
+        detail: 'Check console for form errors'
+      });
+      return false;
     }
 
     let response: ApiResponse<ContentInterface>;
-    let action: string;
     if (this._slug) {
-      action = 'Updated';
+      action = action || 'Updated';
       response = await firstValueFrom(this.contentService.updateContent(formGroup.getRawValue()));
     } else {
       action = 'Created';
       response = await firstValueFrom(this.contentService.createContent(formGroup.getRawValue()));
     }
-
-    if (isPublish) { action = 'Published'; }
 
     if (response.success) {
       this.messageService.add({
@@ -155,12 +167,14 @@ export class ContentFormComponent {
         summary: 'Noice!',
         detail: `${new TitleCasePipe().transform(formGroup.value.type)} ${action}`
       });
+      return true;
     } else {
       this.messageService.add({
         severity: 'error',
         summary: 'Oh shit!',
         detail: response.error?.message
       });
+      return false;
     }
   }
 }
