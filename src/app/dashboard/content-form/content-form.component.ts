@@ -77,7 +77,7 @@ export class ContentFormComponent {
   @Input()
   set slug(slug: string) {
     this._slug = slug;
-    this.formGroup$ = this.contentService.getContentBySlug(slug).pipe(map((result) => {
+    this.formGroup$ = this.contentService.getContentBySlug$(slug).pipe(map((result) => {
       const content = result.success && result.data ? result.data : this.defaultContent;
 
       this.content = content;
@@ -155,10 +155,10 @@ export class ContentFormComponent {
     let response: ApiResponse<ContentInterface>;
     if (this._slug) {
       action = action || 'Updated';
-      response = await firstValueFrom(this.contentService.updateContent(formGroup.getRawValue()));
+      response = await firstValueFrom(this.contentService.updateContent$(formGroup.getRawValue()));
     } else {
       action = 'Created';
-      response = await firstValueFrom(this.contentService.createContent(formGroup.getRawValue()));
+      response = await firstValueFrom(this.contentService.createContent$(formGroup.getRawValue()));
     }
 
     if (response.success) {

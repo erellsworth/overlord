@@ -23,7 +23,7 @@ export class ContentListComponent {
 
   @Input()
   set contentType(contentType: ContentType) {
-    this.content$ = this.contentService.getContentByType(contentType).pipe(
+    this.content$ = this.contentService.getContentByType$(contentType).pipe(
       map((response: PaginatedApiResponse<ContentInterface>) => {
         if (response.success && response.data) {
           return response.data.contents;

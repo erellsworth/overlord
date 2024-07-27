@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { ContentCreation, ContentInstance, ContentQuery, ContentQueryParams, ContentType } from "../../interfaces/content";
+import { ContentCreation, ContentInstance, ContentQueryParams, ContentType, ContentTypes } from "../../interfaces/content";
 import { PaginatedResults } from "../../interfaces/misc";
 import { TaxonomyInterface } from "../../interfaces/taxonomy";
 import { Content, Taxonomy } from "../models";
@@ -8,7 +8,8 @@ import { errorResponse, notFoundResponse, successResponse } from "../utils/respo
 import contentRouter from "./router";
 
 contentRouter.get('/content/types', async (req: Request, res: Response) => {
-    successResponse(res, ['post', 'page']);
+    //TODO: Content types should be more flexible so additional types could be added as needed
+    successResponse(res, Object.values(ContentTypes));
 });
 
 contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {

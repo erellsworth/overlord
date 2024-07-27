@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
+import { ContentService } from '../../services/content.service';
+import { firstValueFrom } from 'rxjs';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-menu',
@@ -9,20 +12,32 @@ import { MenubarModule } from 'primeng/menubar';
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
 
   public items: MenuItem[] = [
     {
       label: 'Home',
       routerLink: '/'
-    },
-    {
-      label: 'Pages',
-      routerLink: 'content/page'
-    },
-    {
-      label: 'Posts',
-      routerLink: 'content/post'
     }
   ];
+  public ready = false;
+
+  constructor(private content: ContentService) { }
+
+  async ngOnInit(): Promise<void> {
+    const result = await firstValueFrom(this.content.getContentTypes$());
+
+    if (result.success) {
+      result.data?.forEach(ct => this.items.push({
+        label: new TitleCasePipe().transform(ct),
+        routerLink: `content/${ct}`,
+      }));
+    } else {
+      console.error('Failed to get content types', result.error);
+    }
+
+    this.ready = true;
+
+  }
+
 }

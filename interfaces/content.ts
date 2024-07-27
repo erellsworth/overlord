@@ -27,6 +27,7 @@ export interface ContentInterface extends baseInterface {
         [key: string]: string | number | undefined;
     };
     Taxonomies?: TaxonomyInterface[];
+    image?: Image;
 }
 
 export interface ContentCreation extends ContentInterface {
