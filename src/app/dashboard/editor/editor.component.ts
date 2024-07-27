@@ -14,7 +14,13 @@ import { SelectedImageConfig } from '../media-library/media-library.component';
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [ButtonModule, CardModule, FormsModule, NgxTiptapModule, PanelModule, ToolbarComponent],
+  imports: [
+    ButtonModule,
+    CardModule,
+    FormsModule,
+    NgxTiptapModule,
+    PanelModule,
+    ToolbarComponent],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.scss'
 })
@@ -71,6 +77,17 @@ export class EditorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.editor.destroy();
     this.subs.forEach(sub => sub.unsubscribe());
+  }
+
+  public get counts(): { [key: string]: number } {
+    const node = this.editor.state.doc
+    const text = node.textBetween(0, node.content.size, ' ', ' ');
+    const words = text.split(' ').filter(word => word !== '').length;
+    const characters = text.length;
+    return {
+      words,
+      characters
+    }
   }
 
   public handleContentChange(): void {

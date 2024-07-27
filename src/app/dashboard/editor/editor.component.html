@@ -5,4 +5,5 @@
         <tiptap-editor [editor]="editor" [(ngModel)]="content" (ngModelChange)="handleContentChange()">
         </tiptap-editor>
     </div>
+    <p><small>Words: {{counts.words}} - Charcters: {{counts.characters}}</small></p>
 </p-card>
