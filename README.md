@@ -1,4 +1,21 @@
-# OverlordNg
+
+# Overlord
+
+![Still image from Sealab 2021 episode Happy Cake, showing green holographic image of Sparks the Overlord's giant head talking to his henchmen](https://github.com/erellsworth/overlord/blob/main/overlord.jpg?raw=true)
+Minimalist headless CMS.
+
+Built with:
+ - [Angular](https://angular.dev/)
+ - [Tiptap](https://tiptap.dev/)
+ - [Primeng](https://primeng.org)
+ - [Express](https://expressjs.com/)
+ - [PostgreSQL](https://www.postgresql.org/)
+
+This is a hobby project and nowhere near ready for production use.
+
+**All hail the Overlord!**
+
+---
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
 
