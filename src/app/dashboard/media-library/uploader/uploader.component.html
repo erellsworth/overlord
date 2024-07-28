@@ -1,0 +1,5 @@
+<div class="flex justify-content-left gap-3">
+    <p-image [src]="file.objectURL" class="w-4" imageClass="w-full" />
+    <p-button label="Upload" severity="success" (onClick)="handleUpload()" />
+    <p-button label="Crop" severity="info" (onClick)="showCropper()" />
+</div>

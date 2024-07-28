@@ -1,5 +1,5 @@
 import { Model, Optional } from "sequelize";
-import { baseInterface } from "./base"
+import { baseInterface } from "./base";
 import { Image } from "./media";
 import { TaxonomyInterface } from "./taxonomy";
 import { Content } from '@tiptap/core';
@@ -8,6 +8,7 @@ export enum ContentTypes {
     POST = 'post',
     PAGE = 'page'
 };
+
 export type ContentType = `${ContentTypes}`;
 export type ContentStatus = 'published' | 'draft';
 

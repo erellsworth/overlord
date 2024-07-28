@@ -7,26 +7,42 @@ import mediaRouter from "./router";
 import { createMediaRecord, removeImage, storeImage } from "../utils/media.helper";
 import { ImageStorageResult } from "../../interfaces/misc";
 
-const upload = multer({
-    storage: {
-        _handleFile: async (req: Request, file: Express.Multer.File, cb: (error?: any, file?: Partial<Express.Multer.File>) => void) => {
+class customStorage {
 
-            req.body.uploadResult = await storeImage(file, JSON.parse(req.body.crops));
+    async _handleFile(
+        req: Request,
+        file: Express.Multer.File,
+        cb: (error?: any, file?: Partial<Express.Multer.File>) => void): Promise<void> {
+        try {
+            console.log('body', { ...req.body });
+            req.body.uploadResult = await storeImage(file, {});
 
             cb(null, file);
-
-        },
-        _removeFile: (req: Request, file: any, cb: (error: Error | null) => void) => {
-            delete file.buffer;
-            cb(null);
+        } catch (e) {
+            cb(e as Error);
         }
     }
-});
 
+    _removeFile(
+        req: Request,
+        file: any,
+        cb: (error: Error | null) => void): void {
+        console.log('_removeFile', { ...req.body });
+        try {
+            delete file.buffer;
+            cb(null);
+        } catch (e) {
+            cb(e as Error);
+        }
+    }
+}
+
+const upload = multer({
+    storage: new customStorage()
+});
 
 mediaRouter.get('/media/image/:id', async (req: Request, res: Response) => {
     let { id } = req.params;
-
 
     const data = await Media.findById(parseInt(id));
 

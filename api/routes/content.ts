@@ -1,11 +1,16 @@
 import { Request, Response } from "express"
-import { ContentCreation, ContentInstance, ContentQueryParams, ContentType, ContentTypes } from "../../interfaces/content";
+import { ContentCreation, ContentInstance, ContentQueryParams, ContentType } from "../../interfaces/content";
 import { PaginatedResults } from "../../interfaces/misc";
 import { TaxonomyInterface } from "../../interfaces/taxonomy";
 import { Content, Taxonomy } from "../models";
 import { ContentModel } from "../models/Content";
 import { errorResponse, notFoundResponse, successResponse } from "../utils/responses";
 import contentRouter from "./router";
+
+export enum ContentTypes {
+    POST = 'post',
+    PAGE = 'page'
+};
 
 contentRouter.get('/content/types', async (req: Request, res: Response) => {
     //TODO: Content types should be more flexible so additional types could be added as needed

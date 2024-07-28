@@ -53,7 +53,7 @@ import { DropdownModule } from 'primeng/dropdown';
 export class ContentFormComponent {
 
   public content!: ContentInterface;
-  public contentTypes = Object.values(ContentTypes);
+  public contentTypes = Object.values(ContentTypes); // TODO: get from service
   public formGroup$!: Observable<FormGroup<ContentForm>>;
 
   private defaultContent: ContentInterface = {
@@ -118,8 +118,7 @@ export class ContentFormComponent {
 
   public getContentType(formGroup: FormGroup): ContentType {
     const contentType = formGroup.get('type')?.value;
-    const types = Object.values(ContentTypes) as ContentType[];
-    return types.includes(contentType) ? contentType : 'post';
+    return this.contentTypes.includes(contentType) ? contentType : 'post';
   }
 
   public getContent(formGroup: FormGroup): Content {

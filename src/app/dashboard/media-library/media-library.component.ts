@@ -6,6 +6,11 @@ import { Image } from '../../../../interfaces/media';
 import { CommonModule } from '@angular/common';
 import { ImageCardComponent } from './image-card/image-card.component';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { UploaderComponent } from './uploader/uploader.component';
 
 export interface SelectedImageConfig {
   image?: Image,
@@ -20,18 +25,29 @@ export interface SelectedImageConfig {
   imports: [
     CommonModule,
     FileUploadModule,
+    FontAwesomeModule,
     ImageCardComponent,
-    PaginatorModule],
+    PaginatorModule,
+    ToastModule,
+    UploaderComponent
+  ],
   templateUrl: './media-library.component.html',
-  styleUrl: './media-library.component.scss'
+  styleUrl: './media-library.component.scss',
+  providers: [
+    MessageService
+  ]
 })
 export class MediaLibraryComponent implements OnInit {
+
+  public uploadIcon = faUpload;
 
   private currentPage = 1;
 
   constructor(
     private config: DynamicDialogConfig<SelectedImageConfig>,
-    private media: MediaService) { }
+    private media: MediaService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit(): void {
     if (!this.media.hasInitiated) {
@@ -64,8 +80,40 @@ export class MediaLibraryComponent implements OnInit {
     return this.media.imageCaptions[id] || '';
   }
 
+  public async getTempImage(file: any): Promise<Image> {
+    const filename = await this.media.getValidFileName(file.name);
+    return {
+      full: file.objectURL,
+      thumbnail: file.objectURL,
+      data: {
+        filename,
+        path: 'string',
+        mimetype: file.type,
+        name: filename,
+        alt: filename
+      }
+    }
+  }
+
   public handleUpload(event: FileUploadHandlerEvent): void {
-    console.log('upload', event);
+    event.files.forEach(async (file) => {
+      const result = await this.media.upload(file);
+      if (result.success && result.image) {
+        this.media.media()[0].push(result.image);
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Uploaded!',
+          detail: `${result.image.data.filename} added to media library`
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Uploaded failed',
+          detail: result.error?.message
+        });
+      }
+    });
   }
 
   public async pageChanged(event: PaginatorState): Promise<void> {

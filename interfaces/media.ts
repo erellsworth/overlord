@@ -25,6 +25,11 @@ export interface Crop {
     width: number;
 }
 
+export interface UploadRequest {
+    file: File,
+    crops?: { [key: string]: Crop }
+}
+
 export interface MediaCreationResult extends GenericResult {
     image?: Image;
 }

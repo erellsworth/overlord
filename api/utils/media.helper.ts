@@ -10,7 +10,8 @@ import { ContentWithMedia, GenericResult, ImageStorageResult, S3UploadResult } f
 import { Media, MediaModel } from "../models/Media";
 
 const s3 = new S3Client({
-    credentials: fromEnv()
+    credentials: fromEnv(),
+    region: 'us-east-1'
 });
 
 export const attachImages = async (contents: ContentWithMedia[]): Promise<ContentWithMedia[]> => {
@@ -61,6 +62,8 @@ const uploadToS3 = async (Body: Buffer | Express.Multer.File['stream'], Key: str
                 params
             });
 
+            console.log('uploading...');
+
             const data = await upload.done();
 
             resolve({
@@ -69,6 +72,7 @@ const uploadToS3 = async (Body: Buffer | Express.Multer.File['stream'], Key: str
             });
 
         } catch (error) {
+            console.log('upload error', error);
             reject({
                 success: false,
                 error
@@ -129,7 +133,12 @@ const removeFromS3 = async (media: MediaInstance): Promise<GenericResult[]> => {
     return Promise.all([removeThumb, removeFull]);
 }
 
-export const storeImage = async (file: Express.Multer.File, crops?: { [key: string]: Crop }, thumbSize: { width: number, height: number } = { width: 400, height: 225 }): Promise<ImageStorageResult> => {
+export const storeImage = async (
+    file: Express.Multer.File,
+    crops?: { [key: string]: Crop },
+    thumbSize: { width: number, height: number } = { width: 400, height: 225 }
+): Promise<ImageStorageResult> => {
+    console.log('storeImage');
 
     const ContentType = file.mimetype;
     const { width, height } = thumbSize;
@@ -138,30 +147,41 @@ export const storeImage = async (file: Express.Multer.File, crops?: { [key: stri
 
         try {
             file.stream.pipe(concat({ encoding: 'buffer' }, async (data) => {
+                try {
+                    console.log('file stream');
+                    let fullsize = sharp(data);
+                    let thumbnail = sharp(data);
 
-                let fullsize = sharp(data);
-                let thumbnail = sharp(data);
+                    console.log('sharp ready');
+                    if (crops?.thumb) {
+                        thumbnail = thumbnail.extract(crops.thumb);
+                    }
 
-                if (crops?.thumb) {
-                    thumbnail = thumbnail.extract(crops.thumb);
+                    if (crops?.full) {
+                        fullsize = fullsize.extract(crops.full);
+                    }
+
+                    const full = await fullsize.toBuffer();
+                    const thumb = await thumbnail.resize(width, height).toBuffer();
+
+                    console.log('upload to S3');
+                    const fullSizeResult = await uploadToS3(full, `uploads/${file.originalname}`, ContentType);
+                    const thumbResult = await uploadToS3(thumb, `uploads/thumbs/${file.originalname}`, ContentType);
+                    console.log('upload done', fullSizeResult);
+
+                    resolve({
+                        success: fullSizeResult.success && thumbResult.success,
+                        fullSizeResult,
+                        thumbResult
+                    });
+                } catch (e) {
+                    reject({
+                        success: false,
+                        error: e
+                    });
                 }
-
-                if (crops?.full) {
-                    fullsize = fullsize.extract(crops.full);
-                }
-
-                const full = await fullsize.toBuffer();
-                const thumb = await thumbnail.resize(width, height).toBuffer();
-
-                const fullSizeResult = await uploadToS3(full, `uploads/${file.originalname}`, ContentType);
-                const thumbResult = await uploadToS3(thumb, `uploads/thumbs/${file.originalname}`, ContentType);
-
-                resolve({
-                    success: fullSizeResult.success && thumbResult.success,
-                    fullSizeResult,
-                    thumbResult
-                });
             }));
+            console.log('try');
         } catch (error) {
             reject({
                 success: false,

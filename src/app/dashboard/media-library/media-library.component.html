@@ -1,5 +1,17 @@
 <p-fileUpload (uploadHandler)="handleUpload($event)" [multiple]="true" [auto]="true" [customUpload]="true"
-    accept="image/*"></p-fileUpload>
+    accept="image/*">
+
+    <ng-template pTemplate="file" let-file>
+        <app-uploader [file]="file" />
+    </ng-template>
+
+    <ng-template pTemplate="empty">
+        <div class="flex align-items-center justify-content-center flex-column">
+            <fa-icon class="text-6xl" [icon]="uploadIcon"></fa-icon>
+            <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
+        </div>
+    </ng-template>
+</p-fileUpload>
 
 <section class="flex flex-wrap">
     @for (media of mediaList; track $index) {
