@@ -3,7 +3,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MediaLibraryComponent, SelectedImageConfig } from '../dashboard/media-library/media-library.component';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse, PaginatedApiResponse } from '../../../interfaces/misc';
-import { Image, MediaCreationResult } from '../../../interfaces/media';
+import { Image, MediaCreationResult, UploadRequest } from '../../../interfaces/media';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -60,7 +60,7 @@ export class MediaService {
     }
   }
 
-  public async upload(file: File): Promise<any> {
+  public async upload(request: UploadRequest): Promise<any> {
     try {
       // const newNameResult = await firstValueFrom(this.http.get<ApiResponse<{ validName: string }>>(
       //   `api/media/getValidFileName/${file.name}`
@@ -73,15 +73,12 @@ export class MediaService {
       // return;
 
       const fd = new FormData();
-      fd.append('crops', JSON.stringify({}));
-      fd.append("file", file);
+      fd.append('crops', JSON.stringify(request.crops));
+      fd.append("file", request.file);
       const result = await firstValueFrom(this.http.post<ApiResponse<MediaCreationResult>>("api/media/create", fd));
-
-      console.log('result', result);
 
       if (result.success) {
         const image = result.data?.image as Image;
-        this.media()[0].unshift(image);
 
         return {
           success: true,

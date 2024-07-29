@@ -62,8 +62,6 @@ const uploadToS3 = async (Body: Buffer | Express.Multer.File['stream'], Key: str
                 params
             });
 
-            console.log('uploading...');
-
             const data = await upload.done();
 
             resolve({
@@ -138,7 +136,6 @@ export const storeImage = async (
     crops?: { [key: string]: Crop },
     thumbSize: { width: number, height: number } = { width: 400, height: 225 }
 ): Promise<ImageStorageResult> => {
-    console.log('storeImage');
 
     const ContentType = file.mimetype;
     const { width, height } = thumbSize;
@@ -148,11 +145,9 @@ export const storeImage = async (
         try {
             file.stream.pipe(concat({ encoding: 'buffer' }, async (data) => {
                 try {
-                    console.log('file stream');
                     let fullsize = sharp(data);
                     let thumbnail = sharp(data);
 
-                    console.log('sharp ready');
                     if (crops?.thumb) {
                         thumbnail = thumbnail.extract(crops.thumb);
                     }
@@ -164,10 +159,8 @@ export const storeImage = async (
                     const full = await fullsize.toBuffer();
                     const thumb = await thumbnail.resize(width, height).toBuffer();
 
-                    console.log('upload to S3');
                     const fullSizeResult = await uploadToS3(full, `uploads/${file.originalname}`, ContentType);
                     const thumbResult = await uploadToS3(thumb, `uploads/thumbs/${file.originalname}`, ContentType);
-                    console.log('upload done', fullSizeResult);
 
                     resolve({
                         success: fullSizeResult.success && thumbResult.success,
@@ -181,7 +174,6 @@ export const storeImage = async (
                     });
                 }
             }));
-            console.log('try');
         } catch (error) {
             reject({
                 success: false,

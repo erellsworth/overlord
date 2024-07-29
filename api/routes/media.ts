@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import request from 'request';
 import multer from 'multer';
 import { Image, MediaInterface } from "../../interfaces/media";
 import { Media } from "../models";
@@ -14,8 +15,7 @@ class customStorage {
         file: Express.Multer.File,
         cb: (error?: any, file?: Partial<Express.Multer.File>) => void): Promise<void> {
         try {
-            console.log('body', { ...req.body });
-            req.body.uploadResult = await storeImage(file, {});
+            req.body.uploadResult = await storeImage(file, JSON.parse(req.body.crops));
 
             cb(null, file);
         } catch (e) {
@@ -27,7 +27,6 @@ class customStorage {
         req: Request,
         file: any,
         cb: (error: Error | null) => void): void {
-        console.log('_removeFile', { ...req.body });
         try {
             delete file.buffer;
             cb(null);
@@ -96,6 +95,24 @@ mediaRouter.get('/media/getValidFileName/:name', async (req: Request, res: Respo
     const validName = await Media.getNewFileName(req.params.name);
 
     successResponse(res, { validName });
+});
+
+mediaRouter.get('/getImageFromUrl', async (req: Request, res: Response) => {
+
+    if (!req.query.url) {
+        return errorResponse(res, 'Url parameter missing', 400);
+    }
+
+    request({
+        url: req.query.url as string,
+        encoding: null
+    },
+        (err, resp) => {
+            if (!err && resp.statusCode === 200) {
+                res.set("Content-Type", resp.headers["content-type"]);
+                res.send(resp.body);
+            }
+        });
 });
 
 mediaRouter.post('/media/create', upload.single('file'), async (req: Request, res: Response) => {

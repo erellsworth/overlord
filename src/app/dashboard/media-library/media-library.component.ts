@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileUploadHandlerEvent, FileUploadModule } from 'primeng/fileupload';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { MediaService } from '../../services/media.service';
-import { Image } from '../../../../interfaces/media';
+import { Image, UploadRequest } from '../../../../interfaces/media';
 import { CommonModule } from '@angular/common';
 import { ImageCardComponent } from './image-card/image-card.component';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
@@ -95,25 +95,25 @@ export class MediaLibraryComponent implements OnInit {
     }
   }
 
-  public handleUpload(event: FileUploadHandlerEvent): void {
-    event.files.forEach(async (file) => {
-      const result = await this.media.upload(file);
-      if (result.success && result.image) {
-        this.media.media()[0].push(result.image);
+  public async handleUpload(request: UploadRequest): Promise<void> {
 
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Uploaded!',
-          detail: `${result.image.data.filename} added to media library`
-        });
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Uploaded failed',
-          detail: result.error?.message
-        });
-      }
-    });
+    const result = await this.media.upload(request);
+    if (result.success && result.image) {
+
+      this.media.loadMedia(this.currentPage);
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Uploaded!',
+        detail: `${result.image.data.filename} added to media library`
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Uploaded failed',
+        detail: result.error?.message
+      });
+    }
   }
 
   public async pageChanged(event: PaginatorState): Promise<void> {

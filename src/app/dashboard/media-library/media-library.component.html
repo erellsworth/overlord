@@ -1,8 +1,7 @@
-<p-fileUpload (uploadHandler)="handleUpload($event)" [multiple]="true" [auto]="true" [customUpload]="true"
-    accept="image/*">
+<p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" accept="image/*">
 
     <ng-template pTemplate="file" let-file>
-        <app-uploader [file]="file" />
+        <app-uploader [file]="file" (upload)="handleUpload($event)" />
     </ng-template>
 
     <ng-template pTemplate="empty">

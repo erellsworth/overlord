@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
-import { Crop, UploadRequest } from '../../../../../interfaces/media';
+import { Crop, Image, UploadRequest } from '../../../../../interfaces/media';
+import { ImageEditorComponent } from '../image-editor/image-editor.component';
+import { DialogModule } from 'primeng/dialog';
 
 interface uploadedFile extends File {
   objectURL: string
@@ -12,6 +14,8 @@ interface uploadedFile extends File {
   standalone: true,
   imports: [
     ButtonModule,
+    DialogModule,
+    ImageEditorComponent,
     ImageModule
   ],
   templateUrl: './uploader.component.html',
@@ -27,14 +31,26 @@ export class UploaderComponent {
     thumbnail: Crop
   };
 
+  public showEditor = false;
+
+  public get image(): Image {
+    return {
+      full: this.file.objectURL,
+      thumbnail: this.file.objectURL,
+      data: {
+        filename: this.file.name,
+        path: '',
+        mimetype: this.file.type,
+        name: this.file.name,
+        alt: this.file.name
+      }
+    }
+  }
+
   public handleUpload(): void {
     this.upload.emit({
       crops: this.crops,
       file: this.file
     });
-  }
-
-  public showCropper(): void {
-
   }
 }

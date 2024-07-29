@@ -1,27 +1,28 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
 import { InplaceModule } from 'primeng/inplace';
-import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Image } from '../../../../../interfaces/media';
+import { Crop, Image } from '../../../../../interfaces/media';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { CropperComponent } from './cropper/cropper.component';
 
 @Component({
   selector: 'app-image-editor',
   standalone: true,
   imports: [
     ButtonModule,
+    CropperComponent,
     DividerModule,
     FloatLabelModule,
     FontAwesomeModule,
-    InplaceModule,
     ImageModule,
+    InplaceModule,
     InputTextareaModule,
     InputTextModule,
     PanelModule,
@@ -31,13 +32,13 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './image-editor.component.scss'
 })
 export class ImageEditorComponent implements OnInit, OnChanges {
+  @Input() crops!: { [key: string]: Crop };
   @Input({ required: true }) image!: Image;
 
   @Output() saved = new EventEmitter();
 
-  public editIcon = faEdit;
   public formGroup!: FormGroup;
-  public showEditIcon = false;
+  public showCropper = false;
 
   constructor(private fb: FormBuilder) { }
 

@@ -1,24 +1,37 @@
-<p-image [src]="image.thumbnail"></p-image>
-
+@if (showCropper) {
+<app-cropper [image]="image"></app-cropper>
+} @else {
 @if (formGroup) {
-<div [formGroup]="formGroup">
-    <h3 class="py-2">Image Info:</h3>
+<div class="flex justify-content-left gap-3">
+    <p-image [src]="image.thumbnail"></p-image>
+    <div [formGroup]="formGroup" class="flex-grow-1">
+        <h3 class="mt-0 pb-3">Image Info:</h3>
 
-    <p-floatLabel>
-        <input id="title" type="text" class="w-full" pInputText formControlName="name" />
-        <label for="title">Name</label>
-    </p-floatLabel>
+        <p-floatLabel>
+            <input id="title" type="text" class="w-full" pInputText formControlName="name" />
+            <label for="title">Name</label>
+        </p-floatLabel>
 
-    <p-divider styleClass="py-1" />
+        <p-divider styleClass="py-1" />
 
-    <p-floatLabel>
-        <input id="title" type="text" class="w-full" pInputText formControlName="alt" />
-        <label for="title">Alt Text</label>
-    </p-floatLabel>
+        <p-floatLabel>
+            <input id="title" type="text" class="w-full" pInputText formControlName="alt" />
+            <label for="title">Alt Text</label>
+        </p-floatLabel>
 
-    <p-divider styleClass="py-1" />
-
-    <p-button label="Save" (onClick)="saved.emit(formGroup.value)" />
-
+    </div>
 </div>
 }
+}
+
+
+<p-divider styleClass="py-1" />
+
+<div class="flex gap-2">
+    <p-button label="Save" (onClick)="saved.emit(formGroup.value)" />
+    @if(showCropper) {
+    <p-button label="Edit Info" severity="info" (onClick)="showCropper = false" />
+    } @else {
+    <p-button label="Crop" severity="info" (onClick)="showCropper = true" />
+    }
+</div>

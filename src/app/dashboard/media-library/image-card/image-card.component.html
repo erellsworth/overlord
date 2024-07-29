@@ -23,6 +23,6 @@
     </ng-template>
 </p-card>
 
-<p-dialog [(visible)]="showEditor" [maximizable]="true" [modal]="true">
+<p-dialog [(visible)]="showEditor" [draggable]="false" [maximizable]="true" [modal]="true">
     <app-image-editor [image]="image" (saved)="handleImageEdit($event)"></app-image-editor>
 </p-dialog>
