@@ -141,8 +141,6 @@ export const storeImage = async (
     const ContentType = file.mimetype;
     const { width, height } = thumbSize;
 
-    console.log('store', file);
-
     return new Promise((resolve, reject) => {
 
         try {

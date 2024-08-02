@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
 import { Image } from '../../../../../interfaces/media';
@@ -12,6 +13,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormsModule } from '@angular/forms';
 import { ButtonGroupModule } from 'primeng/buttongroup';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-image-card',
@@ -20,6 +22,7 @@ import { ButtonGroupModule } from 'primeng/buttongroup';
     ButtonGroupModule,
     ButtonModule,
     CardModule,
+    ConfirmPopupModule,
     DialogModule,
     DividerModule,
     FloatLabelModule,
@@ -28,6 +31,7 @@ import { ButtonGroupModule } from 'primeng/buttongroup';
     ImageEditorComponent,
     ImageModule,
     InputTextareaModule],
+  providers: [ConfirmationService],
   templateUrl: './image-card.component.html',
   styleUrl: './image-card.component.scss'
 })
@@ -41,6 +45,7 @@ export class ImageCardComponent {
     caption?: string;
   }>();
   @Output() imageEdited = new EventEmitter<ImageEditEvent>();
+  @Output() deleteImage = new EventEmitter();
 
   public icons = {
     delete: faTrash,
@@ -49,6 +54,19 @@ export class ImageCardComponent {
   };
 
   public showEditor = false;
+
+  constructor(private confirmationService: ConfirmationService) { }
+
+  public delete(event: MouseEvent): void {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure you want to delete this image?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteImage.emit();
+      }
+    });
+  }
 
   public handleImageEdit(event: ImageEditEvent): void {
     this.imageEdited.emit(event);

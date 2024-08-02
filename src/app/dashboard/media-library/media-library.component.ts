@@ -68,6 +68,26 @@ export class MediaLibraryComponent implements OnInit {
     this.media.closeLibrary();
   }
 
+  public async deleteImage(id?: number): Promise<void> {
+    if (id) {
+      const result = await this.media.deleteImage(id);
+      if (result.success) {
+        this.media.loadMedia(this.currentPage);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'File deleted',
+          detail: `Image removed from library and deleted from storage`
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error deleting image',
+          detail: result.error?.message
+        });
+      }
+    }
+  }
+
   public editImage(image: Image, event: ImageEditEvent): void {
     console.log('edit', image, event);
   }

@@ -16,10 +16,12 @@
     @for (media of mediaList; track $index) {
     <div class="w-4">
         <app-image-card [caption]="getCaption(media.data.id)" [image]="media" (imageSelected)="selectImage($event)"
-            (imageEdited)="editImage(media, $event)"></app-image-card>
+            (imageEdited)="editImage(media, $event)" (deleteImage)="deleteImage(media.data.id)"></app-image-card>
     </div>
     }
 </section>
 <div class="card flex justify-content-center">
     <p-paginator (onPageChange)="pageChanged($event)" [first]="0" [rows]="12" [totalRecords]="total" />
 </div>
+
+<p-toast />

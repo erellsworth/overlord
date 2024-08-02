@@ -16,7 +16,7 @@
             <p-button label="Edit" severity="success" size="small" (onClick)="showEditor = true">
                 <fa-icon class="block pr-1" [icon]="icons.edit"></fa-icon>
             </p-button>
-            <p-button label="Delete" severity="danger" size="small">
+            <p-button label="Delete" severity="danger" size="small" (onClick)="delete($event)">
                 <fa-icon class="block pr-1" [icon]="icons.delete"></fa-icon>
             </p-button>
         </div>
@@ -29,3 +29,4 @@
         (canceled)="showEditor = false"></app-image-editor>
     }
 </p-dialog>
+<p-confirmPopup />

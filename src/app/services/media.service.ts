@@ -3,7 +3,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MediaLibraryComponent, SelectedImageConfig } from '../dashboard/media-library/media-library.component';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse, GenericResult, PaginatedApiResponse } from '../../../interfaces/misc';
-import { Image, MediaCreationResult, UploadRequest } from '../../../interfaces/media';
+import { Image, MediaCreationResult, MediaDeletionResult, UploadRequest } from '../../../interfaces/media';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 
 interface uploadStatus {
@@ -36,20 +36,37 @@ export class MediaService {
     if (this.ref) { this.ref.close(); }
   }
 
+  public async deleteImage(id: number): Promise<ApiResponse<MediaDeletionResult>> {
+    try {
+      return firstValueFrom(this.http.delete<ApiResponse<MediaDeletionResult>>(`api/media/${id}`));
+    } catch (e) {
+      return {
+        success: false,
+        error: e as Error
+      }
+    }
+  }
+
   public getImageById$(id: number): Observable<ApiResponse<Image>> {
     return this.http.get<ApiResponse<Image>>(`api/media/image/${id}`);
   }
 
   public async getValidFileName(fileName: string): Promise<string> {
-    const newNameResult = await firstValueFrom(this.http.get<ApiResponse<{ validName: string }>>(
-      `api/media/getValidFileName/${__filename}`
-    ));
+    try {
+      const newNameResult = await firstValueFrom(this.http.get<ApiResponse<{ validName: string }>>(
+        `api/media/getValidFileName/${fileName}`
+      ));
 
-    if (newNameResult.data?.validName) {
-      return newNameResult.data.validName;
+      if (newNameResult.data?.validName) {
+        return newNameResult.data.validName;
+      }
+
+      return fileName;
+    } catch (e) {
+      console.error('error getting valid name');
+      return fileName;
     }
 
-    return fileName;
   }
 
   public launchLibrary(
@@ -79,28 +96,13 @@ export class MediaService {
     });
 
     try {
-
-      const newNameResult = await firstValueFrom(this.http.get<ApiResponse<{ validName: string }>>(
-        `api/media/getValidFileName/${request.name}`
-      ));
-
-      if (newNameResult.success) {
-        request.name = newNameResult.data?.validName as string;
-      } else {
-        this.updateUploadStatus(request.name, {
-          isUploading: false,
-          isUploaded: false,
-          error: newNameResult.error?.message
-        });
-        return newNameResult as GenericResult;
-      }
+      request.name = await this.getValidFileName(request.name);
 
       const fd = new FormData();
       fd.append('alt', request.alt);
       fd.append('crops', JSON.stringify(request.crops));
       fd.append("filename", request.name);
       fd.append("file", request.file);
-      console.log('fd', fd);
       const result = await firstValueFrom(this.http.post<ApiResponse<MediaCreationResult>>("api/media/create", fd));
 
       if (result.success) {
