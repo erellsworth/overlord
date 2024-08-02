@@ -6,7 +6,7 @@ import { ImageModule } from 'primeng/image';
 import { Image } from '../../../../../interfaces/media';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFileImport, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ImageEditorComponent } from '../image-editor/image-editor.component';
+import { ImageEditEvent, ImageEditorComponent } from '../image-editor/image-editor.component';
 import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -40,7 +40,7 @@ export class ImageCardComponent {
     image: Image;
     caption?: string;
   }>();
-  @Output() imageEdited = new EventEmitter();
+  @Output() imageEdited = new EventEmitter<ImageEditEvent>();
 
   public icons = {
     delete: faTrash,
@@ -50,11 +50,7 @@ export class ImageCardComponent {
 
   public showEditor = false;
 
-  public handleImageEdit(event: {
-    name: string;
-    alt: string;
-    caption?: string;
-  }): void {
+  public handleImageEdit(event: ImageEditEvent): void {
     this.imageEdited.emit(event);
     this.showEditor = false;
   }

@@ -1,9 +1,27 @@
+@if(dataUrl && !done){
 <div class="flex justify-content-left gap-3">
-    <p-image [src]="file.objectURL" class="w-4" imageClass="w-full" />
-    <p-button label="Upload" (onClick)="handleUpload()" />
-    <p-button label="Crop" severity="success" (onClick)="showEditor = true" />
+    <p-image [src]="dataUrl" [class]="imageWidthClass" imageClass="w-full" />
+    <div class="flex gap-2 flex-column flex-grow-1">
+        @if(status.status === 'Uploaded'){
+        <p-button label="Done" (onClick)="done = true"></p-button>
+        } @else {
+        <div class="flex gap-2">
+            <p-button label="Upload" (onClick)="handleUpload()" />
+            <p-button label="Edit" severity="success" (onClick)="showEditor = true" />
+        </div>
+        }
+        <p-divider>
+            {{status.status}}
+
+            @if(status.error) {
+            - {{status.error}}
+            }
+        </p-divider>
+    </div>
+
 </div>
 
-<p-dialog [visible]="showEditor" [draggable]="false">
-    <app-image-editor [image]="image"></app-image-editor>
+<p-dialog [visible]="showEditor" [draggable]="false" header="Edit Image:" [closable]="false">
+    <app-image-editor [image]="image" (saved)="saveEdit($event)" (canceled)="showEditor = false"></app-image-editor>
 </p-dialog>
+}

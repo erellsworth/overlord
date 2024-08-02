@@ -15,7 +15,10 @@ class customStorage {
         file: Express.Multer.File,
         cb: (error?: any, file?: Partial<Express.Multer.File>) => void): Promise<void> {
         try {
-            req.body.uploadResult = await storeImage(file, JSON.parse(req.body.crops));
+
+            console.log('_handleFile', file);
+
+            req.body.uploadResult = await storeImage(file, req.body.filename, JSON.parse(req.body.crops));
 
             cb(null, file);
         } catch (e) {
@@ -117,6 +120,8 @@ mediaRouter.get('/getImageFromUrl', async (req: Request, res: Response) => {
 
 mediaRouter.post('/media/create', upload.single('file'), async (req: Request, res: Response) => {
 
+    console.log('create');
+
     const uploadResult = req.body.uploadResult as ImageStorageResult;
 
     if (!uploadResult.success) {
@@ -124,7 +129,7 @@ mediaRouter.post('/media/create', upload.single('file'), async (req: Request, re
         return;
     }
 
-    const newMedia = await createMediaRecord(req.file as unknown as Express.Multer.File, req.body.s3Data);
+    const newMedia = await createMediaRecord(req.file as unknown as Express.Multer.File, req.body.filename, req.body.alt, req.body.s3Data);
 
     if (newMedia.success) {
         successResponse(res, newMedia);

@@ -24,5 +24,8 @@
 </p-card>
 
 <p-dialog [(visible)]="showEditor" [draggable]="false" [maximizable]="true" [modal]="true">
-    <app-image-editor [image]="image" (saved)="handleImageEdit($event)"></app-image-editor>
+    @if(showEditor){
+    <app-image-editor [image]="image" (saved)="handleImageEdit($event)"
+        (canceled)="showEditor = false"></app-image-editor>
+    }
 </p-dialog>

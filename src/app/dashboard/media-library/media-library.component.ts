@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FileUploadHandlerEvent, FileUploadModule } from 'primeng/fileupload';
+import { FileBeforeUploadEvent, FileUploadEvent, FileUploadHandlerEvent, FileUploadModule } from 'primeng/fileupload';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { MediaService } from '../../services/media.service';
 import { Image, UploadRequest } from '../../../../interfaces/media';
@@ -11,6 +11,7 @@ import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { UploaderComponent } from './uploader/uploader.component';
+import { ImageEditEvent } from './image-editor/image-editor.component';
 
 export interface SelectedImageConfig {
   image?: Image,
@@ -67,11 +68,7 @@ export class MediaLibraryComponent implements OnInit {
     this.media.closeLibrary();
   }
 
-  public editImage(image: Image, event: {
-    name: string;
-    alt: string;
-    caption?: string;
-  }): void {
+  public editImage(image: Image, event: ImageEditEvent): void {
     console.log('edit', image, event);
   }
 
@@ -80,32 +77,17 @@ export class MediaLibraryComponent implements OnInit {
     return this.media.imageCaptions[id] || '';
   }
 
-  public async getTempImage(file: any): Promise<Image> {
-    const filename = await this.media.getValidFileName(file.name);
-    return {
-      full: file.objectURL,
-      thumbnail: file.objectURL,
-      data: {
-        filename,
-        path: 'string',
-        mimetype: file.type,
-        name: filename,
-        alt: filename
-      }
-    }
-  }
-
   public async handleUpload(request: UploadRequest): Promise<void> {
 
     const result = await this.media.upload(request);
-    if (result.success && result.image) {
+    if (result.success && result.data?.image) {
 
       this.media.loadMedia(this.currentPage);
 
       this.messageService.add({
         severity: 'success',
         summary: 'Uploaded!',
-        detail: `${result.image.data.filename} added to media library`
+        detail: `${result.data?.image.data.filename} added to media library`
       });
     } else {
       this.messageService.add({

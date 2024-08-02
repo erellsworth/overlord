@@ -1,9 +1,11 @@
-<div class="flex gap-2">
+<div class="inline-block w-6">
     <p-card header="Full size">
-        <image-cropper [imageURL]="src" (imageCropped)="cropped($event, 'full')">
+        <image-cropper [imageURL]="src" [maintainAspectRatio]="false" (imageCropped)="cropped($event, 'full')">
         </image-cropper>
     </p-card>
+</div>
 
+<div class="inline-block w-6">
     <p-card header="Thumbnail">
         <image-cropper [aspectRatio]="16 / 9" [imageURL]="src" (imageCropped)="cropped($event, 'thumb')">
         </image-cropper>

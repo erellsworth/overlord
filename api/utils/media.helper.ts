@@ -133,12 +133,15 @@ const removeFromS3 = async (media: MediaInstance): Promise<GenericResult[]> => {
 
 export const storeImage = async (
     file: Express.Multer.File,
+    filename: string,
     crops?: { [key: string]: Crop },
     thumbSize: { width: number, height: number } = { width: 400, height: 225 }
 ): Promise<ImageStorageResult> => {
 
     const ContentType = file.mimetype;
     const { width, height } = thumbSize;
+
+    console.log('store', file);
 
     return new Promise((resolve, reject) => {
 
@@ -159,9 +162,10 @@ export const storeImage = async (
                     const full = await fullsize.toBuffer();
                     const thumb = await thumbnail.resize(width, height).toBuffer();
 
-                    const fullSizeResult = await uploadToS3(full, `uploads/${file.originalname}`, ContentType);
-                    const thumbResult = await uploadToS3(thumb, `uploads/thumbs/${file.originalname}`, ContentType);
+                    const fullSizeResult = await uploadToS3(full, `uploads/${filename}`, ContentType);
+                    const thumbResult = await uploadToS3(thumb, `uploads/thumbs/${filename}`, ContentType);
 
+                    console.log('uplaoded');
                     resolve({
                         success: fullSizeResult.success && thumbResult.success,
                         fullSizeResult,
@@ -215,7 +219,7 @@ export const removeImage = async (id: number): Promise<MediaDeletionResult> => {
 
 }
 
-export const createMediaRecord = async (file: Express.Multer.File, uploadData: any): Promise<MediaCreationResult> => {
+export const createMediaRecord = async (file: Express.Multer.File, filename: string, alt: string, uploadData: any): Promise<MediaCreationResult> => {
 
     if (!file) {
         return {
@@ -224,12 +228,12 @@ export const createMediaRecord = async (file: Express.Multer.File, uploadData: a
         };
     }
 
-    const name = parseFileName(file.originalname);
+    const name = parseFileName(filename);
 
     const newMedia = {
         name,
-        filename: file.originalname,
-        alt: name,
+        filename,
+        alt,
         mimetype: file.mimetype,
         path: '/uploads'
     }

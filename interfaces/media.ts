@@ -19,15 +19,24 @@ export interface Image {
 };
 
 export interface Crop {
-    height: number;
+    /** zero-indexed offset from left edge */
     left: number;
+    /** zero-indexed offset from top edge */
     top: number;
+    /** dimension of extracted image */
     width: number;
+    /** dimension of extracted image */
+    height: number;
 }
 
+export interface CropEvent { size: 'full' | 'thumb'; crop: Crop };
+
 export interface UploadRequest {
-    file: File,
-    crops?: { [key: string]: Crop }
+    id: string;
+    file: File;
+    alt: string;
+    name: string;
+    crops?: { [key: string]: Crop };
 }
 
 export interface MediaCreationResult extends GenericResult {
