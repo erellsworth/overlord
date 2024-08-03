@@ -11,7 +11,7 @@ import { Content } from '@tiptap/core';
 import { EditorComponent } from '../editor/editor.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContentInterface, ContentType, ContentTypes } from '../../../../interfaces/content';
-import { Subscription, firstValueFrom, interval } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 import { ContentForm } from './content-form.interface';
@@ -20,10 +20,12 @@ import { TaxonomyInputComponent } from './taxonomy-input/taxonomy-input.componen
 import { ImageSelectorComponent } from './image-selector/image-selector.component';
 import { DividerModule } from 'primeng/divider';
 import { ApiResponse } from '../../../../interfaces/misc';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { InplaceModule } from 'primeng/inplace';
 import { DropdownModule } from 'primeng/dropdown';
 import { v4 as uuidv4 } from 'uuid';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-content-form',
@@ -31,6 +33,7 @@ import { v4 as uuidv4 } from 'uuid';
   imports: [
     ButtonModule,
     CardModule,
+    ConfirmPopupModule,
     CommonModule,
     DividerModule,
     DropdownModule,
@@ -48,6 +51,7 @@ import { v4 as uuidv4 } from 'uuid';
   templateUrl: './content-form.component.html',
   styleUrl: './content-form.component.scss',
   providers: [
+    ConfirmationService,
     MessageService
   ]
 })
@@ -87,9 +91,12 @@ export class ContentFormComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private confirmationService: ConfirmationService,
     private contentService: ContentService,
     private fb: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -144,33 +151,49 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     return this._slug ? 'Update' : 'Create';
   }
 
-  public getContentType(formGroup: FormGroup): ContentType {
-    const contentType = formGroup.get('type')?.value;
-    return this.contentTypes.includes(contentType) ? contentType : 'post';
+
+  public get contentType(): ContentType {
+    const contentType = this.formGroup.get('type')?.value as ContentTypes;
+    return contentType && this.contentTypes.includes(contentType) ? contentType : 'post';
   }
 
-  public getContent(formGroup: FormGroup): Content {
-    return formGroup.value.content || formGroup.value.html;
+  public async autoSave(content: ContentInterface): Promise<void> {
+    //const result = await this.contentService.autoSave(content);
   }
 
-  public async publish(formGroup: FormGroup): Promise<void> {
-    formGroup.get('status')?.setValue('published');
-    if (await this.save(formGroup, 'Published')) {
+  public async delete(event: MouseEvent): Promise<void> {
+    console.log('delete');
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure you want to delete this image?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteContent();
+      }
+    });
+  }
+
+  public getContent(): Content {
+    return this.formGroup.value.content as Content || this.formGroup.value.html as string;
+  }
+
+  public async publish(): Promise<void> {
+    this.formGroup.get('status')?.setValue('published');
+    if (await this.save('Published')) {
       this.content.status = 'published';
     }
   }
 
-  public async unpublish(formGroup: FormGroup): Promise<void> {
-    formGroup.get('status')?.setValue('draft');
-    if (await this.save(formGroup, 'Unpublished')) {
+  public async unpublish(): Promise<void> {
+    this.formGroup.get('status')?.setValue('draft');
+    if (await this.save('Unpublished')) {
       this.content.status = 'draft';
     }
   }
 
-  public async save(formGroup: FormGroup, action?: string): Promise<boolean> {
+  public async save(action?: string): Promise<boolean> {
 
-    if (formGroup.invalid) {
-      console.error('save error', formGroup);
+    if (this.formGroup.invalid) {
       this.messageService.add({
         severity: 'error',
         summary: 'Oh shit!',
@@ -182,17 +205,17 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     let response: ApiResponse<ContentInterface>;
     if (this._slug) {
       action = action || 'Updated';
-      response = await firstValueFrom(this.contentService.updateContent$(formGroup.getRawValue()));
+      response = await this.contentService.updateContent(this.formGroup.getRawValue() as ContentInterface);
     } else {
       action = 'Created';
-      response = await firstValueFrom(this.contentService.createContent$(formGroup.getRawValue()));
+      response = await this.contentService.createContent(this.formGroup.getRawValue() as ContentInterface);
     }
 
     if (response.success) {
       this.messageService.add({
         severity: 'success',
         summary: 'Noice!',
-        detail: `${new TitleCasePipe().transform(formGroup.value.type)} ${action}`
+        detail: `${new TitleCasePipe().transform(this.formGroup.value.type)} ${action}`
       });
       return true;
     } else {
@@ -205,7 +228,22 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async autoSave(content: ContentInterface): Promise<void> {
-    const result = await this.contentService.autoSave(content);
+  private async deleteContent(): Promise<void> {
+    const response = await this.contentService.deleteContent(this.content.id as number);
+
+    if (response.success) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Buh Bye',
+        detail: `${new TitleCasePipe().transform(this.formGroup.value.type)} deleted`
+      });
+      this.router.navigate(['/']);
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Oh shit!',
+        detail: response.error?.message
+      });
+    }
   }
 }

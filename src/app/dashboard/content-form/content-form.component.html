@@ -4,7 +4,7 @@
     <ng-template pTemplate="title">
         Create new <p-inplace closable="closable">
             <ng-template pTemplate="display">
-                {{getContentType(formGroup)}}
+                {{contentType}}
             </ng-template>
             <ng-template pTemplate="content">
                 <p-dropdown formControlName="type" [options]="contentTypes" />
@@ -14,7 +14,7 @@
 
     <app-title-input [formGroup]="formGroup"></app-title-input>
 
-    <app-editor [content]="getContent(formGroup)" [formGroup]="formGroup"></app-editor>
+    <app-editor [content]="getContent()" [formGroup]="formGroup"></app-editor>
 
     <div formGroupName="seo">
         <p-floatLabel>
@@ -35,22 +35,27 @@
     <p-divider></p-divider>
 
     <div class="flex justify-content-left gap-3">
-        <p-button [label]="buttonText" (onClick)="save(formGroup)" [disabled]="formGroup.invalid" />
+        <p-button [label]="buttonText" (onClick)="save()" [disabled]="formGroup.invalid" />
 
         @if(content.status === 'draft'){
-        <p-button label="Publish" (onClick)="publish(formGroup)" [disabled]="formGroup.invalid" />
+        <p-button label="Publish" (onClick)="publish()" [disabled]="formGroup.invalid" />
         }
 
         @if(content.status === 'published'){
-        <p-button label="Unpublish" (onClick)="unpublish(formGroup)" [disabled]="formGroup.invalid" />
+        <p-button label="Unpublish" (onClick)="unpublish()" [disabled]="formGroup.invalid" />
+        }
+
+        @if(content.id) {
+        <p-button label="Delete" (onClick)="delete($event)" [disabled]="formGroup.invalid" />
         }
     </div>
-
 
 </p-card>
 }
 
 <p-toast />
+
+<p-confirmPopup />
 
 @if(autoSaving){
 <p class="fixed bottom-0 left-0 right-0 mb-1 text-right pr-1">Saving revision...</p>

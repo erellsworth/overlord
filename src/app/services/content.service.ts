@@ -11,9 +11,42 @@ export class ContentService {
 
   constructor(private http: HttpClient) { }
 
+  public async autoSave(content: ContentInterface): Promise<ApiResponse<ContentInterface>> {
+    try {
+      return firstValueFrom(this.http.put<ApiResponse<ContentInterface>>(`api/content/autosave`, content));
+    } catch (e) {
+      return {
+        success: false,
+        error: e as Error
+      };
+    }
+  }
+
+  public async createContent(content: ContentInterface): Promise<ApiResponse<ContentInterface>> {
+    try {
+      return firstValueFrom(this.http.post<ApiResponse<ContentInterface>>(`api/content/`, content));
+    } catch (e) {
+      return {
+        success: false,
+        error: e as Error
+      };
+    }
+  }
+
+  public async deleteContent(id: number): Promise<ApiResponse<ContentInterface>> {
+    try {
+      return firstValueFrom(this.http.delete<ApiResponse<ContentInterface>>(`api/content/${id}`));
+    } catch (e) {
+      return {
+        success: false,
+        error: e as Error
+      };
+    }
+  }
+
   public getContentByType$(type: string = 'post'): Observable<PaginatedApiResponse<ContentInterface>> {
     try {
-      return this.http.get<PaginatedApiResponse<ContentInterface>>(`api/contents/${type}`);
+      return this.http.get<PaginatedApiResponse<ContentInterface>>(`api/content/type/${type}`);
     } catch (e) {
       return of({
         success: false,
@@ -44,36 +77,14 @@ export class ContentService {
     }
   }
 
-  public createContent$(content: ContentInterface): Observable<ApiResponse<ContentInterface>> {
+  public async updateContent(content: ContentInterface): Promise<ApiResponse<ContentInterface>> {
     try {
-      return this.http.post<ApiResponse<ContentInterface>>(`api/content/`, content);
-    } catch (e) {
-      return of({
-        success: false,
-        error: e as Error
-      });
-    }
-  }
-
-  public async autoSave(content: ContentInterface): Promise<ApiResponse<ContentInterface>> {
-    try {
-      return firstValueFrom(this.http.put<ApiResponse<ContentInterface>>(`api/content/autosave`, content));
+      return firstValueFrom(this.http.put<ApiResponse<ContentInterface>>(`api/update`, content));
     } catch (e) {
       return {
         success: false,
         error: e as Error
-      };
-    }
-  }
-
-  public updateContent$(content: ContentInterface): Observable<ApiResponse<ContentInterface>> {
-    try {
-      return this.http.put<ApiResponse<ContentInterface>>(`api/update`, content);
-    } catch (e) {
-      return of({
-        success: false,
-        error: e as Error
-      });
+      }
     }
   }
 }
