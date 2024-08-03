@@ -22,6 +22,7 @@
 </div>
 
 <p-dialog [visible]="showEditor" [draggable]="false" header="Edit Image:" [closable]="false">
-    <app-image-editor [image]="image" (saved)="saveEdit($event)" (canceled)="showEditor = false"></app-image-editor>
+    <app-image-editor [image]="image" [showCropper]="true" (saved)="saveEdit($event)"
+        (canceled)="showEditor = false"></app-image-editor>
 </p-dialog>
 }

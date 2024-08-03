@@ -88,8 +88,23 @@ export class MediaLibraryComponent implements OnInit {
     }
   }
 
-  public editImage(image: Image, event: ImageEditEvent): void {
-    console.log('edit', image, event);
+  public async editImage(image: Image, event: ImageEditEvent): Promise<void> {
+    const result = await this.media.editImage(image.data.id as number, event);
+
+    if (result.success) {
+      this.media.loadMedia(this.currentPage);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'File update',
+        detail: `${image.data.filename} updated`
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error editing image',
+        detail: result.error?.message
+      });
+    }
   }
 
   public getCaption(id?: number): string {

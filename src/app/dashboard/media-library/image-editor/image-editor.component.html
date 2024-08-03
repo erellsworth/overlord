@@ -1,6 +1,8 @@
 @if (formGroup) {
 
+@if(showCropper){
 <app-cropper [image]="image" (imageCropped)="crop($event)"></app-cropper>
+}
 
 <p-divider styleClass="py-1">
     <strong>Image Info:</strong>
@@ -8,12 +10,14 @@
 
 <div [formGroup]="formGroup" class="flex-grow-1">
 
+    @if(!image.data.id) {
     <p-floatLabel>
         <input id="name" type="text" class="w-full" pInputText formControlName="name" />
         <label for="name">File Name</label>
     </p-floatLabel>
 
     <p-divider styleClass="py-2" type="dotted" />
+    }
 
     <p-floatLabel>
         <input id="alt" type="text" class="w-full" pInputText formControlName="alt" />

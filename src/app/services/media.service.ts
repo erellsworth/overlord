@@ -3,8 +3,9 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MediaLibraryComponent, SelectedImageConfig } from '../dashboard/media-library/media-library.component';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse, GenericResult, PaginatedApiResponse } from '../../../interfaces/misc';
-import { Image, MediaCreationResult, MediaDeletionResult, UploadRequest } from '../../../interfaces/media';
+import { Image, MediaCreationResult, MediaDeletionResult, MediaInterface, UploadRequest } from '../../../interfaces/media';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
+import { ImageEditEvent } from '../dashboard/media-library/image-editor/image-editor.component';
 
 interface uploadStatus {
   isUploading: boolean;
@@ -39,6 +40,17 @@ export class MediaService {
   public async deleteImage(id: number): Promise<ApiResponse<MediaDeletionResult>> {
     try {
       return firstValueFrom(this.http.delete<ApiResponse<MediaDeletionResult>>(`api/media/${id}`));
+    } catch (e) {
+      return {
+        success: false,
+        error: e as Error
+      }
+    }
+  }
+
+  public async editImage(id: number, edit: ImageEditEvent): Promise<ApiResponse<MediaInterface>> {
+    try {
+      return firstValueFrom(this.http.patch<ApiResponse<MediaInterface>>(`api/media/${id}`, edit));
     } catch (e) {
       return {
         success: false,

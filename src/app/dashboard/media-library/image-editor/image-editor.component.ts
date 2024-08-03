@@ -39,13 +39,13 @@ export interface ImageEditEvent {
 })
 export class ImageEditorComponent implements OnInit {
   @Input({ required: true }) image!: Image;
+  @Input() showCropper = false;
 
   @Output() canceled = new EventEmitter();
   @Output() saved = new EventEmitter<ImageEditEvent>();
 
   public crops: { [key: string]: Crop } = {};
   public formGroup!: FormGroup;
-  public showCropper = false;
 
   constructor(private fb: FormBuilder) { }
 

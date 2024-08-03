@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import request from 'request';
 import multer from 'multer';
-import { Image, MediaInterface } from "../../interfaces/media";
+import { Crop, Image, MediaInterface } from "../../interfaces/media";
 import { Media } from "../models";
 import { errorResponse, successResponse } from "../utils/responses";
 import mediaRouter from "./router";
@@ -149,25 +149,34 @@ mediaRouter.delete('/media/:id', async (req: Request, res: Response) => {
     successResponse(res, result);
 });
 
-mediaRouter.patch('/media', async (req: Request, res: Response) => {
+mediaRouter.patch('/media/:id', async (req: Request, res: Response) => {
 
-    const updatedMedia = { ...req.body } as MediaInterface;
+    const { id } = req.params;
 
-    if (!updatedMedia.id) {
-        errorResponse(res, 'Missing id');
+    if (isNaN(Number(id))) {
+        errorResponse(res, 'Invalid Image Id', 400);
         return;
     }
 
-    const media = await Media.findById(updatedMedia.id);
+    const media = await Media.findById(Number(id));
 
-    delete updatedMedia.updatedAt;
-    delete updatedMedia.createdAt;
+    if (!media) {
+        errorResponse(res, 'Image not found', 404);
+        return;
+    }
 
-    media.set(updatedMedia);
+    const { alt } = req.body;
+
+    if (req.body.crops) {
+        const crops: { [key: string]: Crop } = req.body.crops;
+        // TODO: handle crop updates
+    }
+
+    media.alt = alt;
 
     await media.save();
 
-    successResponse(res, { media });
+    successResponse(res, media);
 
 });
 
