@@ -1,4 +1,4 @@
-@if (formGroup$ | async; as formGroup) {
+@if (formGroup) {
 <p-card [formGroup]="formGroup">
 
     <ng-template pTemplate="title">
@@ -51,3 +51,7 @@
 }
 
 <p-toast />
+
+@if(autoSaving){
+<p class="fixed bottom-0 left-0 right-0 mb-1 text-right pr-1">Saving revision...</p>
+}

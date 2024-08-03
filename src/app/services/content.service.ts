@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ContentInterface, ContentType } from '../../../interfaces/content';
-import { Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { ApiResponse, PaginatedApiResponse } from '../../../interfaces/misc';
 
 @Injectable({
@@ -52,6 +52,17 @@ export class ContentService {
         success: false,
         error: e as Error
       });
+    }
+  }
+
+  public async autoSave(content: ContentInterface): Promise<ApiResponse<ContentInterface>> {
+    try {
+      return firstValueFrom(this.http.put<ApiResponse<ContentInterface>>(`api/content/autosave`, content));
+    } catch (e) {
+      return {
+        success: false,
+        error: e as Error
+      };
     }
   }
 

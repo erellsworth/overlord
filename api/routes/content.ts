@@ -17,57 +17,65 @@ contentRouter.get('/content/types', async (req: Request, res: Response) => {
     successResponse(res, Object.values(ContentTypes));
 });
 
+contentRouter.get('/content/type/:type?', async (req: Request, res: Response) => {
+
+    try {
+        let content: PaginatedResults<ContentInstance>;
+
+        const { type } = req.params;
+
+        const query: ContentQueryParams = {
+            noPagination: true
+        };
+
+        if (type) {
+            query.type = type as ContentType;
+        }
+
+        content = await Content.findAll(query);
+
+        if (content) {
+            successResponse(res, content);
+        } else {
+            notFoundResponse(res);
+        }
+    } catch (e) {
+        errorResponse(res, (e as Error).message);
+    }
+
+});
+
 contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {
 
     let content: ContentInstance | PaginatedResults<ContentInstance>;
 
     const { slug } = req.params;
 
-    if (slug) {
-        content = await Content.findBySlug(slug);
-    } else {
-        const query: ContentQueryParams = {
-            type: 'post',
-            limit: 9,
-            page: 1
-        };
+    try {
+        if (slug) {
+            content = await Content.findBySlug(slug);
+        } else {
+            const query: ContentQueryParams = {
+                type: 'post',
+                limit: 9,
+                page: 1
+            };
 
-        content = await Content.findAll(query);
-    }
+            content = await Content.findAll(query);
+        }
 
-    if (content) {
-        successResponse(res, content);
-    } else {
-        notFoundResponse(res);
-    }
-
-});
-
-contentRouter.get('/contents/:type?', async (req: Request, res: Response) => {
-
-    let content: PaginatedResults<ContentInstance>;
-
-    const { type } = req.params;
-
-    const query: ContentQueryParams = {
-        noPagination: true
-    };
-
-    if (type) {
-        query.type = type as ContentType;
-    }
-
-    content = await Content.findAll(query);
-
-    if (content) {
-        successResponse(res, content);
-    } else {
-        notFoundResponse(res);
+        if (content) {
+            successResponse(res, content);
+        } else {
+            notFoundResponse(res);
+        }
+    } catch (e) {
+        errorResponse(res, (e as Error).message);
     }
 
 });
 
-contentRouter.put('/update', async (req: Request, res: Response) => {
+contentRouter.put('/content', async (req: Request, res: Response) => {
 
     const contentUpdate = { ...req.body } as ContentCreation;
 
@@ -75,64 +83,101 @@ contentRouter.put('/update', async (req: Request, res: Response) => {
         return errorResponse(res, 'Content ID missing', 400);
     }
 
-    delete contentUpdate.newTaxonomies;
-    delete contentUpdate.updatedAt;
-    delete contentUpdate.createdAt;
+    try {
+        delete contentUpdate.newTaxonomies;
+        delete contentUpdate.updatedAt;
+        delete contentUpdate.createdAt;
 
-    if (!contentUpdate.Taxonomies) {
-        contentUpdate.Taxonomies = [];
+        if (!contentUpdate.Taxonomies) {
+            contentUpdate.Taxonomies = [];
+        }
+
+        if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
+            const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
+            contentUpdate.Taxonomies = contentUpdate.Taxonomies.concat(newTags);
+        }
+
+        let content = await Content.findById(contentUpdate.id);
+
+        let newContent = await content.update(contentUpdate);
+
+        if (contentUpdate.Taxonomies) {
+            const tagIds = contentUpdate.Taxonomies.map((tag: TaxonomyInterface) => {
+                return tag.id;
+            });
+
+            // @ts-ignore
+            newContent.addTaxonomies(tagIds);
+        }
+
+        successResponse(res, newContent);
+    } catch (e) {
+        errorResponse(res, (e as Error).message);
     }
 
-    if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
-        const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
-        contentUpdate.Taxonomies = contentUpdate.Taxonomies.concat(newTags);
-    }
+});
 
-    let content = await Content.findById(contentUpdate.id);
-
-    let newContent = await content.update(contentUpdate);
-
-    if (contentUpdate.Taxonomies) {
-        const tagIds = contentUpdate.Taxonomies.map((tag: TaxonomyInterface) => {
-            return tag.id;
-        });
-
-        // @ts-ignore
-        newContent.addTaxonomies(tagIds);
-    }
-
-    successResponse(res, newContent);
-
+contentRouter.put('/content/autosave', async (req: Request, res: Response) => {
+    successResponse(res, '');
 });
 
 contentRouter.post('/content', async (req: Request, res: Response) => {
 
-    const newContent = { ...req.body, ...{ text: '', status: 'draft' } } as ContentCreation;
+    try {
+        const newContent = { ...req.body, ...{ text: '', status: 'draft' } } as ContentCreation;
 
-    delete newContent.id;
-    delete newContent.newTaxonomies;
-    delete newContent.createdAt;
-    delete newContent.updatedAt;
+        delete newContent.id;
+        delete newContent.newTaxonomies;
+        delete newContent.createdAt;
+        delete newContent.updatedAt;
 
-    if (!newContent.Taxonomies) {
-        newContent.Taxonomies = [];
+        if (!newContent.Taxonomies) {
+            newContent.Taxonomies = [];
+        }
+
+        if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
+            const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
+            newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
+        }
+
+        const tagIds = newContent.Taxonomies.map((tag: TaxonomyInterface) => {
+            return tag.id;
+        });
+
+        const content = await ContentModel.create(newContent);
+
+        // @ts-ignore
+        content.addTaxonomies(tagIds);
+
+        successResponse(res, content);
+    } catch (e) {
+        errorResponse(res, (e as Error).message);
+        return;
     }
 
-    if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
-        const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
-        newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
+});
+
+contentRouter.delete('/content/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    if (isNaN(Number(id))) {
+        errorResponse(res, 'Invalid Content Id', 400);
+        return;
     }
 
-    const tagIds = newContent.Taxonomies.map((tag: TaxonomyInterface) => {
-        return tag.id;
-    });
+    try {
+        const content = await Content.findById(Number(id));
 
-    const content = await ContentModel.create(newContent);
+        if (!content) {
+            notFoundResponse(res);
+            return;
+        }
+        await content.destroy();
+        return successResponse(res, 'Content Deleted');
+    } catch (e) {
+        errorResponse(res, (e as Error).message);
+    }
 
-    // @ts-ignore
-    content.addTaxonomies(tagIds);
-
-    successResponse(res, content);
 });
 
 export default contentRouter;
