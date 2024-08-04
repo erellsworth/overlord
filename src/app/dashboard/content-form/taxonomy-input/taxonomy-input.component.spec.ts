@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TaxonomyInputComponent } from './taxonomy-input.component';
+import { TaxonomyService } from '../../../services/taxonomy.service';
+import { of } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
+import { mockFormGroup } from '../../../test-helpers/content-formgroup';
 
 describe('TaxonomyInputComponent', () => {
   let component: TaxonomyInputComponent;
@@ -8,12 +12,21 @@ describe('TaxonomyInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaxonomyInputComponent]
+      imports: [HttpClientModule, TaxonomyInputComponent],
+      providers: [
+        {
+          prvoide: TaxonomyService,
+          useValue: {
+            getTaxonomies$: () => of([])
+          }
+        }
+      ]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(TaxonomyInputComponent);
     component = fixture.componentInstance;
+    component.formGroup = mockFormGroup;
     fixture.detectChanges();
   });
 

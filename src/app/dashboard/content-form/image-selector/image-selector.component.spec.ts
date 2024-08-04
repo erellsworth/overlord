@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImageSelectorComponent } from './image-selector.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ImageSelectorComponent', () => {
   let component: ImageSelectorComponent;
@@ -8,10 +9,10 @@ describe('ImageSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ImageSelectorComponent]
+      imports: [HttpClientModule, ImageSelectorComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(ImageSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

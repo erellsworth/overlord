@@ -22,6 +22,7 @@ export class CropperComponent {
   @Output() imageCropped = new EventEmitter<CropEvent>();
 
   public get src(): string {
+    if (!this.image) { return '' }
     return Boolean(this.image.data.id) ? `api/getImageFromUrl?url=${this.image.full}` : this.image.full;
   }
 

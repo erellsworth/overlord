@@ -25,7 +25,7 @@ import { InplaceModule } from 'primeng/inplace';
 import { DropdownModule } from 'primeng/dropdown';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-content-form',
@@ -95,7 +95,6 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     private contentService: ContentService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    private route: ActivatedRoute,
     private router: Router
   ) { }
 
@@ -119,7 +118,7 @@ export class ContentFormComponent implements OnInit, OnDestroy {
         html: this.fb.nonNullable.control(content.html),
         content: this.fb.control(content.content, Validators.required),
         seo: this.fb.nonNullable.group(content?.seo || { description: '' }),
-        metaData: this.fb.nonNullable.group(content?.metaData || { media_id: 0, autosave_id: uuidv4() }),
+        metaData: this.fb.nonNullable.control(content?.metaData || { media_id: 0, autosave_id: uuidv4() }),
         taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
         newTaxonomies: this.fb.nonNullable.control([])
       };

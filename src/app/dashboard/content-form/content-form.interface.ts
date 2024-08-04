@@ -16,9 +16,7 @@ export interface ContentForm {
         description: FormControl<string>;
         [key: string]: FormControl<string>;
     }>;
-    metaData: FormGroup<{
-        [key: string]: FormControl<string | number | undefined>;
-    }>;
+    metaData: FormControl<{ [key: string]: any }>
     taxonomyIds: FormControl<number[]>;
     newTaxonomies: FormControl<string[]>
 }

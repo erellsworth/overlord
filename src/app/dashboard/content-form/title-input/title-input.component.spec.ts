@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TitleInputComponent } from './title-input.component';
+import { FormBuilder } from '@angular/forms';
+import { mockFormGroup } from '../../../test-helpers/content-formgroup';
 
 describe('TitleInputComponent', () => {
   let component: TitleInputComponent;
@@ -10,10 +12,11 @@ describe('TitleInputComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TitleInputComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(TitleInputComponent);
     component = fixture.componentInstance;
+    component.formGroup = mockFormGroup;
     fixture.detectChanges();
   });
 

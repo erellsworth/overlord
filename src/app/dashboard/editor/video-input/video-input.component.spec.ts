@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { VideoInputComponent } from './video-input.component';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 describe('VideoInputComponent', () => {
   let component: VideoInputComponent;
@@ -8,10 +9,11 @@ describe('VideoInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VideoInputComponent]
+      imports: [VideoInputComponent],
+      providers: [DynamicDialogRef]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(VideoInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

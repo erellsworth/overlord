@@ -59,7 +59,12 @@ export class UploaderComponent implements OnInit {
       this.dataUrl = reader.result as string;
     };
 
-    reader.readAsDataURL(this.file);
+    try {
+      reader.readAsDataURL(this.file);
+    } catch (e) {
+      console.error('Error reading file', e);
+    }
+
   }
 
   public get image(): Image {
