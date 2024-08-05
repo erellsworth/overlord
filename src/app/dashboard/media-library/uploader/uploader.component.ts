@@ -11,11 +11,11 @@ import { slugger } from '../../../../../api/utils/misc';
 import { MediaService } from '../../../services/media.service';
 import { DividerModule } from 'primeng/divider';
 
-interface uploadedFile extends File {
+export interface uploadedFile extends File {
   objectURL: string
 }
 
-interface uploadForm {
+export interface uploadForm {
   name: FormControl<string>;
   alt: FormControl<string>;
   crops: FormControl<{ [key: string]: Crop }>;

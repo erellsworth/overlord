@@ -5,6 +5,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MediaService } from '../../../services/media.service';
 import { BehaviorSubject, of } from 'rxjs';
 import { SelectedImageConfig } from '../../media-library/media-library.component';
+import { Node } from 'prosemirror-model';
 
 describe('TiptapImageComponent', () => {
   let component: TiptapImageComponent;
@@ -31,6 +32,12 @@ describe('TiptapImageComponent', () => {
 
     fixture = TestBed.createComponent(TiptapImageComponent);
     component = fixture.componentInstance;
+    component.node = {
+      attrs: {
+        imageId: 0,
+        caption: 'MOCK_CAPTION'
+      }
+    } as unknown as Node;;
     fixture.detectChanges();
   });
 

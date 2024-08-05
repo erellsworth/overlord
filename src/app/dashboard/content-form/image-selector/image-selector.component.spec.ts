@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImageSelectorComponent } from './image-selector.component';
 import { HttpClientModule } from '@angular/common/http';
+import { mockFormGroup } from '../../../test-helpers/content-formgroup';
 
 describe('ImageSelectorComponent', () => {
   let component: ImageSelectorComponent;
@@ -15,6 +16,7 @@ describe('ImageSelectorComponent', () => {
 
     fixture = TestBed.createComponent(ImageSelectorComponent);
     component = fixture.componentInstance;
+    component.formGroup = mockFormGroup;
     fixture.detectChanges();
   });
 

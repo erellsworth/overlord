@@ -7,6 +7,7 @@ import { Image } from '../../../../../interfaces/media';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { ContentForm } from '../content-form.interface';
 
 @Component({
   selector: 'app-image-selector',
@@ -22,7 +23,7 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './image-selector.component.scss'
 })
 export class ImageSelectorComponent implements OnInit {
-  @Input({ required: true }) formGroup!: FormGroup;
+  @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
 
   public image!: Image | null;
 
@@ -31,8 +32,8 @@ export class ImageSelectorComponent implements OnInit {
   constructor(private dialogService: DialogService, private media: MediaService) { }
 
   ngOnInit(): void {
-    if (this.mediaIdControl?.value) {
-      this.subs.push(this.media.getImageById$(this.mediaIdControl.value).subscribe(response => {
+    if (this.metatDataControl?.value) {
+      this.subs.push(this.media.getImageById$(this.mediaId).subscribe(response => {
         if (response.success) {
           this.image = response.data as Image;
         }
@@ -42,17 +43,29 @@ export class ImageSelectorComponent implements OnInit {
     this.subs.push(this.media.selectedImage.subscribe(data => {
       if (data.image && data.source === 'selector') {
         this.image = data.image;
-        this.mediaIdControl?.setValue(data.image.data.id);
+        this.mediaId = data.image.data.id as number;
       }
     }));
   }
 
-  private get mediaIdControl() {
-    return this.formGroup.get('metaData')?.get('media_id');
+  private get metatDataControl() {
+    return this.formGroup.get('metaData');
+  }
+
+  private get mediaId() {
+    return this.metatDataControl?.value.media_id;
+  }
+
+  private set mediaId(id: number) {
+    const metaData = this.metatDataControl?.value;
+    if (metaData) {
+      metaData.media_id = id;
+      this.metatDataControl?.setValue(metaData);
+    }
   }
 
   public removeImage(): void {
-    this.mediaIdControl?.setValue(0);
+    this.mediaId = 0;
     this.image = null;
   }
 
