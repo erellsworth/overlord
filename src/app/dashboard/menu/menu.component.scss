@@ -1,0 +1,7 @@
+:host {
+  ::ng-deep {
+    .p-menuitem-text {
+      text-transform: capitalize;
+    }
+  }
+}

@@ -37,6 +37,7 @@ yarn-error.log
 testem.log
 /typings
 .env
+overlord.json
 
 # System files
 .DS_Store

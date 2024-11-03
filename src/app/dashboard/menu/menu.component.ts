@@ -10,34 +10,33 @@ import { TitleCasePipe } from '@angular/common';
   standalone: true,
   imports: [MenubarModule],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss'
+  styleUrl: './menu.component.scss',
 })
 export class MenuComponent implements OnInit {
-
   public items: MenuItem[] = [
     {
       label: 'Home',
-      routerLink: '/'
-    }
+      routerLink: '/',
+    },
   ];
   public ready = false;
 
-  constructor(private content: ContentService) { }
+  constructor(private content: ContentService) {}
 
   async ngOnInit(): Promise<void> {
     const result = await firstValueFrom(this.content.getContentTypes$());
 
     if (result.success) {
-      result.data?.forEach(ct => this.items.push({
-        label: new TitleCasePipe().transform(ct),
-        routerLink: `content/${ct}`,
-      }));
+      result.data?.forEach((ct) =>
+        this.items.push({
+          label: ct.plural,
+          routerLink: `content/${ct.slug}`,
+        })
+      );
     } else {
       console.error('Failed to get content types', result.error);
     }
 
     this.ready = true;
-
   }
-
 }
