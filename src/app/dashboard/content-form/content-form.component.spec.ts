@@ -6,7 +6,7 @@ import { ContentService } from '../../services/content.service';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ContentFormComponent', () => {
   let component: ContentFormComponent;
@@ -14,23 +14,24 @@ describe('ContentFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContentFormComponent, HttpClientModule],
-      providers: [
+    imports: [ContentFormComponent],
+    providers: [
         ConfirmationService,
         {
-          provide: ContentService,
-          useValue: {
-            getContentBySlug$: () => of({
-              success: false,
-              error: 'MOCK_ERROR'
-            })
-          }
+            provide: ContentService,
+            useValue: {
+                getContentBySlug$: () => of({
+                    success: false,
+                    error: 'MOCK_ERROR'
+                })
+            }
         },
         FormBuilder,
         MessageService,
-        Router
-      ]
-    })
+        Router,
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(ContentFormComponent);

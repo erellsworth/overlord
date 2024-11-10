@@ -4,7 +4,7 @@ import { MediaLibraryComponent } from './media-library.component';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { MediaService } from '../../services/media.service';
 import { MessageService } from 'primeng/api';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { signal } from '@angular/core';
 import { Image } from 'primeng/image';
 
@@ -14,25 +14,27 @@ describe('MediaLibraryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientModule, MediaLibraryComponent],
-      providers: [
+    imports: [MediaLibraryComponent],
+    providers: [
         {
-          provide: DynamicDialogConfig,
-          useValue: {}
+            provide: DynamicDialogConfig,
+            useValue: {}
         },
         {
-          provide: MediaService,
-          useValue: {
-            loadMedia: () => { },
-            media: signal<{ [key: number]: Image[] }>({
-              1: []
-            })
-
-          }
+            provide: MediaService,
+            useValue: {
+                loadMedia: () => { },
+                media: signal<{
+                    [key: number]: Image[];
+                }>({
+                    1: []
+                })
+            }
         },
-        MessageService
-      ]
-    })
+        MessageService,
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(MediaLibraryComponent);

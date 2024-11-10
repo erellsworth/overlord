@@ -1,14 +1,12 @@
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { ContentType } from 'aws-sdk/clients/cloudsearchdomain';
-import { ContentStatus } from 'aws-sdk/clients/wisdom';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Content } from '@tiptap/core';
-import { ContentBase } from '../../../../interfaces/content';
+import { ContentBase, ContentStatus } from '../../../../interfaces/content';
 
 export interface ContentForm {
   id?: FormControl<number | undefined>;
   slug: FormControl<string>;
   title: FormControl<string>;
-  type: FormControl<ContentType>;
+  type: FormControl<string>;
   status: FormControl<ContentStatus>;
   text: FormControl<string>;
   html: FormControl<string>;

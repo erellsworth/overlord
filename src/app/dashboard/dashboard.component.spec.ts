@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardComponent } from './dashboard.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -9,8 +9,9 @@ describe('DashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardComponent, HttpClientModule]
-    })
+    imports: [DashboardComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi())]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(DashboardComponent);

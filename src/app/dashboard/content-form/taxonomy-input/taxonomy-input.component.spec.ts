@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TaxonomyInputComponent } from './taxonomy-input.component';
 import { TaxonomyService } from '../../../services/taxonomy.service';
 import { of } from 'rxjs';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { mockFormGroup } from '../../../test-helpers/content-formgroup';
 
 describe('TaxonomyInputComponent', () => {
@@ -12,16 +12,17 @@ describe('TaxonomyInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientModule, TaxonomyInputComponent],
-      providers: [
+    imports: [TaxonomyInputComponent],
+    providers: [
         {
-          prvoide: TaxonomyService,
-          useValue: {
-            getTaxonomies$: () => of([])
-          }
-        }
-      ]
-    })
+            prvoide: TaxonomyService,
+            useValue: {
+                getTaxonomies$: () => of([])
+            }
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(TaxonomyInputComponent);

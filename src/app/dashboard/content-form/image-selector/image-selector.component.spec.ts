@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImageSelectorComponent } from './image-selector.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { mockFormGroup } from '../../../test-helpers/content-formgroup';
 
 describe('ImageSelectorComponent', () => {
@@ -10,8 +10,9 @@ describe('ImageSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientModule, ImageSelectorComponent]
-    })
+    imports: [ImageSelectorComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi())]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(ImageSelectorComponent);
