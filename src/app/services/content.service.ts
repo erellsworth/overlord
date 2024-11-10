@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { ContentInterface, ContentType } from '../../../interfaces/content';
+import { computed, Injectable, signal } from '@angular/core';
+import { ContentInterface } from '../../../interfaces/content';
 import { firstValueFrom, Observable, of } from 'rxjs';
 import { ApiResponse, PaginatedApiResponse } from '../../../interfaces/misc';
 import { OverlordContentType } from '../../../interfaces/overlord.config';
@@ -9,7 +9,14 @@ import { OverlordContentType } from '../../../interfaces/overlord.config';
   providedIn: 'root',
 })
 export class ContentService {
-  constructor(private http: HttpClient) {}
+  public contentTypes = signal<OverlordContentType[]>([]);
+  public contentTypeSlugs = computed<string[]>(() =>
+    this.contentTypes().map((ct) => ct.slug as string)
+  );
+
+  constructor(private http: HttpClient) {
+    this.fetchContentTypes();
+  }
 
   public async autoSave(
     content: ContentInterface
@@ -89,19 +96,6 @@ export class ContentService {
     }
   }
 
-  public getContentTypes$(): Observable<ApiResponse<OverlordContentType[]>> {
-    try {
-      return this.http.get<ApiResponse<OverlordContentType[]>>(
-        `api/content/types`
-      );
-    } catch (e) {
-      return of({
-        success: false,
-        error: e as Error,
-      });
-    }
-  }
-
   public async updateContent(
     content: ContentInterface
   ): Promise<ApiResponse<ContentInterface>> {
@@ -114,6 +108,22 @@ export class ContentService {
         success: false,
         error: e as Error,
       };
+    }
+  }
+
+  private async fetchContentTypes(): Promise<void> {
+    try {
+      const result = await firstValueFrom(
+        this.http.get<ApiResponse<OverlordContentType[]>>(`api/content/types`)
+      );
+
+      if (result.success) {
+        this.contentTypes.set(result.data as OverlordContentType[]);
+      } else {
+        console.error('Problem fetching content types', result.error);
+      }
+    } catch (e) {
+      console.error('Problem fetching content types', e);
     }
   }
 }
