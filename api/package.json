@@ -16,17 +16,17 @@
     "@aws-sdk/lib-storage": "^3.588.0",
     "aws-sdk": "^2.1632.0",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.21.1",
     "multer": "^1.4.5-lts.1",
-    "pg": "^8.11.5",
+    "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
     "request": "^2.88.2",
-    "sequelize": "^6.37.3",
+    "sequelize": "^6.37.5",
     "sharp": "^0.33.4"
   },
   "devDependencies": {
     "@types/request": "^2.48.12",
-    "tsx": "^4.11.2",
-    "typescript": "^5.4.5"
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   }
 }

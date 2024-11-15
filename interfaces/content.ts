@@ -43,13 +43,11 @@ export interface ContentCreation extends ContentInterface {
 }
 
 // Some fields are optional when calling UserModel.create() or UserModel.build()
-interface ContentCreationAttributes extends Optional<ContentInterface, 'id'> {
-  Tag: any;
-}
+interface ContentCreationAttributes extends Optional<ContentInterface, 'id'> {}
 
 // We need to declare an interface for our model that is basically what our class would be
 export interface ContentInstance
-  extends Model<any, ContentCreationAttributes>,
+  extends Model<ContentInterface, ContentCreationAttributes>,
     ContentInterface {}
 
 export interface ContentQuery {

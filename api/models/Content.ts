@@ -1,22 +1,16 @@
-import {
-  DataTypes,
-  FindAndCountOptions,
-  ModelAttributes,
-  WhereOptions,
-} from 'sequelize';
+import { DataTypes, FindAndCountOptions, ModelAttributes } from 'sequelize';
 import { PaginatedResults } from '../../interfaces/misc';
 import { TaxonomyQuery } from '../../interfaces/taxonomy';
 import {
   ContentInstance,
   ContentInterface,
-  ContentQuery,
   ContentQueryParams,
 } from '../../interfaces/content';
 import { db } from '../utils';
 import { attachImage, attachImages } from '../utils/media.helper';
 import { TaxonomyModel } from './Taxonomy';
 
-const attributes: ModelAttributes<ContentInstance, ContentInterface> = {
+const attributes: ModelAttributes<ContentInstance> = {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -55,23 +49,18 @@ const attributes: ModelAttributes<ContentInstance, ContentInterface> = {
     type: DataTypes.VIRTUAL,
   },
   // standard attributes:
-  id: {
-    primaryKey: true,
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-  },
   createdAt: {
     type: DataTypes.DATE,
     get() {
       const rawValue = this.getDataValue('createdAt');
-      return new Date(rawValue).toDateString();
+      return new Date(rawValue as string).toDateString();
     },
   },
   updatedAt: {
     type: DataTypes.DATE,
     get() {
       const rawValue = this.getDataValue('updatedAt');
-      return new Date(rawValue).toDateString();
+      return new Date(rawValue as string).toDateString();
     },
   },
 };
