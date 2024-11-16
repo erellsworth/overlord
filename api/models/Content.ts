@@ -1,14 +1,16 @@
 import { DataTypes, FindAndCountOptions, ModelAttributes } from 'sequelize';
 import { PaginatedResults } from '../../interfaces/misc';
-import { TaxonomyQuery } from '../../interfaces/taxonomy';
+import { TaxonomyInterface, TaxonomyQuery } from '../../interfaces/taxonomy';
 import {
+  ContentCreation,
   ContentInstance,
   ContentInterface,
   ContentQueryParams,
 } from '../../interfaces/content';
 import { db } from '../utils';
 import { attachImage, attachImages } from '../utils/media.helper';
-import { TaxonomyModel } from './Taxonomy';
+import { Taxonomy, TaxonomyModel } from './Taxonomy';
+import { RevisionModel } from './Revision';
 
 const attributes: ModelAttributes<ContentInstance> = {
   title: {
@@ -26,6 +28,7 @@ const attributes: ModelAttributes<ContentInstance> = {
   status: {
     type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: 'draft',
   },
   content: {
     type: DataTypes.JSONB,
@@ -41,9 +44,6 @@ const attributes: ModelAttributes<ContentInstance> = {
   },
   seo: {
     type: DataTypes.JSON,
-  },
-  revisions: {
-    type: DataTypes.JSONB,
   },
   image: {
     type: DataTypes.VIRTUAL,
@@ -68,6 +68,33 @@ const attributes: ModelAttributes<ContentInstance> = {
 const ContentModel = db.define<ContentInstance>('Content', attributes);
 
 const Content = {
+  create: async (newContent: ContentCreation): Promise<ContentInstance> => {
+    const newTaxonomies = newContent.newTaxonomies || [];
+    delete newContent.id;
+    delete newContent.newTaxonomies;
+    delete newContent.createdAt;
+    delete newContent.updatedAt;
+
+    if (!newContent.Taxonomies) {
+      newContent.Taxonomies = [];
+    }
+
+    if (newTaxonomies.length) {
+      const newTags = await Taxonomy.bulkCreate(newTaxonomies);
+      newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
+    }
+
+    const tagIds = newContent.Taxonomies.map(
+      (tag: TaxonomyInterface) => tag.id
+    );
+
+    const content = await ContentModel.create(newContent);
+
+    // @ts-ignore
+    content.addTaxonomies(tagIds);
+
+    return content;
+  },
   findAll: async (
     query: ContentQueryParams
   ): Promise<PaginatedResults<ContentInstance>> => {
@@ -118,7 +145,7 @@ const Content = {
       where: {
         slug,
       },
-      include: TaxonomyModel,
+      include: [TaxonomyModel, RevisionModel],
       logging: false,
     })) as unknown as ContentInterface;
 

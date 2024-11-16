@@ -25,7 +25,7 @@ import {
   ContentType,
   ContentTypes,
 } from '../../../../interfaces/content';
-import { Subscription, interval } from 'rxjs';
+import { firstValueFrom, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 import { ContentForm } from './content-form.interface';
@@ -66,32 +66,16 @@ import { Router } from '@angular/router';
   styleUrl: './content-form.component.scss',
   providers: [ConfirmationService, MessageService],
 })
-export class ContentFormComponent implements OnInit, OnDestroy {
+export class ContentFormComponent {
   public autoSaving = false;
   public content!: ContentInterface;
   public formGroup!: FormGroup<ContentForm>;
-  private autosaveInterval = 1000 * 30; // every 30 seconds
-  private currentContent!: string;
+  private autosaveDelay = 1000 * 5; // autosave 5 seconds after typing stops
+  private minAutoSaveWordCount = 30; //TODO: get these values from database
+  private lastSave!: string;
+  private isSaving = false;
+  private autosaveTimeOut!: ReturnType<typeof setTimeout>;
 
-  private defaultContent: ContentInterface = {
-    title: '',
-    type: 'post',
-    slug: '',
-    status: 'draft',
-    text: '',
-    html: '',
-    content: null,
-    seo: {
-      description: '',
-    },
-    metaData: {
-      media_id: 0,
-      wordCount: 0,
-    },
-    revisions: [],
-  };
-
-  private subs: Subscription[] = [];
   private _slug: string = '';
 
   @Input()
@@ -112,25 +96,6 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     effect(() => this.prepareForm(this.contentService.activeContent()));
   }
 
-  ngOnInit(): void {
-    // this.subs.push(
-    //   interval(this.autosaveInterval).subscribe(() => {
-    //     if (this.formGroup.invalid) {
-    //       return;
-    //     }
-    //     const newContent = JSON.stringify(this.formGroup.getRawValue());
-    //     if (newContent !== this.currentContent) {
-    //       this.currentContent = newContent;
-    //       this.autoSave(this.formGroup.getRawValue() as ContentInterface);
-    //     }
-    //   })
-    // );
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach((sub) => sub.unsubscribe());
-  }
-
   public get buttonText(): string {
     return this._slug ? 'Update' : 'Create';
   }
@@ -146,12 +111,17 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     return this.contentService.contentTypeSlugs();
   }
 
-  public async autoSave(content: ContentInterface): Promise<void> {
-    //const result = await this.contentService.autoSave(content);
+  private get shouldAutosave(): boolean {
+    const values = this.formGroup.getRawValue();
+    return Boolean(
+      values.title &&
+        values.metaData.wordCount &&
+        values.metaData.wordCount > this.minAutoSaveWordCount &&
+        JSON.stringify(values.content) !== this.lastSave
+    );
   }
 
   public async delete(event: MouseEvent): Promise<void> {
-    console.log('delete');
     this.confirmationService.confirm({
       target: event.target as EventTarget,
       message: 'Are you sure you want to delete this image?',
@@ -194,19 +164,17 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     }
 
     let response: ApiResponse<ContentInterface>;
+    const content = this.formGroup.getRawValue();
     if (this._slug) {
       action = action || 'Updated';
-      response = await this.contentService.updateContent(
-        this.formGroup.getRawValue() as ContentInterface
-      );
+      response = await this.contentService.updateContent(content);
     } else {
       action = 'Created';
-      response = await this.contentService.createContent(
-        this.formGroup.getRawValue() as ContentInterface
-      );
+      response = await this.contentService.createContent(content);
     }
 
     if (response.success) {
+      this.lastSave = JSON.stringify(content);
       this.messageService.add({
         severity: 'success',
         summary: 'Noice!',
@@ -222,6 +190,58 @@ export class ContentFormComponent implements OnInit, OnDestroy {
         detail: response.error?.message,
       });
       return false;
+    }
+  }
+
+  public startAutosaveTimer(): void {
+    clearTimeout(this.autosaveTimeOut);
+
+    this.autosaveTimeOut = setTimeout(async () => {
+      clearTimeout(this.autosaveTimeOut);
+      this.autoSave();
+    }, this.autosaveDelay);
+  }
+
+  private async autoSave(): Promise<void> {
+    console.log('autosave?', this.shouldAutosave);
+    if (!this.shouldAutosave) {
+      return;
+    }
+
+    if (this.isSaving) {
+      await firstValueFrom(timer(this.autosaveDelay));
+      return this.autoSave();
+    }
+
+    this.isSaving = true;
+
+    const autoSave = this.formGroup.getRawValue();
+    this.lastSave = JSON.stringify(autoSave.content);
+    await this.contentService.autoSave(autoSave);
+
+    this.isSaving = false;
+  }
+
+  private async deleteContent(): Promise<void> {
+    const response = await this.contentService.deleteContent(
+      this.content.id as number
+    );
+
+    if (response.success) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Buh Bye',
+        detail: `${new TitleCasePipe().transform(
+          this.formGroup.value.type
+        )} deleted`,
+      });
+      this.router.navigate(['/']);
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Oh shit!',
+        detail: response.error?.message,
+      });
     }
   }
 
@@ -254,34 +274,11 @@ export class ContentFormComponent implements OnInit, OnDestroy {
       ),
       taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
       newTaxonomies: this.fb.nonNullable.control([]),
-      revisions: this.fb.nonNullable.control(content.revisions),
+      revisions: this.fb.nonNullable.control(content.Revisions || []),
     };
 
     this.formGroup = this.fb.group(formData);
 
-    console.log('fg', this.formGroup);
-  }
-
-  private async deleteContent(): Promise<void> {
-    const response = await this.contentService.deleteContent(
-      this.content.id as number
-    );
-
-    if (response.success) {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Buh Bye',
-        detail: `${new TitleCasePipe().transform(
-          this.formGroup.value.type
-        )} deleted`,
-      });
-      this.router.navigate(['/']);
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Oh shit!',
-        detail: response.error?.message,
-      });
-    }
+    this.lastSave = JSON.stringify(content.content);
   }
 }

@@ -25,7 +25,7 @@ export class ContentService {
       media_id: 0,
       wordCount: 0,
     },
-    revisions: [],
+    Revisions: [],
   };
   public activeContent = signal<ContentInterface>(this.defaultContent);
   public contentTypes = signal<OverlordContentType[]>([]);
@@ -46,12 +46,26 @@ export class ContentService {
     content: ContentInterface
   ): Promise<ApiResponse<ContentInterface>> {
     try {
-      return firstValueFrom(
-        this.http.put<ApiResponse<ContentInterface>>(
+      const data: ContentInterface = {
+        ...content,
+        ...{
+          metaData: {
+            ...content.metaData,
+            ...{
+              isAutoSave: true,
+            },
+          },
+        },
+      };
+
+      const result = await firstValueFrom(
+        this.http.post<ApiResponse<ContentInterface>>(
           `api/content/autosave`,
-          content
+          data
         )
       );
+
+      return result;
     } catch (e) {
       return {
         success: false,

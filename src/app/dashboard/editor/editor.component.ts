@@ -1,4 +1,11 @@
-import { Component, Injector, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  output,
+} from '@angular/core';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { Content, Editor, generateJSON, JSONContent } from '@tiptap/core';
 import { NgxTiptapModule } from 'ngx-tiptap';
@@ -20,79 +27,93 @@ import { SelectedImageConfig } from '../media-library/media-library.component';
     FormsModule,
     NgxTiptapModule,
     PanelModule,
-    ToolbarComponent],
+    ToolbarComponent,
+  ],
   templateUrl: './editor.component.html',
-  styleUrl: './editor.component.scss'
+  styleUrl: './editor.component.scss',
 })
 export class EditorComponent implements OnInit, OnDestroy {
-
   @Input({ required: true }) content!: Content;
   @Input({ required: true }) formGroup!: FormGroup;
+  public contentChanged = output();
 
   public editor = new Editor({
     extensions: Extensions(this.injector),
-    content: this.content
+    content: this.content,
   });
 
   private subs: Subscription[] = [];
 
-  constructor(
-    private injector: Injector,
-    private media: MediaService) { }
+  constructor(private injector: Injector, private media: MediaService) {}
 
   ngOnInit(): void {
-
     if (typeof this.content === 'string') {
-      this.editor.commands.setContent(generateJSON(this.content, Extensions(this.injector)));
+      this.editor.commands.setContent(
+        generateJSON(this.content, Extensions(this.injector))
+      );
       this.handleContentChange();
     }
     if (typeof this.content === 'object') {
       // pre-populate captions in media library based on content;
-      const images = (this.content as JSONContent).content?.filter(content => content.type === 'imageFigure');
-      images?.forEach(image => {
+      const images = (this.content as JSONContent).content?.filter(
+        (content) => content.type === 'imageFigure'
+      );
+      images?.forEach((image) => {
         if (image.attrs && image.attrs.caption) {
           this.media.imageCaptions[image.attrs.imageId] = image.attrs.caption;
         }
       });
     }
 
-    this.subs.push(this.media.selectedImage.subscribe((data: SelectedImageConfig) => {
-      if (!data.image?.data || data.source !== 'editor') { return; }
+    this.subs.push(
+      this.media.selectedImage.subscribe((data: SelectedImageConfig) => {
+        if (!data.image?.data || data.source !== 'editor') {
+          return;
+        }
 
-      const { caption, image } = data;
-      const { alt, id } = image.data;
+        const { caption, image } = data;
+        const { alt, id } = image.data;
 
-      if (!id) { return; }
+        if (!id) {
+          return;
+        }
 
-      const src = image.full;
+        const src = image.full;
 
-      this.editor.commands.setCustomImage({ src, alt, caption, imageId: id });
+        this.editor.commands.setCustomImage({ src, alt, caption, imageId: id });
 
-      if (caption) {
-        this.media.imageCaptions[id] = caption;
-      }
-    }));
+        if (caption) {
+          this.media.imageCaptions[id] = caption;
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {
     this.editor.destroy();
-    this.subs.forEach(sub => sub.unsubscribe());
+    this.subs.forEach((sub) => sub.unsubscribe());
   }
 
   public get counts(): { [key: string]: number } {
-    const node = this.editor.state.doc
+    const node = this.editor.state.doc;
     const text = node.textBetween(0, node.content.size, ' ', ' ');
-    const words = text.split(' ').filter(word => word !== '').length;
+    const words = text.split(' ').filter((word) => word !== '').length;
     const characters = text.length;
     return {
       words,
-      characters
-    }
+      characters,
+    };
   }
 
   public handleContentChange(): void {
+    const meta = this.formGroup.get('metaData');
+    meta?.setValue({
+      ...meta.value,
+      wordCount: this.counts.words,
+    });
     this.formGroup.get('content')?.setValue(this.editor.getJSON());
     this.formGroup.get('html')?.setValue(this.editor.getHTML());
     this.formGroup.get('text')?.setValue(this.editor.getText());
+    this.contentChanged.emit();
   }
 }

@@ -14,7 +14,11 @@
 
   <app-title-input [formGroup]="formGroup"></app-title-input>
 
-  <app-editor [content]="getContent()" [formGroup]="formGroup"></app-editor>
+  <app-editor
+    (contentChanged)="startAutosaveTimer()"
+    [content]="getContent()"
+    [formGroup]="formGroup"
+  ></app-editor>
 
   <div formGroupName="seo">
     <p-floatLabel>

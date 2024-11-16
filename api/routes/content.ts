@@ -7,7 +7,6 @@ import {
 } from '../../interfaces/content';
 import { PaginatedResults } from '../../interfaces/misc';
 import { TaxonomyInterface } from '../../interfaces/taxonomy';
-import { OverlordConfig } from '../../interfaces/overlord.config';
 import { Content, Taxonomy } from '../models';
 import { ContentModel } from '../models/Content';
 import {
@@ -17,11 +16,7 @@ import {
 } from '../utils/responses';
 import contentRouter from './router';
 import { configurator } from '../utils/config';
-
-export enum ContentTypes {
-  POST = 'post',
-  PAGE = 'page',
-}
+import { Revision } from '../models/Revision';
 
 contentRouter.get('/content/types', async (req: Request, res: Response) => {
   successResponse(res, configurator.contentTypes);
@@ -124,8 +119,34 @@ contentRouter.put('/content', async (req: Request, res: Response) => {
   }
 });
 
-contentRouter.put('/content/autosave', async (req: Request, res: Response) => {
-  successResponse(res, '');
+contentRouter.post('/content/autosave', async (req: Request, res: Response) => {
+  console.log('/content/autosave');
+  try {
+    const autoSaveContent = req.body as ContentCreation;
+
+    if (autoSaveContent.id) {
+      const ContentId = autoSaveContent.id;
+      delete autoSaveContent.id;
+      const revision = await Revision.create({
+        ...autoSaveContent,
+        ...{
+          ContentId,
+        },
+      });
+
+      successResponse(res, revision);
+      return;
+    } else {
+      console.log('create');
+      const content = await Content.create(autoSaveContent);
+
+      successResponse(res, content);
+      return;
+    }
+  } catch (e) {
+    errorResponse(res, (e as Error).message);
+    return;
+  }
 });
 
 contentRouter.post('/content', async (req: Request, res: Response) => {
@@ -135,28 +156,7 @@ contentRouter.post('/content', async (req: Request, res: Response) => {
       ...{ text: '', status: 'draft' },
     } as ContentCreation;
 
-    delete newContent.id;
-    delete newContent.newTaxonomies;
-    delete newContent.createdAt;
-    delete newContent.updatedAt;
-
-    if (!newContent.Taxonomies) {
-      newContent.Taxonomies = [];
-    }
-
-    if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
-      const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
-      newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
-    }
-
-    const tagIds = newContent.Taxonomies.map((tag: TaxonomyInterface) => {
-      return tag.id;
-    });
-
-    const content = await ContentModel.create(newContent);
-
-    // @ts-ignore
-    content.addTaxonomies(tagIds);
+    const content = await Content.create(newContent);
 
     successResponse(res, content);
   } catch (e) {

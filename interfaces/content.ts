@@ -3,6 +3,7 @@ import { baseInterface } from './base';
 import { Image } from './media';
 import { TaxonomyInterface } from './taxonomy';
 import { Content } from '@tiptap/core';
+import { RevisionInterface } from './revision';
 
 export enum ContentTypes {
   POST = 'post',
@@ -10,17 +11,18 @@ export enum ContentTypes {
 }
 
 export type ContentType = `${ContentTypes}`;
-export type ContentStatus = 'published' | 'draft';
+export type ContentStatus = 'draft' | 'published';
 
 export interface ContentMetaData {
   media_id?: number;
   wordCount?: number;
-  [key: string]: string | number | undefined;
+  isAutosave?: boolean;
+  [key: string]: string | number | boolean | undefined;
 }
 
 export interface ContentBase extends baseInterface {
   title: string;
-  type: ContentType;
+  type: string;
   status: ContentStatus;
   text: string;
   html: string;
@@ -35,7 +37,7 @@ export interface ContentInterface extends ContentBase {
   };
   Taxonomies?: TaxonomyInterface[];
   image?: Image;
-  revisions: ContentBase[];
+  Revisions?: RevisionInterface[];
 }
 
 export interface ContentCreation extends ContentInterface {
