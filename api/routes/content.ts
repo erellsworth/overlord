@@ -8,7 +8,6 @@ import {
 import { PaginatedResults } from '../../interfaces/misc';
 import { TaxonomyInterface } from '../../interfaces/taxonomy';
 import { Content, Taxonomy } from '../models';
-import { ContentModel } from '../models/Content';
 import {
   errorResponse,
   notFoundResponse,

@@ -1,85 +1,99 @@
 @if (formGroup && content) {
-<p-card [formGroup]="formGroup">
-  <ng-template pTemplate="title">
-    Create New
-    <p-inplace closable="closable" class="capitalize">
-      <ng-template pTemplate="display">
-        {{ contentType }}
-      </ng-template>
-      <ng-template pTemplate="content">
-        <p-dropdown formControlName="type" [options]="contentTypes" />
-      </ng-template>
-    </p-inplace>
-  </ng-template>
+  <p-card [formGroup]="formGroup">
+    <ng-template pTemplate="title">
+      Create New
+      <p-inplace closable="closable" class="capitalize">
+        <ng-template pTemplate="display">
+          {{ contentType }}
+        </ng-template>
+        <ng-template pTemplate="content">
+          <p-dropdown formControlName="type" [options]="contentTypes" />
+        </ng-template>
+      </p-inplace>
+    </ng-template>
 
-  <app-title-input [formGroup]="formGroup"></app-title-input>
+    <app-title-input [formGroup]="formGroup"></app-title-input>
 
-  <app-editor
-    (contentChanged)="startAutosaveTimer()"
-    [content]="getContent()"
-    [formGroup]="formGroup"
-  ></app-editor>
+    @for (field of fields; track $index) {
+      @switch (field) {
+        @case ("editor") {
+          <app-editor
+            (contentChanged)="startAutosaveTimer()"
+            [content]="getContent()"
+            [formGroup]="formGroup"
+          ></app-editor>
+        }
 
-  <div formGroupName="seo">
-    <p-floatLabel>
-      <textarea
-        id="description"
-        class="w-full"
-        rows="5"
-        pInputTextarea
-        formControlName="description"
-      >
-      </textarea>
-      <label for="description">Description</label>
-    </p-floatLabel>
-  </div>
+        @case ("description") {
+          <div formGroupName="seo">
+            <p-floatLabel>
+              <textarea
+                id="description"
+                class="w-full"
+                rows="5"
+                pInputTextarea
+                formControlName="description"
+              >
+              </textarea>
+              <label for="description">Description</label>
+            </p-floatLabel>
+          </div>
 
-  <p-divider></p-divider>
+          <p-divider></p-divider>
+        }
 
-  <app-taxonomy-input [formGroup]="formGroup"></app-taxonomy-input>
+        @case ("tags") {
+          <app-taxonomy-input [formGroup]="formGroup"></app-taxonomy-input>
 
-  <p-divider></p-divider>
+          <p-divider></p-divider>
+        }
 
-  <app-image-selector [formGroup]="formGroup"></app-image-selector>
+        @case ("image") {
+          <app-image-selector [formGroup]="formGroup"></app-image-selector>
 
-  <p-divider></p-divider>
-
-  <div class="flex justify-content-left gap-3">
-    <p-button
-      [label]="buttonText"
-      (onClick)="save()"
-      [disabled]="formGroup.invalid"
-    />
-
-    @if(content.status === 'draft'){
-    <p-button
-      label="Publish"
-      (onClick)="publish()"
-      [disabled]="formGroup.invalid"
-    />
-    } @if(content.status === 'published'){
-    <p-button
-      label="Unpublish"
-      (onClick)="unpublish()"
-      [disabled]="formGroup.invalid"
-    />
-    } @if(content.id) {
-    <p-button
-      label="Delete"
-      (onClick)="delete($event)"
-      [disabled]="formGroup.invalid"
-    />
+          <p-divider></p-divider>
+        }
+      }
     }
-  </div>
-</p-card>
+
+    <div class="flex justify-content-left gap-3">
+      <p-button
+        [label]="buttonText"
+        (onClick)="save()"
+        [disabled]="formGroup.invalid"
+      />
+
+      @if (content.status === "draft") {
+        <p-button
+          label="Publish"
+          (onClick)="publish()"
+          [disabled]="formGroup.invalid"
+        />
+      }
+      @if (content.status === "published") {
+        <p-button
+          label="Unpublish"
+          (onClick)="unpublish()"
+          [disabled]="formGroup.invalid"
+        />
+      }
+      @if (content.id) {
+        <p-button
+          label="Delete"
+          (onClick)="delete($event)"
+          [disabled]="formGroup.invalid"
+        />
+      }
+    </div>
+  </p-card>
 }
 
 <p-toast />
 
 <p-confirmPopup />
 
-@if(autoSaving){
-<p class="fixed bottom-0 left-0 right-0 mb-1 text-right pr-1">
-  Saving revision...
-</p>
+@if (autoSaving) {
+  <p class="fixed bottom-0 left-0 right-0 mb-1 text-right pr-1">
+    Saving revision...
+  </p>
 }

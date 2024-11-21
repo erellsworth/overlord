@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, effect, Input } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
@@ -20,11 +13,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  ContentInterface,
-  ContentType,
-  ContentTypes,
-} from '../../../../interfaces/content';
+import { ContentInterface, ContentTypes } from '../../../../interfaces/content';
 import { firstValueFrom, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
@@ -40,6 +29,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Router } from '@angular/router';
+import { ConfigService } from '../../services/config.service';
 
 @Component({
   selector: 'app-content-form',
@@ -87,6 +77,7 @@ export class ContentFormComponent {
   }
 
   constructor(
+    private configService: ConfigService,
     private confirmationService: ConfirmationService,
     private contentService: ContentService,
     private fb: FormBuilder,
@@ -100,15 +91,19 @@ export class ContentFormComponent {
     return this._slug ? 'Update' : 'Create';
   }
 
-  public get contentType(): ContentType {
+  public get contentType(): string {
     const contentType = this.formGroup.get('type')?.value as ContentTypes;
     return contentType && this.contentTypes.includes(contentType)
       ? contentType
       : 'post';
   }
 
-  public get contentTypes() {
+  public get contentTypes(): string[] {
     return this.contentService.contentTypeSlugs();
+  }
+
+  public get fields(): string[] {
+    return this.configService.getActiveFields(this.contentType);
   }
 
   private get shouldAutosave(): boolean {
@@ -193,6 +188,10 @@ export class ContentFormComponent {
     }
   }
 
+  public showField(field: string): boolean {
+    return this.configService.isFieldActive(this.contentType, field);
+  }
+
   public startAutosaveTimer(): void {
     clearTimeout(this.autosaveTimeOut);
 
@@ -203,7 +202,6 @@ export class ContentFormComponent {
   }
 
   private async autoSave(): Promise<void> {
-    console.log('autosave?', this.shouldAutosave);
     if (!this.shouldAutosave) {
       return;
     }
@@ -280,5 +278,7 @@ export class ContentFormComponent {
     this.formGroup = this.fb.group(formData);
 
     this.lastSave = JSON.stringify(content.content);
+
+    console.log('fields', this.fields);
   }
 }
