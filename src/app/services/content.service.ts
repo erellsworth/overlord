@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, signal } from '@angular/core';
 import { ContentInterface } from '../../../interfaces/content';
 import { firstValueFrom, Observable, of } from 'rxjs';
-import { ApiResponse, PaginatedApiResponse } from '../../../interfaces/misc';
+import {
+  ApiResponse,
+  PaginatedApiResponse,
+  PaginatedResults,
+} from '../../../interfaces/misc';
 import { OverlordContentType } from '../../../interfaces/overlord.config';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -30,10 +34,17 @@ export class ContentService {
   public activeContent = signal<ContentInterface>(this.defaultContent);
   public contentTypes = signal<OverlordContentType[]>([]);
   public contentTypeSlugs = computed<string[]>(() =>
-    this.contentTypes().map((ct) => ct.slug as string)
+    this.contentTypes().map((ct) => ct.slug as string),
   );
 
-  constructor(private http: HttpClient, private router: Router) {
+  public contentLists = signal<{
+    [key: string]: PaginatedResults<ContentInterface>;
+  }>({});
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.activeContent.set(this.defaultContent);
@@ -43,7 +54,7 @@ export class ContentService {
   }
 
   public async autoSave(
-    content: ContentInterface
+    content: ContentInterface,
   ): Promise<ApiResponse<ContentInterface>> {
     try {
       const data: ContentInterface = {
@@ -61,8 +72,8 @@ export class ContentService {
       const result = await firstValueFrom(
         this.http.post<ApiResponse<ContentInterface>>(
           `api/content/autosave`,
-          data
-        )
+          data,
+        ),
       );
 
       return result;
@@ -75,11 +86,11 @@ export class ContentService {
   }
 
   public async createContent(
-    content: ContentInterface
+    content: ContentInterface,
   ): Promise<ApiResponse<ContentInterface>> {
     try {
       return firstValueFrom(
-        this.http.post<ApiResponse<ContentInterface>>(`api/content/`, content)
+        this.http.post<ApiResponse<ContentInterface>>(`api/content/`, content),
       );
     } catch (e) {
       return {
@@ -89,12 +100,38 @@ export class ContentService {
     }
   }
 
+  public async fetchContentsByType(
+    type: string,
+    page: number = 1,
+  ): Promise<void> {
+    try {
+      const result = await firstValueFrom(
+        this.http.get<PaginatedApiResponse<ContentInterface>>(
+          `api/content/type/${type}`,
+        ),
+      );
+
+      if (result.success) {
+        this.contentLists.update((list) => {
+          list[type] = result.data as PaginatedResults<ContentInterface>;
+          return list;
+        });
+
+        console.log('success', this.contentLists());
+      } else {
+        console.error('Failed to fetch contents', result.error);
+      }
+    } catch (e) {
+      console.error('Error fetching contents', e);
+    }
+  }
+
   public async deleteContent(
-    id: number
+    id: number,
   ): Promise<ApiResponse<ContentInterface>> {
     try {
       return firstValueFrom(
-        this.http.delete<ApiResponse<ContentInterface>>(`api/content/${id}`)
+        this.http.delete<ApiResponse<ContentInterface>>(`api/content/${id}`),
       );
     } catch (e) {
       return {
@@ -105,11 +142,11 @@ export class ContentService {
   }
 
   public getContentByType$(
-    type: string = 'post'
+    type: string = 'post',
   ): Observable<PaginatedApiResponse<ContentInterface>> {
     try {
       return this.http.get<PaginatedApiResponse<ContentInterface>>(
-        `api/content/type/${type}`
+        `api/content/type/${type}`,
       );
     } catch (e) {
       return of({
@@ -120,11 +157,11 @@ export class ContentService {
   }
 
   public getContentBySlug$(
-    slug: string
+    slug: string,
   ): Observable<ApiResponse<ContentInterface>> {
     try {
       return this.http.get<ApiResponse<ContentInterface>>(
-        `api/content/${slug}`
+        `api/content/${slug}`,
       );
     } catch (e) {
       return of({
@@ -136,7 +173,7 @@ export class ContentService {
 
   public async fetchContent(slug: string): Promise<void> {
     const result = await firstValueFrom(
-      this.http.get<ApiResponse<ContentInterface>>(`api/content/${slug}`)
+      this.http.get<ApiResponse<ContentInterface>>(`api/content/${slug}`),
     );
 
     if (result.success) {
@@ -146,11 +183,11 @@ export class ContentService {
     }
   }
   public async updateContent(
-    content: ContentInterface
+    content: ContentInterface,
   ): Promise<ApiResponse<ContentInterface>> {
     try {
       return firstValueFrom(
-        this.http.put<ApiResponse<ContentInterface>>(`api/content`, content)
+        this.http.put<ApiResponse<ContentInterface>>(`api/content`, content),
       );
     } catch (e) {
       return {
@@ -163,7 +200,7 @@ export class ContentService {
   private async fetchContentTypes(): Promise<void> {
     try {
       const result = await firstValueFrom(
-        this.http.get<ApiResponse<OverlordContentType[]>>(`api/content/types`)
+        this.http.get<ApiResponse<OverlordContentType[]>>(`api/content/types`),
       );
 
       if (result.success) {

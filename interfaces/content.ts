@@ -53,7 +53,7 @@ export interface ContentInstance
     ContentInterface {}
 
 export interface ContentQuery {
-  type?: ContentType;
+  type?: string;
 }
 
 export interface ContentQueryParams extends ContentQuery {

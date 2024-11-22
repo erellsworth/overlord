@@ -22,15 +22,17 @@ contentRouter.get('/content/types', async (req: Request, res: Response) => {
 });
 
 contentRouter.get(
-  '/content/type/:type?',
-  async (req: Request, res: Response) => {
+  '/content/type/:type/:page?',
+  async (req: Request<{ type: string; page?: number }>, res: Response) => {
     try {
       let content: PaginatedResults<ContentInstance>;
 
       const { type } = req.params;
+      const page = req.params.page || 1;
 
       const query: ContentQueryParams = {
-        noPagination: true,
+        page,
+        type,
       };
 
       if (type) {
@@ -47,7 +49,7 @@ contentRouter.get(
     } catch (e) {
       errorResponse(res, (e as Error).message);
     }
-  }
+  },
 );
 
 contentRouter.get('/content/:slug?', async (req: Request, res: Response) => {

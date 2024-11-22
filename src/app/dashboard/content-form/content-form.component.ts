@@ -13,7 +13,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ContentInterface, ContentTypes } from '../../../../interfaces/content';
+import { ContentInterface } from '../../../../interfaces/content';
 import { firstValueFrom, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
@@ -66,6 +66,7 @@ export class ContentFormComponent {
   private isSaving = false;
   private autosaveTimeOut!: ReturnType<typeof setTimeout>;
 
+  private _contentType!: string;
   private _slug: string = '';
 
   @Input()
@@ -76,26 +77,34 @@ export class ContentFormComponent {
     }
   }
 
+  get slug(): string {
+    return this._slug;
+  }
+
+  @Input()
+  set contentType(type: string) {
+    this._contentType = type;
+  }
+
+  get contentType(): string {
+    return this.contentTypes.includes(this._contentType)
+      ? this._contentType
+      : 'post';
+  }
+
   constructor(
     private configService: ConfigService,
     private confirmationService: ConfirmationService,
     private contentService: ContentService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
   ) {
     effect(() => this.prepareForm(this.contentService.activeContent()));
   }
 
   public get buttonText(): string {
     return this._slug ? 'Update' : 'Create';
-  }
-
-  public get contentType(): string {
-    const contentType = this.formGroup.get('type')?.value as ContentTypes;
-    return contentType && this.contentTypes.includes(contentType)
-      ? contentType
-      : 'post';
   }
 
   public get contentTypes(): string[] {
@@ -106,20 +115,24 @@ export class ContentFormComponent {
     return this.configService.getActiveFields(this.contentType);
   }
 
+  public get title(): string {
+    return this.formGroup.get('title')?.value || '';
+  }
+
   private get shouldAutosave(): boolean {
     const values = this.formGroup.getRawValue();
     return Boolean(
       values.title &&
         values.metaData.wordCount &&
         values.metaData.wordCount > this.minAutoSaveWordCount &&
-        JSON.stringify(values.content) !== this.lastSave
+        JSON.stringify(values.content) !== this.lastSave,
     );
   }
 
   public async delete(event: MouseEvent): Promise<void> {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'Are you sure you want to delete this image?',
+      message: `Are you sure you want to delete this ${this.contentType}?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.deleteContent();
@@ -174,7 +187,7 @@ export class ContentFormComponent {
         severity: 'success',
         summary: 'Noice!',
         detail: `${new TitleCasePipe().transform(
-          this.formGroup.value.type
+          this.formGroup.value.type,
         )} ${action}`,
       });
       return true;
@@ -222,7 +235,7 @@ export class ContentFormComponent {
 
   private async deleteContent(): Promise<void> {
     const response = await this.contentService.deleteContent(
-      this.content.id as number
+      this.content.id as number,
     );
 
     if (response.success) {
@@ -230,7 +243,7 @@ export class ContentFormComponent {
         severity: 'success',
         summary: 'Buh Bye',
         detail: `${new TitleCasePipe().transform(
-          this.formGroup.value.type
+          this.formGroup.value.type,
         )} deleted`,
       });
       this.router.navigate(['/']);
@@ -247,7 +260,7 @@ export class ContentFormComponent {
     this.content = content;
     const taxonomyIds = content.Taxonomies
       ? content.Taxonomies.filter((tax) => tax.id).map(
-          (tax) => tax.id as number
+          (tax) => tax.id as number,
         )
       : [];
 
@@ -259,7 +272,7 @@ export class ContentFormComponent {
           value: content?.slug,
           disabled: Boolean(this._slug),
         },
-        Validators.required
+        Validators.required,
       ),
       type: this.fb.nonNullable.control(content.type, Validators.required),
       status: this.fb.nonNullable.control(content.status, Validators.required),
@@ -268,7 +281,7 @@ export class ContentFormComponent {
       content: this.fb.control(content.content, Validators.required),
       seo: this.fb.nonNullable.group(content?.seo || { description: '' }),
       metaData: this.fb.nonNullable.control(
-        content?.metaData || { media_id: 0, autosave_id: uuidv4() }
+        content?.metaData || { media_id: 0, autosave_id: uuidv4() },
       ),
       taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
       newTaxonomies: this.fb.nonNullable.control([]),
@@ -278,7 +291,5 @@ export class ContentFormComponent {
     this.formGroup = this.fb.group(formData);
 
     this.lastSave = JSON.stringify(content.content);
-
-    console.log('fields', this.fields);
   }
 }

@@ -1,8 +1,47 @@
-@if (content$ | async; as contents) {
-<p-listbox styleClass="h-full" scrollHeight="auto" [options]="contents">
-    <ng-template let-content pTemplate="item">
-        <a class="p-button p-button-link block w-full text-left no-underline"
-            routerLink="/edit/{{content.slug}}">{{content.title}}</a>
-    </ng-template>
-</p-listbox>
+<ul>
+  @if (!contents.length) {
+    <li class="py-2">No {{ contentType() }} found</li>
+  }
+
+  @for (content of contents; track $index) {
+    <li class="flex justify-content-between align-items-center my-1">
+      <a
+        class="flex-grow-1 p-button p-button-link block text-left no-underline px-0"
+        routerLink="/edit/{{ content.slug }}"
+        >{{ content.title }} ({{ content.status }})</a
+      >
+      <div class="my-2 flex gap-1">
+        <p-button
+          [outlined]="true"
+          severity="info"
+          routerLink="/edit/{{ content.slug }}"
+          ><fa-icon [icon]="icons.edit"
+        /></p-button>
+
+        <p-button
+          [outlined]="true"
+          severity="danger"
+          (onClick)="delete($event, content.id)"
+          ><fa-icon [icon]="icons.delete"
+        /></p-button>
+      </div>
+    </li>
+  }
+</ul>
+
+<a class="createButton" routerLink="/create/{{ contentType() }}">
+  <fa-icon [icon]="icons.create" />
+</a>
+
+@if (total > 10) {
+  <p-paginator
+    (onPageChange)="pageChanged($event)"
+    [first]="0"
+    [rows]="10"
+    [totalRecords]="total"
+  />
 }
+
+<p-toast />
+
+<p-confirmPopup />

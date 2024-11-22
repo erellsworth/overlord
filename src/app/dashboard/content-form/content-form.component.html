@@ -1,15 +1,19 @@
 @if (formGroup && content) {
   <p-card [formGroup]="formGroup">
     <ng-template pTemplate="title">
-      Create New
-      <p-inplace closable="closable" class="capitalize">
-        <ng-template pTemplate="display">
-          {{ contentType }}
-        </ng-template>
-        <ng-template pTemplate="content">
-          <p-dropdown formControlName="type" [options]="contentTypes" />
-        </ng-template>
-      </p-inplace>
+      @if (slug) {
+        Edit {{ title }}
+      } @else {
+        Create New
+        <p-inplace closable="closable" class="capitalize">
+          <ng-template pTemplate="display">
+            {{ contentType }}
+          </ng-template>
+          <ng-template pTemplate="content">
+            <p-dropdown formControlName="type" [options]="contentTypes" />
+          </ng-template>
+        </p-inplace>
+      }
     </ng-template>
 
     <app-title-input [formGroup]="formGroup"></app-title-input>

@@ -85,7 +85,7 @@ const Content = {
     }
 
     const tagIds = newContent.Taxonomies.map(
-      (tag: TaxonomyInterface) => tag.id
+      (tag: TaxonomyInterface) => tag.id,
     );
 
     const content = await ContentModel.create(newContent);
@@ -96,7 +96,7 @@ const Content = {
     return content;
   },
   findAll: async (
-    query: ContentQueryParams
+    query: ContentQueryParams,
   ): Promise<PaginatedResults<ContentInstance>> => {
     const page = query.page ? query.page : 1;
 
@@ -109,7 +109,7 @@ const Content = {
     };
 
     if (!query.noPagination) {
-      options.limit = query.limit ? query.limit : 9;
+      options.limit = query.limit ? query.limit : 10;
       options.offset = (parseInt(page.toString()) - 1) * options.limit;
     }
 
@@ -152,7 +152,7 @@ const Content = {
     return (await attachImage(content)) as ContentInstance;
   },
   findByTaxonomy: async (
-    query: TaxonomyQuery
+    query: TaxonomyQuery,
   ): Promise<PaginatedResults<ContentInstance>> => {
     const { slug, limit, page } = query;
     const offset = (parseInt(page.toString()) - 1) * limit;
