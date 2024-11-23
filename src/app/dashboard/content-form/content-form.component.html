@@ -16,7 +16,9 @@
       }
     </ng-template>
 
-    <app-title-input [formGroup]="formGroup"></app-title-input>
+    @if (showTitle) {
+      <app-title-input [formGroup]="formGroup"></app-title-input>
+    }
 
     @for (field of fields; track $index) {
       @switch (field) {

@@ -115,6 +115,12 @@ export class ContentFormComponent {
     return this.configService.getActiveFields(this.contentType);
   }
 
+  public get showTitle(): boolean {
+    return !Boolean(
+      this.configService.config().contentTypes[this.contentType]?.noTitle,
+    );
+  }
+
   public get title(): string {
     return this.formGroup.get('title')?.value || '';
   }
@@ -264,12 +270,15 @@ export class ContentFormComponent {
         )
       : [];
 
+    const title = content?.title || this.showTitle ? '' : uuidv4();
+    const slug = content?.slug || title;
+
     const formData: ContentForm = {
       id: this.fb.nonNullable.control(content.id),
-      title: this.fb.nonNullable.control(content?.title, Validators.required),
+      title: this.fb.nonNullable.control(title, Validators.required),
       slug: this.fb.nonNullable.control(
         {
-          value: content?.slug,
+          value: slug,
           disabled: Boolean(this._slug),
         },
         Validators.required,
@@ -281,7 +290,7 @@ export class ContentFormComponent {
       content: this.fb.control(content.content, Validators.required),
       seo: this.fb.nonNullable.group(content?.seo || { description: '' }),
       metaData: this.fb.nonNullable.control(
-        content?.metaData || { media_id: 0, autosave_id: uuidv4() },
+        content?.metaData || { media_id: 0 },
       ),
       taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
       newTaxonomies: this.fb.nonNullable.control([]),

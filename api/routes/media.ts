@@ -18,8 +18,6 @@ class customStorage {
     cb: (error?: any, file?: Partial<Express.Multer.File>) => void,
   ): Promise<void> {
     try {
-      console.log('_handleFile', file);
-
       req.body.uploadResult = await storeImage(
         file,
         req.body.filename,
@@ -127,8 +125,6 @@ mediaRouter.post(
   '/media/create',
   upload.single('file'),
   async (req: Request, res: Response) => {
-    console.log('create');
-
     const uploadResult = req.body.uploadResult as ImageStorageResult;
 
     if (!uploadResult.success) {

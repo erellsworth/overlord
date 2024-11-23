@@ -4,6 +4,7 @@ export interface OverlordContentType {
   plural?: string;
   hierarchical?: boolean;
   fields?: string[];
+  noTitle?: boolean;
 }
 
 export interface OverlordField {

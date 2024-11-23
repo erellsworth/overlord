@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ContentForm } from '../content-form.interface';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -7,7 +7,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Subscription } from 'rxjs';
 import { slugger } from '../../../../../api/utils/misc';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faLock, faLockOpen, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import {
+  faLock,
+  faLockOpen,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -19,49 +23,64 @@ import { ButtonModule } from 'primeng/button';
     FontAwesomeModule,
     InputGroupModule,
     InputTextModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './title-input.component.html',
-  styleUrl: './title-input.component.scss'
+  styleUrl: './title-input.component.scss',
 })
 export class TitleInputComponent implements OnInit, OnDestroy {
-
-  @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
+  public formGroup = input.required<FormGroup<ContentForm>>();
 
   public icons = {
     locked: faLock,
-    unlocked: faLockOpen
+    unlocked: faLockOpen,
   };
 
   private subs: Subscription[] = [];
 
   ngOnInit(): void {
-    const titleControl = this.formGroup.get('title');
-    if (titleControl) {
-      this.subs.push(titleControl.valueChanges.subscribe(title => {
-        if (this.slugControl?.enabled) {
-          this.slugControl.setValue(slugger(title));
-        }
-      }));
-    }
+    // for some reason this stopped working in angular 18.
+    // The valueChanges event never fires
+    // const titleControl = this.formGroup().get('title');
+    // if (titleControl) {
+    //   this.subs.push(
+    //     titleControl.valueChanges.subscribe((title) => {
+    //       if (this.slugControl?.enabled) {
+    //         this.slugControl.setValue(slugger(title));
+    //       }
+    //     }),
+    //   );
+    // }
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach(sub => sub.unsubscribe());
+    this.subs.forEach((sub) => sub.unsubscribe());
   }
 
   public get slugIcon(): IconDefinition {
-    if (!this.slugControl) { return faLock; }
+    if (!this.slugControl) {
+      return faLock;
+    }
     return this.slugControl.disabled ? faLock : faLockOpen;
   }
 
   private get slugControl() {
-    return this.formGroup.get('slug');
+    return this.formGroup().get('slug');
+  }
+
+  public handleChange(): void {
+    const title = this.formGroup().get('title')?.value;
+
+    if (title && this.slugControl?.enabled) {
+      this.slugControl.setValue(slugger(title));
+    }
   }
 
   public toggleSlugField(): void {
     if (this.slugControl) {
-      this.slugControl.disabled ? this.slugControl.enable() : this.slugControl.disable();
+      this.slugControl.disabled
+        ? this.slugControl.enable()
+        : this.slugControl.disable();
     }
   }
 }

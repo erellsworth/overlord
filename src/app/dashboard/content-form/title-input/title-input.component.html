@@ -1,24 +1,40 @@
-@if(formGroup) {
-<ng-container [formGroup]="formGroup">
+@if (formGroup()) {
+  <ng-container [formGroup]="formGroup()">
     <p-floatLabel>
-        <input id="title" type="text" class="w-full" pInputText formControlName="title" />
-        <label for="title">Title</label>
+      <input
+        id="title"
+        type="text"
+        class="w-full"
+        pInputText
+        (change)="handleChange()"
+        formControlName="title"
+      />
+      <label for="title">Title</label>
     </p-floatLabel>
 
     <p-floatLabel class="mt-4 block">
-        <p-inputGroup class="w-full">
-
-            <input id="slug" type="text" class="w-full" pInputText formControlName="slug" />
-            <label for="slug" class="slug-label">Slug</label>
-            <button type="button" pButton
-                [class]="formGroup.get('slug')?.disabled ? 'p-button-warning' : 'p-button-success'"
-                (click)="toggleSlugField()">
-                <fa-icon [icon]="slugIcon"></fa-icon>
-            </button>
-
-        </p-inputGroup>
-
+      <p-inputGroup class="w-full">
+        <input
+          id="slug"
+          type="text"
+          class="w-full"
+          pInputText
+          formControlName="slug"
+        />
+        <label for="slug" class="slug-label">Slug</label>
+        <button
+          type="button"
+          pButton
+          [class]="
+            formGroup().get('slug')?.disabled
+              ? 'p-button-warning'
+              : 'p-button-success'
+          "
+          (click)="toggleSlugField()"
+        >
+          <fa-icon [icon]="slugIcon"></fa-icon>
+        </button>
+      </p-inputGroup>
     </p-floatLabel>
-
-</ng-container>
+  </ng-container>
 }

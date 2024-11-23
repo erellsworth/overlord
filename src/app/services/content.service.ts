@@ -116,8 +116,6 @@ export class ContentService {
           list[type] = result.data as PaginatedResults<ContentInterface>;
           return list;
         });
-
-        console.log('success', this.contentLists());
       } else {
         console.error('Failed to fetch contents', result.error);
       }
