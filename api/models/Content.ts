@@ -20,6 +20,7 @@ const attributes: ModelAttributes<ContentInstance> = {
   slug: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   type: {
     type: DataTypes.STRING,
@@ -99,6 +100,8 @@ const Content = {
       await Content.prepareForSave(newContent);
 
     delete preparedContent.id;
+
+    preparedContent.slug = await Content.getNewSlug(preparedContent.slug);
 
     const content = await ContentModel.create(preparedContent);
 
@@ -216,6 +219,30 @@ const Content = {
       total: count,
       page,
     };
+  },
+  getNewSlug: async (slug: string): Promise<string> => {
+    const content = await ContentModel.findOne({
+      where: {
+        slug,
+      },
+    });
+
+    if (content) {
+      const slugArr = slug.split('-');
+      let slugEnd: number | string = slugArr[slugArr.length - 1];
+
+      if (isNaN(Number(slugEnd))) {
+        return Content.getNewSlug(`${slug}-2`);
+      }
+
+      const newSlug = slugArr
+        .map((s, i) => (i === slugArr.length - 1 ? Number(s) + 1 : s))
+        .join('-');
+
+      return Content.getNewSlug(newSlug);
+    }
+
+    return slug;
   },
 };
 

@@ -130,36 +130,6 @@ export class ContentService {
     }
   }
 
-  public getContentByType$(
-    type: string = 'post',
-  ): Observable<PaginatedApiResponse<ContentInterface>> {
-    try {
-      return this.http.get<PaginatedApiResponse<ContentInterface>>(
-        `api/content/type/${type}`,
-      );
-    } catch (e) {
-      return of({
-        success: false,
-        error: e as Error,
-      });
-    }
-  }
-
-  public getContentBySlug$(
-    slug: string,
-  ): Observable<ApiResponse<ContentInterface>> {
-    try {
-      return this.http.get<ApiResponse<ContentInterface>>(
-        `api/content/${slug}`,
-      );
-    } catch (e) {
-      return of({
-        success: false,
-        error: e as Error,
-      });
-    }
-  }
-
   public async fetchContent(slug?: string): Promise<void> {
     if (!slug) {
       this.activeContent.set(this.defaultContent);

@@ -199,6 +199,8 @@ export class ContentFormComponent {
           this.formGroup.value.type,
         )} ${action}`,
       });
+      this.slug = response.data?.slug as string;
+      this.prepareForm();
       return true;
     } else {
       this.messageService.add({
