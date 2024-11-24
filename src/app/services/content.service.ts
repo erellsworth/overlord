@@ -8,7 +8,6 @@ import {
   PaginatedResults,
 } from '../../../interfaces/misc';
 import { OverlordContentType } from '../../../interfaces/overlord.config';
-import { NavigationEnd, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -41,15 +40,7 @@ export class ContentService {
     [key: string]: PaginatedResults<ContentInterface>;
   }>({});
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-  ) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.activeContent.set(this.defaultContent);
-      }
-    });
+  constructor(private http: HttpClient) {
     this.fetchContentTypes();
   }
 
@@ -169,7 +160,11 @@ export class ContentService {
     }
   }
 
-  public async fetchContent(slug: string): Promise<void> {
+  public async fetchContent(slug?: string): Promise<void> {
+    if (!slug) {
+      this.activeContent.set(this.defaultContent);
+      return;
+    }
     const result = await firstValueFrom(
       this.http.get<ApiResponse<ContentInterface>>(`api/content/${slug}`),
     );

@@ -88,57 +88,24 @@ contentRouter.put('/content', async (req: Request, res: Response) => {
   }
 
   try {
-    delete contentUpdate.newTaxonomies;
-    delete contentUpdate.updatedAt;
-    delete contentUpdate.createdAt;
+    const updatedContent = await Content.update(contentUpdate);
 
-    if (!contentUpdate.Taxonomies) {
-      contentUpdate.Taxonomies = [];
-    }
-
-    if (req.body.newTaxonomies && req.body.newTaxonomies.length) {
-      const newTags = await Taxonomy.bulkCreate(req.body.newTaxonomies);
-      contentUpdate.Taxonomies = contentUpdate.Taxonomies.concat(newTags);
-    }
-
-    let content = await Content.findById(contentUpdate.id);
-
-    let newContent = await content.update(contentUpdate);
-
-    if (contentUpdate.Taxonomies) {
-      const tagIds = contentUpdate.Taxonomies.map((tag: TaxonomyInterface) => {
-        return tag.id;
-      });
-
-      // @ts-ignore
-      newContent.addTaxonomies(tagIds);
-    }
-
-    successResponse(res, newContent);
+    successResponse(res, updatedContent);
   } catch (e) {
     errorResponse(res, (e as Error).message);
   }
 });
 
 contentRouter.post('/content/autosave', async (req: Request, res: Response) => {
-  console.log('/content/autosave');
   try {
     const autoSaveContent = req.body as ContentCreation;
 
     if (autoSaveContent.id) {
-      const ContentId = autoSaveContent.id;
-      delete autoSaveContent.id;
-      const revision = await Revision.create({
-        ...autoSaveContent,
-        ...{
-          ContentId,
-        },
-      });
+      const revision = await Content.update(autoSaveContent);
 
       successResponse(res, revision);
       return;
     } else {
-      console.log('create');
       const content = await Content.create(autoSaveContent);
 
       successResponse(res, content);

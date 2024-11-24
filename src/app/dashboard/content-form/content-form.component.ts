@@ -72,9 +72,7 @@ export class ContentFormComponent {
   @Input()
   set slug(slug: string) {
     this._slug = slug;
-    if (slug) {
-      this.contentService.fetchContent(slug);
-    }
+    this.prepareForm();
   }
 
   get slug(): string {
@@ -99,9 +97,7 @@ export class ContentFormComponent {
     private fb: FormBuilder,
     private messageService: MessageService,
     private router: Router,
-  ) {
-    effect(() => this.prepareForm(this.contentService.activeContent()));
-  }
+  ) {}
 
   public get buttonText(): string {
     return this._slug ? 'Update' : 'Create';
@@ -262,7 +258,10 @@ export class ContentFormComponent {
     }
   }
 
-  private prepareForm(content: ContentInterface): void {
+  private async prepareForm(): Promise<void> {
+    await this.contentService.fetchContent(this.slug);
+
+    const content = this.contentService.activeContent();
     this.content = content;
     const taxonomyIds = content.Taxonomies
       ? content.Taxonomies.filter((tax) => tax.id).map(
@@ -270,7 +269,12 @@ export class ContentFormComponent {
         )
       : [];
 
-    const title = content?.title || this.showTitle ? '' : uuidv4();
+    const title = content.title
+      ? content.title
+      : this.showTitle
+        ? ''
+        : uuidv4();
+
     const slug = content?.slug || title;
 
     const formData: ContentForm = {

@@ -39,18 +39,16 @@ export class TitleInputComponent implements OnInit, OnDestroy {
   private subs: Subscription[] = [];
 
   ngOnInit(): void {
-    // for some reason this stopped working in angular 18.
-    // The valueChanges event never fires
-    // const titleControl = this.formGroup().get('title');
-    // if (titleControl) {
-    //   this.subs.push(
-    //     titleControl.valueChanges.subscribe((title) => {
-    //       if (this.slugControl?.enabled) {
-    //         this.slugControl.setValue(slugger(title));
-    //       }
-    //     }),
-    //   );
-    // }
+    const titleControl = this.formGroup().get('title');
+    if (titleControl) {
+      this.subs.push(
+        titleControl.valueChanges.subscribe((title) => {
+          if (this.slugControl?.enabled) {
+            this.slugControl.setValue(slugger(title));
+          }
+        }),
+      );
+    }
   }
 
   ngOnDestroy(): void {
@@ -66,14 +64,6 @@ export class TitleInputComponent implements OnInit, OnDestroy {
 
   private get slugControl() {
     return this.formGroup().get('slug');
-  }
-
-  public handleChange(): void {
-    const title = this.formGroup().get('title')?.value;
-
-    if (title && this.slugControl?.enabled) {
-      this.slugControl.setValue(slugger(title));
-    }
   }
 
   public toggleSlugField(): void {

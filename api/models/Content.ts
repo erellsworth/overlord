@@ -10,7 +10,7 @@ import {
 import { db } from '../utils';
 import { attachImage, attachImages } from '../utils/media.helper';
 import { Taxonomy, TaxonomyModel } from './Taxonomy';
-import { RevisionModel } from './Revision';
+import { Revision, RevisionModel } from './Revision';
 
 const attributes: ModelAttributes<ContentInstance> = {
   title: {
@@ -68,32 +68,71 @@ const attributes: ModelAttributes<ContentInstance> = {
 const ContentModel = db.define<ContentInstance>('Content', attributes);
 
 const Content = {
-  create: async (newContent: ContentCreation): Promise<ContentInstance> => {
-    const newTaxonomies = newContent.newTaxonomies || [];
-    delete newContent.id;
-    delete newContent.newTaxonomies;
-    delete newContent.createdAt;
-    delete newContent.updatedAt;
+  prepareForSave: async (
+    preparedContent: ContentCreation,
+  ): Promise<{
+    preparedContent: ContentCreation;
+    tagIds: number[];
+  }> => {
+    const newTaxonomies = preparedContent.newTaxonomies || [];
+    delete preparedContent.newTaxonomies;
+    delete preparedContent.createdAt;
+    delete preparedContent.updatedAt;
 
-    if (!newContent.Taxonomies) {
-      newContent.Taxonomies = [];
+    if (!preparedContent.Taxonomies) {
+      preparedContent.Taxonomies = [];
     }
 
     if (newTaxonomies.length) {
       const newTags = await Taxonomy.bulkCreate(newTaxonomies);
-      newContent.Taxonomies = newContent.Taxonomies.concat(newTags);
+      preparedContent.Taxonomies = preparedContent.Taxonomies.concat(newTags);
     }
 
-    const tagIds = newContent.Taxonomies.map(
-      (tag: TaxonomyInterface) => tag.id,
+    const tagIds = preparedContent.Taxonomies.map(
+      (tag: TaxonomyInterface) => tag.id as number,
     );
 
-    const content = await ContentModel.create(newContent);
+    return {
+      preparedContent,
+      tagIds,
+    };
+  },
+  create: async (newContent: ContentCreation): Promise<ContentInstance> => {
+    const { preparedContent, tagIds } =
+      await Content.prepareForSave(newContent);
+
+    delete preparedContent.id;
+
+    const content = await ContentModel.create(preparedContent);
 
     // @ts-ignore
     content.addTaxonomies(tagIds);
 
     return content;
+  },
+  update: async (contentUpdate: ContentCreation) => {
+    const { preparedContent, tagIds } =
+      await Content.prepareForSave(contentUpdate);
+
+    console.log('update', preparedContent.text);
+
+    const content = await Content.findById(contentUpdate.id as number);
+
+    const updatedContent = await content.update(preparedContent);
+
+    // @ts-ignore
+    updatedContent.addTaxonomies(tagIds);
+
+    const ContentId = contentUpdate.id as number;
+    delete contentUpdate.id;
+    await Revision.create({
+      ...contentUpdate,
+      ...{
+        ContentId,
+      },
+    });
+
+    return updatedContent;
   },
   findAll: async (
     query: ContentQueryParams,

@@ -39,9 +39,11 @@ export class ContentListComponent {
     private contentService: ContentService,
     private messageService: MessageService,
   ) {
-    effect(() => {
+    effect(async () => {
       if (this.contentType()) {
-        this.contentService.fetchContentsByType(this.contentType() as string);
+        await this.contentService.fetchContentsByType(
+          this.contentType() as string,
+        );
       }
     });
   }

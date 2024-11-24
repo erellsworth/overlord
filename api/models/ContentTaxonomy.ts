@@ -1,8 +1,9 @@
 import { DataTypes, ModelAttributes } from 'sequelize';
 import { db } from '../utils/db';
+import { Taxonomy } from './Taxonomy';
 
 const attributes: ModelAttributes = {
-  LinkId: {
+  TaxonomyId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
