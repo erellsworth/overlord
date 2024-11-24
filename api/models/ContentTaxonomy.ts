@@ -1,13 +1,12 @@
 import { DataTypes, ModelAttributes } from 'sequelize';
 import { db } from '../utils/db';
-import { Taxonomy } from './Taxonomy';
 
 const attributes: ModelAttributes = {
   TaxonomyId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  CategoryId: {
+  ContentId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },

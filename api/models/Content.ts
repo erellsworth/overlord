@@ -79,18 +79,15 @@ const Content = {
     delete preparedContent.createdAt;
     delete preparedContent.updatedAt;
 
-    if (!preparedContent.Taxonomies) {
-      preparedContent.Taxonomies = [];
-    }
+    preparedContent.taxonomyIds = preparedContent.taxonomyIds || [];
 
     if (newTaxonomies.length) {
-      const newTags = await Taxonomy.bulkCreate(newTaxonomies);
-      preparedContent.Taxonomies = preparedContent.Taxonomies.concat(newTags);
+      const newTagIds = await Taxonomy.bulkCreate(newTaxonomies);
+      preparedContent.taxonomyIds =
+        preparedContent.taxonomyIds.concat(newTagIds);
     }
 
-    const tagIds = preparedContent.Taxonomies.map(
-      (tag: TaxonomyInterface) => tag.id as number,
-    );
+    const tagIds = preparedContent.taxonomyIds;
 
     return {
       preparedContent,
@@ -106,7 +103,7 @@ const Content = {
     const content = await ContentModel.create(preparedContent);
 
     // @ts-ignore
-    content.addTaxonomies(tagIds);
+    await content.addTaxonomies(tagIds);
 
     return content;
   },
@@ -114,14 +111,12 @@ const Content = {
     const { preparedContent, tagIds } =
       await Content.prepareForSave(contentUpdate);
 
-    console.log('update', preparedContent.text);
-
     const content = await Content.findById(contentUpdate.id as number);
 
     const updatedContent = await content.update(preparedContent);
 
     // @ts-ignore
-    updatedContent.addTaxonomies(tagIds);
+    await updatedContent.setTaxonomies(tagIds);
 
     const ContentId = contentUpdate.id as number;
     delete contentUpdate.id;
