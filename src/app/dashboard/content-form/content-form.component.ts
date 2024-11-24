@@ -199,8 +199,7 @@ export class ContentFormComponent {
           this.formGroup.value.type,
         )} ${action}`,
       });
-      this.slug = response.data?.slug as string;
-      this.prepareForm();
+      this.router.navigate(['edit', response.data?.slug as string]);
       return true;
     } else {
       this.messageService.add({
