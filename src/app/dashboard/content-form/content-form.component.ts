@@ -14,7 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ContentInterface } from '../../../../interfaces/content';
-import { firstValueFrom, timer } from 'rxjs';
+import { delay, firstValueFrom, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 import { ContentForm } from './content-form.interface';
@@ -57,13 +57,14 @@ import { ConfigService } from '../../services/config.service';
   providers: [ConfirmationService, MessageService],
 })
 export class ContentFormComponent {
-  public autoSaving = false;
   public content!: ContentInterface;
   public formGroup!: FormGroup<ContentForm>;
+  public isSaving = false;
+  public saveIndicator = '';
+
   private autosaveDelay = 1000 * 5; // autosave 5 seconds after typing stops
   private minAutoSaveWordCount = 30; //TODO: get these values from database
   private lastSave!: string;
-  private isSaving = false;
   private autosaveTimeOut!: ReturnType<typeof setTimeout>;
 
   private _contentType!: string;
@@ -175,14 +176,20 @@ export class ContentFormComponent {
 
     let response: ApiResponse<ContentInterface>;
     const content = this.formGroup.getRawValue();
+    this.isSaving = true;
     if (this._slug) {
       action = action || 'Updated';
+      this.saveIndicator = 'Updating...';
       response = await this.contentService.updateContent(content);
     } else {
       action = 'Created';
+      this.saveIndicator = 'Saving...';
       response = await this.contentService.createContent(content);
     }
 
+    this.isSaving = false;
+
+    this.dismisIndicator();
     if (response.success) {
       this.lastSave = JSON.stringify(content);
       this.messageService.add({
@@ -227,12 +234,14 @@ export class ContentFormComponent {
     }
 
     this.isSaving = true;
+    this.saveIndicator = 'Autosaving...';
 
     const autoSave = this.formGroup.getRawValue();
     this.lastSave = JSON.stringify(autoSave.content);
     await this.contentService.autoSave(autoSave);
 
     this.isSaving = false;
+    this.dismisIndicator();
   }
 
   private async deleteContent(): Promise<void> {
@@ -256,6 +265,12 @@ export class ContentFormComponent {
         detail: response.error?.message,
       });
     }
+  }
+
+  private async dismisIndicator(): Promise<void> {
+    await firstValueFrom(timer(1000));
+
+    this.saveIndicator = '';
   }
 
   private async prepareForm(): Promise<void> {
