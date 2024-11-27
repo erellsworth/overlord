@@ -11,9 +11,7 @@ export class ConfigService {
   public config = signal<OverlordConfig>({ contentTypes: {}, fieldTypes: {} });
   private defaultFields = ['editor', 'description', 'tags', 'image'];
 
-  constructor(private http: HttpClient) {
-    this.fetchConfig();
-  }
+  constructor(private http: HttpClient) {}
 
   public getActiveFields(contentType: string): string[] {
     return (
@@ -21,7 +19,7 @@ export class ConfigService {
     );
   }
 
-  private async fetchConfig(): Promise<void> {
+  public async fetchConfig(): Promise<void> {
     try {
       const result = await firstValueFrom(
         this.http.get<ApiResponse<OverlordConfig>>(`api/config`),

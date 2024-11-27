@@ -1,4 +1,9 @@
-import { Component, effect, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  Input,
+} from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
@@ -55,6 +60,7 @@ import { ConfigService } from '../../services/config.service';
   templateUrl: './content-form.component.html',
   styleUrl: './content-form.component.scss',
   providers: [ConfirmationService, MessageService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContentFormComponent {
   public content!: ContentInterface;
@@ -85,7 +91,7 @@ export class ContentFormComponent {
   @Input()
   set contentType(type: string) {
     this._contentType = type;
-    if (type && !this.slug) {
+    if (!this.slug) {
       this.prepareForm();
     }
   }
@@ -169,6 +175,7 @@ export class ContentFormComponent {
 
   public async save(action?: string): Promise<boolean> {
     if (this.formGroup.invalid) {
+      //TODO: display errors on screen
       console.log('error', this.formGroup);
       this.messageService.add({
         severity: 'error',
@@ -279,8 +286,6 @@ export class ContentFormComponent {
   }
 
   private async prepareForm(): Promise<void> {
-    await this.contentService.fetchContent(this.contentType, this.slug);
-
     const content = this.contentService.activeContent();
 
     if (this.slug) {
@@ -294,20 +299,12 @@ export class ContentFormComponent {
         )
       : [];
 
-    const title = content.title
-      ? content.title
-      : this.showTitle
-        ? ''
-        : uuidv4();
-
-    const slug = content?.slug || title;
-
     const formData: ContentForm = {
       id: this.fb.nonNullable.control(content.id),
-      title: this.fb.nonNullable.control(title, Validators.required),
+      title: this.fb.nonNullable.control(content.title, Validators.required),
       slug: this.fb.nonNullable.control(
         {
-          value: slug,
+          value: content.slug,
           disabled: Boolean(this._slug),
         },
         Validators.required,

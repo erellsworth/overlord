@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -38,6 +45,7 @@ import { slugger } from '../../../../../api/utils/misc';
   ],
   templateUrl: './taxonomy-input.component.html',
   styleUrl: './taxonomy-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaxonomyInputComponent {
   @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
