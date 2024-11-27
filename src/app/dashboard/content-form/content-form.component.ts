@@ -73,7 +73,9 @@ export class ContentFormComponent {
   @Input()
   set slug(slug: string) {
     this._slug = slug;
-    this.prepareForm();
+    if (slug) {
+      this.prepareForm();
+    }
   }
 
   get slug(): string {
@@ -83,12 +85,13 @@ export class ContentFormComponent {
   @Input()
   set contentType(type: string) {
     this._contentType = type;
+    if (type && !this.slug) {
+      this.prepareForm();
+    }
   }
 
   get contentType(): string {
-    return this.contentTypes.includes(this._contentType)
-      ? this._contentType
-      : 'post';
+    return this._contentType || 'post';
   }
 
   constructor(
@@ -166,6 +169,7 @@ export class ContentFormComponent {
 
   public async save(action?: string): Promise<boolean> {
     if (this.formGroup.invalid) {
+      console.log('error', this.formGroup);
       this.messageService.add({
         severity: 'error',
         summary: 'Oh shit!',
@@ -275,9 +279,14 @@ export class ContentFormComponent {
   }
 
   private async prepareForm(): Promise<void> {
-    await this.contentService.fetchContent(this.slug);
+    await this.contentService.fetchContent(this.contentType, this.slug);
 
     const content = this.contentService.activeContent();
+
+    if (this.slug) {
+      this.contentType = content.type;
+    }
+
     this.content = content;
     const taxonomyIds = content.Taxonomies
       ? content.Taxonomies.filter((tax) => tax.id).map(
@@ -307,7 +316,7 @@ export class ContentFormComponent {
       status: this.fb.nonNullable.control(content.status, Validators.required),
       text: this.fb.nonNullable.control(content.text),
       html: this.fb.nonNullable.control(content.html),
-      content: this.fb.control(content.content, Validators.required),
+      content: this.fb.control(content.content),
       seo: this.fb.nonNullable.group(content?.seo || { description: '' }),
       metaData: this.fb.nonNullable.control(
         content?.metaData || { media_id: 0 },

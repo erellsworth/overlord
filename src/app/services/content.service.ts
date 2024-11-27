@@ -130,9 +130,14 @@ export class ContentService {
     }
   }
 
-  public async fetchContent(slug?: string): Promise<void> {
+  public async fetchContent(contentType: string, slug?: string): Promise<void> {
     if (!slug) {
-      this.activeContent.set(this.defaultContent);
+      this.activeContent.set({
+        ...this.defaultContent,
+        ...{
+          type: contentType,
+        },
+      });
       return;
     }
     const result = await firstValueFrom(
