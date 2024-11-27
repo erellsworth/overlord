@@ -2,13 +2,21 @@ import { Component, effect, input } from '@angular/core';
 import { ContentService } from '../../services/content.service';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import {
+  faEye,
+  faEyeSlash,
+  faPaperPlane,
+  faPenToSquare,
+  faTrashCan,
+} from '@fortawesome/free-regular-svg-icons';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import { ContentInterface } from '../../../../interfaces/content';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-content-list',
@@ -20,6 +28,7 @@ import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
     PaginatorModule,
     RouterModule,
     ToastModule,
+    TooltipModule,
   ],
   templateUrl: './content-list.component.html',
   styleUrl: './content-list.component.scss',
@@ -31,6 +40,8 @@ export class ContentListComponent {
     create: faSquarePlus,
     delete: faTrashCan,
     edit: faPenToSquare,
+    publish: faEyeSlash,
+    unpublish: faEye,
   };
   public page = 1;
 
@@ -80,6 +91,30 @@ export class ContentListComponent {
     if (state.page) {
       this.page = state.page;
       this.refreshContents();
+    }
+  }
+
+  public async setStatus(
+    content: ContentInterface,
+    status: ContentInterface['status'],
+  ): Promise<void> {
+    const originalStatus = content.status;
+    content.status = status;
+    const response = await this.contentService.updateContent(content);
+
+    if (response.success) {
+      const summary = originalStatus === 'draft' ? 'Published' : 'Unpublished';
+      this.messageService.add({
+        severity: 'success',
+        summary: `${content.type} ${summary}`,
+      });
+    } else {
+      content.status = originalStatus;
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Oh shit!',
+        detail: response.error?.message,
+      });
     }
   }
 
