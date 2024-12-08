@@ -99,6 +99,7 @@ contentRouter.put('/content', async (req: Request, res: Response) => {
 contentRouter.post('/content/autosave', async (req: Request, res: Response) => {
   try {
     const autoSaveContent = req.body as ContentCreation;
+    autoSaveContent.isAutosave = true;
 
     if (autoSaveContent.id) {
       const revision = await Content.update(autoSaveContent);

@@ -43,6 +43,7 @@ export interface ContentInterface extends ContentBase {
 export interface ContentCreation extends ContentInterface {
   newTaxonomies?: string[];
   taxonomyIds: number[];
+  isAutosave: boolean;
 }
 
 // Some fields are optional when calling UserModel.create() or UserModel.build()

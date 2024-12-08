@@ -3,6 +3,7 @@ import { ContentBase } from './content';
 
 export interface RevisionInterface extends ContentBase {
   ContentId: number;
+  isAutosave: boolean;
 }
 // Some fields are optional when calling UserModel.create() or UserModel.build()
 interface RevisionCreationAttributes

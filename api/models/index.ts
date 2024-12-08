@@ -14,8 +14,8 @@ TaxonomyModel.belongsToMany(ContentModel, {
 ContentModel.hasMany(RevisionModel);
 
 const prepare = async () => {
-  await RevisionModel.sync();
   await ContentModel.sync();
+  await RevisionModel.sync();
   await TaxonomyModel.sync();
   await MediaModel.sync();
   await ContentTaxonomyModel.sync();

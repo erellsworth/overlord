@@ -24,6 +24,10 @@ const attributes: ModelAttributes<RevisionInstance> = {
   metaData: {
     type: DataTypes.JSONB,
   },
+  isAutosave: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
   // standard attributes:
   createdAt: {
     type: DataTypes.DATE,
@@ -48,6 +52,13 @@ const Revision = {
     delete revision.id;
     delete revision.createdAt;
     delete revision.updatedAt;
+
+    await RevisionModel.destroy({
+      where: {
+        ContentId: revision.ContentId,
+        isAutosave: true
+      }
+    });
 
     const content = await RevisionModel.create(revision);
 

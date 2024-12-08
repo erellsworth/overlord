@@ -126,7 +126,7 @@ const Content = {
     await Revision.create({
       ...contentUpdate,
       ...{
-        ContentId,
+        ContentId
       },
     });
 
