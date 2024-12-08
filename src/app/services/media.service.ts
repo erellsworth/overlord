@@ -4,8 +4,9 @@ import { MediaLibraryComponent, SelectedImageConfig } from '../dashboard/media-l
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse, GenericResult, PaginatedApiResponse } from '../../../interfaces/misc';
 import { Image, MediaCreationResult, MediaDeletionResult, MediaInterface, UploadRequest } from '../../../interfaces/media';
-import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, filter, firstValueFrom } from 'rxjs';
 import { ImageEditEvent } from '../dashboard/media-library/image-editor/image-editor.component';
+import { NavigationEnd, Router } from '@angular/router';
 
 interface uploadStatus {
   isUploading: boolean;
@@ -31,7 +32,11 @@ export class MediaService {
 
   private ref!: DynamicDialogRef;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) {
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd)
+    ).subscribe(e => this.selectedImage.next({} as SelectedImageConfig));
+  }
 
   public closeLibrary(): void {
     if (this.ref) { this.ref.close(); }

@@ -9,6 +9,10 @@
                 &.ProseMirror {
                     min-height: 50vh;
                     padding: 5px 10px;
+                    color: #ffffff;
+                    font-family: 'Courier New', Courier, monospace;
+                    font-size: 18px;
+                    line-height: 1.75rem;
 
                     &:focus-visible {
                         outline: none;
