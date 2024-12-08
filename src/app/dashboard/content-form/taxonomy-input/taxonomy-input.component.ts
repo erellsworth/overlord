@@ -2,16 +2,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import {
-  FormArray,
+
   FormControl,
   FormGroup,
   FormsModule,
-  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   AutoComplete,
@@ -47,14 +45,18 @@ import { slugger } from '../../../../../api/utils/misc';
   styleUrl: './taxonomy-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaxonomyInputComponent {
+export class TaxonomyInputComponent implements OnInit {
   @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
   @ViewChild('tagSearch') tagSearch!: AutoComplete;
 
   public currentFilter = '';
   public selectedTag!: string;
 
-  constructor(private taxonomyService: TaxonomyService) {}
+  constructor(private taxonomyService: TaxonomyService) { }
+
+  ngOnInit(): void {
+    this.taxonomyService.fetchTaxonomies();
+  }
 
   public get currentTaxonomies() {
     const ids = this.formGroup.get('taxonomyIds');

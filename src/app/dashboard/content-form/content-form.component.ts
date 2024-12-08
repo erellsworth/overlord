@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   Input,
 } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ContentInterface } from '../../../../interfaces/content';
-import { delay, firstValueFrom, timer } from 'rxjs';
+import { firstValueFrom, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 import { ContentForm } from './content-form.interface';
@@ -31,7 +30,6 @@ import { ApiResponse } from '../../../../interfaces/misc';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InplaceModule } from 'primeng/inplace';
 import { DropdownModule } from 'primeng/dropdown';
-import { v4 as uuidv4 } from 'uuid';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Router } from '@angular/router';
 import { ConfigService } from '../../services/config.service';
@@ -107,7 +105,7 @@ export class ContentFormComponent {
     private fb: FormBuilder,
     private messageService: MessageService,
     private router: Router,
-  ) {}
+  ) { }
 
   public get buttonText(): string {
     return this._slug ? 'Update' : 'Create';
@@ -135,9 +133,9 @@ export class ContentFormComponent {
     const values = this.formGroup.getRawValue();
     return Boolean(
       values.title &&
-        values.metaData.wordCount &&
-        values.metaData.wordCount > this.minAutoSaveWordCount &&
-        JSON.stringify(values.content) !== this.lastSave,
+      values.metaData.wordCount &&
+      values.metaData.wordCount > this.minAutoSaveWordCount &&
+      JSON.stringify(values.content) !== this.lastSave,
     );
   }
 
@@ -295,8 +293,8 @@ export class ContentFormComponent {
     this.content = content;
     const taxonomyIds = content.Taxonomies
       ? content.Taxonomies.filter((tax) => tax.id).map(
-          (tax) => tax.id as number,
-        )
+        (tax) => tax.id as number,
+      )
       : [];
 
     const formData: ContentForm = {
