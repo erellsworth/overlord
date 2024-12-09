@@ -38,6 +38,7 @@ export interface ContentInterface extends ContentBase {
   Taxonomies?: TaxonomyInterface[];
   image?: Image;
   Revisions?: RevisionInterface[];
+  publishedDate?: string;
 }
 
 export interface ContentCreation extends ContentInterface {
@@ -47,12 +48,12 @@ export interface ContentCreation extends ContentInterface {
 }
 
 // Some fields are optional when calling UserModel.create() or UserModel.build()
-interface ContentCreationAttributes extends Optional<ContentInterface, 'id'> {}
+interface ContentCreationAttributes extends Optional<ContentInterface, 'id'> { }
 
 // We need to declare an interface for our model that is basically what our class would be
 export interface ContentInstance
   extends Model<ContentInterface, ContentCreationAttributes>,
-    ContentInterface {}
+  ContentInterface { }
 
 export interface ContentQuery {
   type?: string;

@@ -1,6 +1,6 @@
-import { DataTypes, FindAndCountOptions, ModelAttributes } from 'sequelize';
+import { DataTypes, FindAndCountOptions, ModelAttributes, Sequelize } from 'sequelize';
 import { PaginatedResults } from '../../interfaces/misc';
-import { TaxonomyInterface, TaxonomyQuery } from '../../interfaces/taxonomy';
+import { TaxonomyQuery } from '../../interfaces/taxonomy';
 import {
   ContentCreation,
   ContentInstance,
@@ -48,6 +48,13 @@ const attributes: ModelAttributes<ContentInstance> = {
   },
   image: {
     type: DataTypes.VIRTUAL,
+  },
+  publishedDate: {
+    type: DataTypes.DATE,
+    get() {
+      const rawValue = this.getDataValue('publishedDate');
+      return new Date(rawValue as string).toDateString();
+    },
   },
   // standard attributes:
   createdAt: {
@@ -115,6 +122,10 @@ const Content = {
       await Content.prepareForSave(contentUpdate);
 
     const content = await Content.findById(contentUpdate.id as number);
+
+    if (content.status !== 'published' && preparedContent.status === 'published') {
+      preparedContent.publishedDate = db.literal('CURRENT_TIMESTAMP') as unknown as string;
+    }
 
     const updatedContent = await content.update(preparedContent);
 

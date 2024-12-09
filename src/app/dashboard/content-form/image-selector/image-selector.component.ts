@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MediaService } from '../../../services/media.service';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -25,7 +25,7 @@ import { ContentForm } from '../content-form.interface';
 export class ImageSelectorComponent implements OnInit {
   @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
 
-  public image!: Image | null;
+  public image = signal<Image | null>(null);
 
   private subs: Subscription[] = [];
 
@@ -35,14 +35,14 @@ export class ImageSelectorComponent implements OnInit {
     if (this.metatDataControl?.value) {
       this.subs.push(this.media.getImageById$(this.mediaId).subscribe(response => {
         if (response.success) {
-          this.image = response.data as Image;
+          this.image.set(response.data as Image);
         }
       }));
     }
 
     this.subs.push(this.media.selectedImage.subscribe(data => {
       if (data.image && data.source === 'selector') {
-        this.image = data.image;
+        this.image.set(data.image);
         this.mediaId = data.image.data.id as number;
       }
     }));
@@ -66,12 +66,12 @@ export class ImageSelectorComponent implements OnInit {
 
   public removeImage(): void {
     this.mediaId = 0;
-    this.image = null;
+    this.image.set(null);
   }
 
   public showImageLibrary(): void {
     this.media.launchLibrary(this.dialogService, {
-      image: this.image as Image,
+      image: this.image() as Image,
       source: 'selector'
     });
   }
