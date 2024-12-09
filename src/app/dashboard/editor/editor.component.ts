@@ -1,12 +1,5 @@
-import {
-  Component,
-  Injector,
-  Input,
-  OnDestroy,
-  OnInit,
-  output,
-} from '@angular/core';
-import { FormGroup, FormsModule } from '@angular/forms';
+import { Component, Injector, OnDestroy, OnInit, output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Content, Editor, generateJSON, JSONContent } from '@tiptap/core';
 import { NgxTiptapModule } from 'ngx-tiptap';
 import { PanelModule } from 'primeng/panel';
@@ -17,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import Extensions from './nodes/extensions';
 import { CardModule } from 'primeng/card';
 import { SelectedImageConfig } from '../media-library/media-library.component';
+import { FormService } from '../form.service';
 
 @Component({
   selector: 'app-editor',
@@ -33,30 +27,44 @@ import { SelectedImageConfig } from '../media-library/media-library.component';
   styleUrl: './editor.component.scss',
 })
 export class EditorComponent implements OnInit, OnDestroy {
-  @Input({ required: true }) content!: Content;
-  @Input({ required: true }) formGroup!: FormGroup;
+  public content!: Content;
   public contentChanged = output();
 
-  public editor = new Editor({
-    extensions: Extensions(this.injector),
-    content: this.content,
-  });
+  public editor!: Editor;
 
   private subs: Subscription[] = [];
 
-  constructor(private injector: Injector, private media: MediaService) {}
+  constructor(
+    private formService: FormService,
+    private injector: Injector,
+    private media: MediaService,
+  ) {}
+
+  public get formGroup() {
+    return this.formService.form();
+  }
 
   ngOnInit(): void {
+    this.content =
+      this.formGroup.get('content')?.value ||
+      this.formGroup.get('html')?.value ||
+      '';
+
+    this.editor = new Editor({
+      extensions: Extensions(this.injector),
+      content: this.content,
+    });
+
     if (typeof this.content === 'string') {
       this.editor.commands.setContent(
-        generateJSON(this.content, Extensions(this.injector))
+        generateJSON(this.content, Extensions(this.injector)),
       );
       this.handleContentChange();
     }
     if (typeof this.content === 'object') {
       // pre-populate captions in media library based on content;
       const images = (this.content as JSONContent).content?.filter(
-        (content) => content.type === 'imageFigure'
+        (content) => content.type === 'imageFigure',
       );
       images?.forEach((image) => {
         if (image.attrs && image.attrs.caption) {
@@ -85,7 +93,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         if (caption) {
           this.media.imageCaptions[id] = caption;
         }
-      })
+      }),
     );
   }
 
@@ -114,6 +122,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.formGroup.get('content')?.setValue(this.editor.getJSON());
     this.formGroup.get('html')?.setValue(this.editor.getHTML());
     this.formGroup.get('text')?.setValue(this.editor.getText());
-    this.contentChanged.emit();
+    // this.contentChanged.emit();
   }
 }

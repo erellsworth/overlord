@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -18,7 +20,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ContentInterface } from '../../../../interfaces/content';
-import { firstValueFrom, timer } from 'rxjs';
+import { firstValueFrom, Subscription, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 import { ContentForm } from './content-form.interface';
@@ -33,6 +35,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Router } from '@angular/router';
 import { ConfigService } from '../../services/config.service';
+import { FormService } from '../form.service';
 
 @Component({
   selector: 'app-content-form',
@@ -60,63 +63,53 @@ import { ConfigService } from '../../services/config.service';
   providers: [ConfirmationService, MessageService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContentFormComponent {
-  public content!: ContentInterface;
-  public formGroup!: FormGroup<ContentForm>;
-  public isSaving = false;
+export class ContentFormComponent implements OnInit, OnDestroy {
   public saveIndicator = '';
 
   private autosaveDelay = 1000 * 5; // autosave 5 seconds after typing stops
-  private minAutoSaveWordCount = 30; //TODO: get these values from database
-  private lastSave!: string;
   private autosaveTimeOut!: ReturnType<typeof setTimeout>;
-
-  private _contentType!: string;
-  private _slug: string = '';
-
-  @Input()
-  set slug(slug: string) {
-    this._slug = slug;
-    if (slug) {
-      this.prepareForm();
-    }
-  }
-
-  get slug(): string {
-    return this._slug;
-  }
-
-  @Input()
-  set contentType(type: string) {
-    this._contentType = type;
-    if (!this.slug) {
-      this.prepareForm();
-    }
-  }
-
-  get contentType(): string {
-    return this._contentType || 'post';
-  }
+  private isSaving = false;
+  private lastSave!: string;
+  private minAutoSaveWordCount = 30; //TODO: get these values from database
+  private subs: Subscription[] = [];
 
   constructor(
     private configService: ConfigService,
     private confirmationService: ConfirmationService,
     private contentService: ContentService,
-    private fb: FormBuilder,
+    private formService: FormService,
     private messageService: MessageService,
     private router: Router,
-  ) { }
+  ) {}
 
+  ngOnInit(): void {
+    const autoSaveSub = this.formGroup
+      .get('content')
+      ?.valueChanges.subscribe(() => this.startAutosaveTimer());
+    if (autoSaveSub) {
+      this.subs.push(autoSaveSub);
+    }
+  }
+
+  ngOnDestroy(): void {}
   public get buttonText(): string {
-    return this._slug ? 'Update' : 'Create';
+    return this.isNew ? 'Create' : 'Update';
+  }
+
+  public get contentType(): string {
+    return this.formService.contentType();
   }
 
   public get contentTypes(): string[] {
     return this.contentService.contentTypeSlugs();
   }
 
-  public get fields(): string[] {
-    return this.configService.getActiveFields(this.contentType);
+  public get formGroup() {
+    return this.formService.form();
+  }
+
+  public get isNew(): boolean {
+    return !Boolean(this.formGroup.get('id')?.value);
   }
 
   public get showTitle(): boolean {
@@ -124,6 +117,14 @@ export class ContentFormComponent {
       this.configService.config().contentTypes[this.contentType]?.noTitle,
     );
   }
+
+  public get status(): string {
+    return this.formGroup.get('status')?.value as string;
+  }
+
+  public fields: string[] = this.configService.getActiveFields(
+    this.contentType,
+  );
 
   public get title(): string {
     return this.formGroup.get('title')?.value || '';
@@ -133,9 +134,9 @@ export class ContentFormComponent {
     const values = this.formGroup.getRawValue();
     return Boolean(
       values.title &&
-      values.metaData.wordCount &&
-      values.metaData.wordCount > this.minAutoSaveWordCount &&
-      JSON.stringify(values.content) !== this.lastSave,
+        values.metaData.wordCount &&
+        values.metaData.wordCount > this.minAutoSaveWordCount &&
+        JSON.stringify(values.content) !== this.lastSave,
     );
   }
 
@@ -159,16 +160,12 @@ export class ContentFormComponent {
 
   public async publish(): Promise<void> {
     this.formGroup.get('status')?.setValue('published');
-    if (await this.save('Published')) {
-      this.content.status = 'published';
-    }
+    await this.save('Published');
   }
 
   public async unpublish(): Promise<void> {
     this.formGroup.get('status')?.setValue('draft');
-    if (await this.save('Unpublished')) {
-      this.content.status = 'draft';
-    }
+    await this.save('Unpublished');
   }
 
   public async save(action?: string): Promise<boolean> {
@@ -186,14 +183,14 @@ export class ContentFormComponent {
     let response: ApiResponse<ContentInterface>;
     const content = this.formGroup.getRawValue();
     this.isSaving = true;
-    if (this._slug) {
-      action = action || 'Updated';
-      this.saveIndicator = 'Updating...';
-      response = await this.contentService.updateContent(content);
-    } else {
+    if (this.isNew) {
       action = 'Created';
       this.saveIndicator = 'Saving...';
       response = await this.contentService.createContent(content);
+    } else {
+      action = action || 'Updated';
+      this.saveIndicator = 'Updating...';
+      response = await this.contentService.updateContent(content);
     }
 
     this.isSaving = false;
@@ -220,10 +217,6 @@ export class ContentFormComponent {
     }
   }
 
-  public showField(field: string): boolean {
-    return this.configService.isFieldActive(this.contentType, field);
-  }
-
   public startAutosaveTimer(): void {
     clearTimeout(this.autosaveTimeOut);
 
@@ -248,16 +241,23 @@ export class ContentFormComponent {
 
     const autoSave = this.formGroup.getRawValue();
     this.lastSave = JSON.stringify(autoSave.content);
-    await this.contentService.autoSave(autoSave);
+    const saved = await this.contentService.autoSave(autoSave);
+    if (saved.success) {
+      this.formGroup.get('id')?.setValue(saved.data?.id);
+      this.formGroup.get('slug')?.setValue(saved.data?.slug as string);
+    }
 
     this.isSaving = false;
     this.dismisIndicator();
   }
 
   private async deleteContent(): Promise<void> {
-    const response = await this.contentService.deleteContent(
-      this.content.id as number,
-    );
+    const id = this.formGroup.get('id')?.value;
+
+    if (!id) {
+      return;
+    }
+    const response = await this.contentService.deleteContent(id);
 
     if (response.success) {
       this.messageService.add({
@@ -281,48 +281,5 @@ export class ContentFormComponent {
     await firstValueFrom(timer(1000));
 
     this.saveIndicator = '';
-  }
-
-  private async prepareForm(): Promise<void> {
-    const content = this.contentService.activeContent();
-
-    if (this.slug) {
-      this.contentType = content.type;
-    }
-
-    this.content = content;
-    const taxonomyIds = content.Taxonomies
-      ? content.Taxonomies.filter((tax) => tax.id).map(
-        (tax) => tax.id as number,
-      )
-      : [];
-
-    const formData: ContentForm = {
-      id: this.fb.nonNullable.control(content.id),
-      title: this.fb.nonNullable.control(content.title, Validators.required),
-      slug: this.fb.nonNullable.control(
-        {
-          value: content.slug,
-          disabled: Boolean(this._slug),
-        },
-        Validators.required,
-      ),
-      type: this.fb.nonNullable.control(content.type, Validators.required),
-      status: this.fb.nonNullable.control(content.status, Validators.required),
-      text: this.fb.nonNullable.control(content.text),
-      html: this.fb.nonNullable.control(content.html),
-      content: this.fb.control(content.content),
-      seo: this.fb.nonNullable.group(content?.seo || { description: '' }),
-      metaData: this.fb.nonNullable.control(
-        content?.metaData || { media_id: 0 },
-      ),
-      taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
-      newTaxonomies: this.fb.nonNullable.control([]),
-      revisions: this.fb.nonNullable.control(content.Revisions || []),
-    };
-
-    this.formGroup = this.fb.group(formData);
-
-    this.lastSave = JSON.stringify(content.content);
   }
 }

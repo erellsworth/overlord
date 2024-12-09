@@ -18,5 +18,4 @@ export interface ContentForm {
   metaData: FormControl<{ [key: string]: any }>;
   taxonomyIds: FormControl<number[]>;
   newTaxonomies: FormControl<string[]>;
-  revisions: FormControl<ContentBase[]>;
 }
