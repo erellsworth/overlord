@@ -5,7 +5,11 @@ import { Level } from '@tiptap/extension-heading';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icons } from './toolbar.icons';
 import { MediaService } from '../../../services/media.service';
-import { DialogService, DynamicDialogConfig, DynamicDialogModule } from 'primeng/dynamicdialog';
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogModule,
+} from 'primeng/dynamicdialog';
 import { VideoInputComponent } from '../video-input/video-input.component';
 import { Subscription } from 'rxjs';
 import { LinkInputComponent } from '../link-input/link-input.component';
@@ -17,17 +21,22 @@ import { LinkConfig } from '../link-input/link-input.interface';
   imports: [ButtonModule, DynamicDialogModule, FontAwesomeModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss',
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class ToolbarComponent {
   @Input({ required: true }) editor!: Editor;
 
-  public headingLevels = [...Array(6).keys()].map((level) => level + 1 as Level);
+  public headingLevels = [...Array(6).keys()].map(
+    (level) => (level + 1) as Level,
+  );
   public icons = Icons;
 
   private subs: Subscription[] = [];
 
-  constructor(private dialogService: DialogService, private media: MediaService) { }
+  constructor(
+    private dialogService: DialogService,
+    private media: MediaService,
+  ) {}
 
   public get focus() {
     return this.editor.chain().focus();
@@ -43,10 +52,9 @@ export class ToolbarComponent {
 
   public showImageLibrary(): void {
     this.media.launchLibrary(this.dialogService, {
-      source: 'editor'
+      source: 'editor',
     });
   }
-
 
   public showLinkInput(): void {
     const linkAttr: DynamicDialogConfig = { header: 'Link Editor' };
@@ -56,21 +64,25 @@ export class ToolbarComponent {
     }
 
     const ref = this.dialogService.open(LinkInputComponent, linkAttr);
-    this.subs.push(ref.onClose.subscribe((link: LinkConfig) => {
-      console.log('close', link);
-      if (link) {
-        this.focus.extendMarkRange('link').setLink(link).run();
-      } else {
-        this.focus.extendMarkRange('link').unsetLink().run();
-      }
-    }));
+    this.subs.push(
+      ref.onClose.subscribe((link: LinkConfig) => {
+        if (link) {
+          this.focus.extendMarkRange('link').setLink(link).run();
+        } else {
+          this.focus.extendMarkRange('link').unsetLink().run();
+        }
+      }),
+    );
   }
 
   public showVideoInput(): void {
-    const ref = this.dialogService.open(VideoInputComponent, { header: 'Video URL' });
-    this.subs.push(ref.onClose.subscribe(src => {
-      this.editor.commands.setExternalVideo({ src });
-    }));
+    const ref = this.dialogService.open(VideoInputComponent, {
+      header: 'Video URL',
+    });
+    this.subs.push(
+      ref.onClose.subscribe((src) => {
+        this.editor.commands.setExternalVideo({ src });
+      }),
+    );
   }
-
 }
