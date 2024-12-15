@@ -4,6 +4,7 @@ import { ContentFormComponent } from './dashboard/content-form/content-form.comp
 import { ContentListComponent } from './dashboard/content-list/content-list.component';
 import { configResolver } from './config.resolver';
 import { contentResolver } from './content.resolver';
+import { NavControlComponent } from './dashboard/nav-control/nav-control.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,10 @@ export const routes: Routes = [
         path: 'create/:contentType',
         component: ContentFormComponent,
         resolve: { contentResolver },
+      },
+      {
+        path: 'menu',
+        component: NavControlComponent,
       },
     ],
   },

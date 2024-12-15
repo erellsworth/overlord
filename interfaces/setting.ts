@@ -1,7 +1,7 @@
 import { Model, Optional } from 'sequelize/types';
 
 export interface SettingInterface<T = object> {
-  id: number;
+  id?: number;
   name: string;
   data: T;
 }

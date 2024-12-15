@@ -6,8 +6,7 @@ import {
   ContentType,
 } from '../../interfaces/content';
 import { PaginatedResults } from '../../interfaces/misc';
-import { TaxonomyInterface } from '../../interfaces/taxonomy';
-import { Content, Taxonomy } from '../models';
+import { Content } from '../models';
 import {
   errorResponse,
   notFoundResponse,
@@ -15,7 +14,6 @@ import {
 } from '../utils/responses';
 import contentRouter from './router';
 import { configurator } from '../utils/config';
-import { Revision } from '../models/Revision';
 
 contentRouter.get('/content/types', async (req: Request, res: Response) => {
   successResponse(res, configurator.contentTypes);

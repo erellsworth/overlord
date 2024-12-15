@@ -19,12 +19,16 @@ export class MenuComponent {
         label: 'Home',
         routerLink: '/',
       },
+      {
+        label: 'Menu',
+        routerLink: 'menu',
+      },
     ];
     return items.concat(
       this.contentService.contentTypes().map((ct) => ({
         label: ct.plural,
         routerLink: `content/${ct.slug}`,
-      }))
+      })),
     );
   });
 

@@ -103,8 +103,6 @@ mediaRouter.get(
   },
 );
 
-// mediaRouter.get('/getImageFromUrl', async (req: Request, res: Response) => {
-
 //     if (!req.query.url) {
 //         return errorResponse(res, 'Url parameter missing', 400);
 //     }
