@@ -1,46 +1,89 @@
 <div class="flex justify-content-center pb-3 flex-wrap">
-  <p-button [severity]="buttonSeverity('bold')" title="Bold" icon="fa-solid fa-google"
-    (onClick)="focus.toggleBold().run()">
+  <p-button
+    [severity]="buttonSeverity('bold')"
+    title="Bold"
+    icon="fa-solid fa-google"
+    (onClick)="focus.toggleBold().run()"
+  >
     <fa-icon [icon]="icons.bold"></fa-icon>
   </p-button>
-  <p-button [severity]="buttonSeverity('italic')" title="Italic" (onClick)="focus.toggleItalic().run()">
+  <p-button
+    [severity]="buttonSeverity('italic')"
+    title="Italic"
+    (onClick)="focus.toggleItalic().run()"
+  >
     <fa-icon [icon]="icons.italic"></fa-icon>
   </p-button>
-  <p-button [severity]="buttonSeverity('strike')" title="Strikethrough" (onClick)="focus.toggleStrike().run()">
+  <p-button
+    [severity]="buttonSeverity('strike')"
+    title="Strikethrough"
+    (onClick)="focus.toggleStrike().run()"
+  >
     <fa-icon [icon]="icons.strikeThrough"></fa-icon>
   </p-button>
 
-  <p-button [severity]="buttonSeverity('code')" title="Inline code" (onClick)="focus.toggleCode().run()">
+  <p-button
+    [severity]="buttonSeverity('code')"
+    title="Inline code"
+    (onClick)="focus.toggleCode().run()"
+  >
     <fa-icon [icon]="icons.codeInline"></fa-icon>
   </p-button>
 
-  <p-button [severity]="buttonSeverity('codeBlock')" title="Code block" (onClick)="focus.toggleCodeBlock().run()">
+  <p-button
+    [severity]="buttonSeverity('codeBlock')"
+    title="Code block"
+    (onClick)="focus.toggleCodeBlock().run()"
+  >
     <fa-icon [icon]="icons.codeBlock"></fa-icon>
   </p-button>
 
-  <p-button title="Remove formatting" (onClick)="focus.unsetAllMarks().clearNodes().run()">
+  <p-button
+    title="Remove formatting"
+    (onClick)="focus.unsetAllMarks().clearNodes().run()"
+  >
     <fa-icon [icon]="icons.removeFormating"></fa-icon>
   </p-button>
 
-  <p-button [severity]="buttonSeverity('paragraph')" title="Paragraph" (onClick)="focus.setParagraph().run()">
+  <p-button
+    [severity]="buttonSeverity('paragraph')"
+    title="Paragraph"
+    (onClick)="focus.setParagraph().run()"
+  >
     <fa-icon [icon]="icons.paragraph"></fa-icon>
   </p-button>
 
   @for (level of headingLevels; track level) {
-  <p-button [severity]="buttonSeverity('heading', {level})" (onClick)="editor.chain().focus().setHeading({level}).run()"
-    title="H{{level}}">H{{level}}</p-button>
+    <p-button
+      [severity]="buttonSeverity('heading', { level })"
+      (onClick)="editor.chain().focus().setHeading({ level }).run()"
+      title="H{{ level }}"
+      >H{{ level }}</p-button
+    >
   }
+  <hr class="w-full m-0 opacity-0" />
 
-
-  <p-button [severity]="buttonSeverity('bulletList')" title="Bullet list" (onClick)="focus.toggleBulletList().run()">
+  <p-button
+    [severity]="buttonSeverity('bulletList')"
+    title="Bullet list"
+    (onClick)="focus.toggleBulletList().run()"
+  >
     <fa-icon [icon]="icons.bulletList"></fa-icon>
   </p-button>
 
-  <p-button [severity]="buttonSeverity('orderedList')" title="Ordered list" (onClick)="focus.toggleOrderedList().run()">
+  <p-button
+    [severity]="buttonSeverity('orderedList')"
+    title="Ordered list"
+    (onClick)="focus.toggleOrderedList().run()"
+  >
     <fa-icon [icon]="icons.orderedList"></fa-icon>
   </p-button>
 
-  <p-button [severity]="buttonSeverity('blockquote')" title="Blockquote" (onClick)="focus.toggleBlockquote().run()">
+  <p-button
+    [severity]="buttonSeverity('blockquote')"
+    title="Blockquote"
+    (onClick)="focus.toggleBlockquote().run()"
+  >
     <fa-icon [icon]="icons.blockQuote"></fa-icon>
   </p-button>
 
@@ -54,7 +97,11 @@
   <p-button title="Redo" (onClick)="focus.redo().run()">
     <fa-icon [icon]="icons.redo"></fa-icon>
   </p-button>
-  <p-button [severity]="buttonSeverity('link')" title="Link" (onClick)="showLinkInput()">
+  <p-button
+    [severity]="buttonSeverity('link')"
+    title="Link"
+    (onClick)="showLinkInput()"
+  >
     <fa-icon [icon]="icons.link"></fa-icon>
   </p-button>
   <p-button title="Insert image" (onClick)="showImageLibrary()">
