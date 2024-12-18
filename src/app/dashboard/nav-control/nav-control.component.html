@@ -1,13 +1,19 @@
-<div class="grid">
+<div class="grid mt-2">
   <div class="col-3">
-    <h3>Menus:</h3>
+    <h3 class="mt-0">Menus:</h3>
     <p-listbox
       [options]="menus"
-      optionLabel="label"
       optionValue="label"
       [(ngModel)]="selectedMenu"
-      (onChange)="menuSelected()"
-    />
+      emptyMessage="Add menu to start"
+    >
+      <ng-template let-menu pTemplate="item">
+        <div class="flex justify-content-between w-full">
+          <span>{{ menu.label }}</span>
+          <span (click)="removeMenu(menu)">X</span>
+        </div>
+      </ng-template>
+    </p-listbox>
 
     <p-inputGroup class="mt-1">
       <input
@@ -17,9 +23,69 @@
         [(ngModel)]="pendingMenuName"
         (keyup.enter)="addMenu()"
       />
-      <button type="button" pButton class="p-button-success">
+      <button
+        type="button"
+        pButton
+        class="p-button-success"
+        (click)="addMenu()"
+      >
         <fa-icon [icon]="icons.add" />
       </button>
     </p-inputGroup>
   </div>
+  @if (selectedMenuObj) {
+    <div class="col-9 border-left-1">
+      <div class="flex gap-2">
+        <div class="dragzone">
+          <h3>Available Nav Items</h3>
+          <ul class="list-none flex flex-column gap-2 p-2 m-0 border-1">
+            @for (item of selectableItems; track $index) {
+              <li>
+                <div
+                  pDraggable
+                  (onDragStart)="dragStart(item)"
+                  (onDragEnd)="dragEnd()"
+                  class="p-2 border-round bg-primary cursor-move"
+                >
+                  {{ item.label }}
+                </div>
+                @if (item.children) {
+                  <ul>
+                    @for (child of item.children; track $index) {
+                      <li
+                        class="p-2 border-round bg-primary cursor-move"
+                        pDraggable
+                        (onDragStart)="dragStart(child)"
+                        (onDragEnd)="dragEnd()"
+                      >
+                        {{ child.label }}
+                      </li>
+                    }
+                  </ul>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+        <div class="dropzone border-1" pDroppable (onDrop)="itemDropped()">
+          <p-tree
+            class="w-full md:w-30rem"
+            [value]="selectedMenuObj.children"
+            [draggableNodes]="true"
+            [droppableNodes]="true"
+            draggableScope="self"
+            droppableScope="self"
+            emptyMessage="Add Menu Items"
+          >
+            <ng-template let-node pTemplate="default">
+              <div class="flex justify-content-between w-full">
+                <strong>{{ node.label }}</strong>
+                <span class="cursor-pointer" (click)="removeItem(node)">X</span>
+              </div>
+            </ng-template>
+          </p-tree>
+        </div>
+      </div>
+    </div>
+  }
 </div>
