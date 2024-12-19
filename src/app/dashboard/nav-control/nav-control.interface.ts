@@ -1,6 +1,6 @@
 export interface NavMenuItem {
   label: string;
-  route?: string;
+  slug?: string;
   children?: NavMenuItem[];
   isGenerated?: boolean;
 }

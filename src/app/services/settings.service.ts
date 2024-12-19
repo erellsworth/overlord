@@ -33,9 +33,10 @@ export class SettingsService {
   public async saveSetting(
     setting: SettingInterface,
   ): Promise<SettingInterface | false> {
+    console.log('saveSetting', setting);
     try {
       const result = await firstValueFrom(
-        this.http.put<ApiResponse<SettingInterface>>('settings', setting),
+        this.http.put<ApiResponse<SettingInterface>>('api/settings', setting),
       );
 
       if (result.success) {
