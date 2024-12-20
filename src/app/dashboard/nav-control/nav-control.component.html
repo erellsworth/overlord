@@ -50,7 +50,12 @@
                   (onDragEnd)="dragEnd()"
                   class="p-2 border-round bg-primary cursor-move flex gap-2 justify-content-between"
                 >
-                  <span>{{ item.label }}</span>
+                  <span>Label: {{ item.label }}</span>
+
+                  @if (item.slug) {
+                    <span>/{{ item.slug }}</span>
+                  }
+
                   @if (item.isGenerated) {
                     <fa-icon
                       pTooltip="Children are automatically generated"
@@ -90,6 +95,9 @@
             <ng-template let-node pTemplate="default">
               <div class="flex justify-content-between w-full">
                 <strong>{{ node.label }}</strong>
+                @if (node.slug) {
+                  <span>/{{ node.slug }}</span>
+                }
                 <div class="flex gap-2 align-items-center">
                   @if (node.isGenerated) {
                     <fa-icon

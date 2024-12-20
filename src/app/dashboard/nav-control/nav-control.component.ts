@@ -78,24 +78,27 @@ export class NavControlComponent implements OnInit {
     let items: NavMenuItem[] = [
       {
         label: 'Tags',
-        children: this.taxonomiesService.taxonomies().map((tag) => {
+        isGenerated: true,
+      },
+    ];
+
+    this.selectableItems = items
+      .concat(
+        this.taxonomiesService.taxonomies().map((tag) => {
           return {
             label: tag.name,
             slug: tag.slug,
           };
         }),
-        isGenerated: true,
-      },
-    ];
-
-    this.selectableItems = items.concat(
-      this.contentTypes.map((ct) => {
-        return {
-          label: ct.plural as string,
-          slug: ct.slug,
-        };
-      }),
-    );
+      )
+      .concat(
+        this.contentTypes.map((ct) => {
+          return {
+            label: ct.plural as string,
+            slug: ct.slug,
+          };
+        }),
+      );
   }
 
   public get contentTypes(): OverlordContentType[] {

@@ -3,6 +3,7 @@ import {
   OverlordContentType,
 } from '../../interfaces/overlord.config';
 import { default as configFile } from '../../overlord.json';
+import { slugger, titleCase } from './misc';
 
 class Overlord {
   public config: OverlordConfig;
@@ -44,9 +45,9 @@ class Overlord {
   public get contentTypes(): OverlordContentType[] {
     return Object.entries(this.config.contentTypes).map((entry) => {
       return {
-        label: entry[1].label || entry[0],
-        slug: entry[1].slug || entry[0],
-        plural: entry[1].plural || `${entry[0]}s`,
+        label: entry[1].label || titleCase(entry[0]),
+        slug: entry[1].slug || slugger(entry[0]),
+        plural: entry[1].plural || `${titleCase(entry[0])}s`,
       };
     });
   }
