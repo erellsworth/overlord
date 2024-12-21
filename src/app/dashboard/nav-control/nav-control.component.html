@@ -50,7 +50,7 @@
                   (onDragEnd)="dragEnd()"
                   class="p-2 border-round bg-primary cursor-move flex gap-2 justify-content-between"
                 >
-                  <span>Label: {{ item.label }}</span>
+                  <span>{{ item.label }}</span>
 
                   @if (item.slug) {
                     <span>/{{ item.slug }}</span>
@@ -83,6 +83,10 @@
           </ul>
         </div>
         <div class="dropzone border-1" pDroppable (onDrop)="itemDropped()">
+          <div class="flex">
+            <div class="w-6 text-center py-1">Label</div>
+            <div class="w-6 py-1 pl-4">Route</div>
+          </div>
           <p-tree
             class="w-full md:w-30rem"
             [value]="selectedMenuObj.children"
@@ -93,10 +97,37 @@
             emptyMessage="Add Menu Items"
           >
             <ng-template let-node pTemplate="default">
-              <div class="flex justify-content-between w-full">
-                <strong>{{ node.label }}</strong>
+              <div
+                class="flex justify-content-between w-full align-items-center"
+              >
+                <p-inplace closable="closable">
+                  <ng-template pTemplate="display">
+                    <span>{{ node.label }}</span>
+                  </ng-template>
+                  <ng-template pTemplate="content">
+                    <input
+                      type="text"
+                      class="w-9"
+                      pInputText
+                      [(ngModel)]="node.label"
+                    />
+                  </ng-template>
+                </p-inplace>
+
                 @if (node.slug) {
-                  <span>/{{ node.slug }}</span>
+                  <p-inplace closable="closable">
+                    <ng-template pTemplate="display">
+                      <span>/{{ node.slug }}</span>
+                    </ng-template>
+                    <ng-template pTemplate="content">
+                      <input
+                        type="text"
+                        class="w-9"
+                        pInputText
+                        [(ngModel)]="node.slug"
+                      />
+                    </ng-template>
+                  </p-inplace>
                 }
                 <div class="flex gap-2 align-items-center">
                   @if (node.isGenerated) {
@@ -113,6 +144,32 @@
               </div>
             </ng-template>
           </p-tree>
+          <hr />
+          <div class="text-right p-2">
+            <p-inputGroup class="mt-1">
+              <input
+                type="text"
+                pInputText
+                placeholder="Label"
+                [(ngModel)]="pendingItem.label"
+              />
+              <input
+                type="text"
+                pInputText
+                placeholder="Slug"
+                [(ngModel)]="pendingItem.slug"
+              />
+              <button
+                type="button"
+                pButton
+                class="p-button-success"
+                [disabled]="!pendingItem.slug || !pendingItem.label"
+                (click)="addItem()"
+              >
+                <fa-icon [icon]="icons.add" />
+              </button>
+            </p-inputGroup>
+          </div>
         </div>
       </div>
     </div>
