@@ -10,17 +10,16 @@ import { ButtonModule } from 'primeng/button';
 import { ContentForm } from '../content-form.interface';
 
 @Component({
-  selector: 'app-image-selector',
-  standalone: true,
-  imports: [
-    ButtonModule,
-    CommonModule,
-    ImageModule,
-    ReactiveFormsModule
-  ],
-  providers: [DialogService],
-  templateUrl: './image-selector.component.html',
-  styleUrl: './image-selector.component.scss'
+    selector: 'app-image-selector',
+    imports: [
+        ButtonModule,
+        CommonModule,
+        ImageModule,
+        ReactiveFormsModule
+    ],
+    providers: [DialogService],
+    templateUrl: './image-selector.component.html',
+    styleUrl: './image-selector.component.scss'
 })
 export class ImageSelectorComponent implements OnInit {
   @Input({ required: true }) formGroup!: FormGroup<ContentForm>;

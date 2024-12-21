@@ -21,22 +21,21 @@ export interface SelectedImageConfig {
 }
 
 @Component({
-  selector: 'app-media-library',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FileUploadModule,
-    FontAwesomeModule,
-    ImageCardComponent,
-    PaginatorModule,
-    ToastModule,
-    UploaderComponent
-  ],
-  templateUrl: './media-library.component.html',
-  styleUrl: './media-library.component.scss',
-  providers: [
-    MessageService
-  ]
+    selector: 'app-media-library',
+    imports: [
+        CommonModule,
+        FileUploadModule,
+        FontAwesomeModule,
+        ImageCardComponent,
+        PaginatorModule,
+        ToastModule,
+        UploaderComponent
+    ],
+    templateUrl: './media-library.component.html',
+    styleUrl: './media-library.component.scss',
+    providers: [
+        MessageService
+    ]
 })
 export class MediaLibraryComponent implements OnInit {
 

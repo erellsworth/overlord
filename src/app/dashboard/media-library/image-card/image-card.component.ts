@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -6,18 +12,24 @@ import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
 import { Image } from '../../../../../interfaces/media';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFileImport, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ImageEditEvent, ImageEditorComponent } from '../image-editor/image-editor.component';
+import {
+  faFileImport,
+  faPenToSquare,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  ImageEditEvent,
+  ImageEditorComponent,
+} from '../image-editor/image-editor.component';
 import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/inputtextarea';
 import { FormsModule } from '@angular/forms';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-image-card',
-  standalone: true,
   imports: [
     ButtonGroupModule,
     ButtonModule,
@@ -30,13 +42,13 @@ import { ConfirmationService } from 'primeng/api';
     FormsModule,
     ImageEditorComponent,
     ImageModule,
-    InputTextareaModule],
+    Textarea,
+  ],
   providers: [ConfirmationService],
   templateUrl: './image-card.component.html',
-  styleUrl: './image-card.component.scss'
+  styleUrl: './image-card.component.scss',
 })
 export class ImageCardComponent {
-
   @Input() caption!: string;
   @Input({ required: true }) image!: Image;
 
@@ -50,12 +62,12 @@ export class ImageCardComponent {
   public icons = {
     delete: faTrash,
     edit: faPenToSquare,
-    insert: faFileImport
+    insert: faFileImport,
   };
 
   public showEditor = false;
 
-  constructor(private confirmationService: ConfirmationService) { }
+  constructor(private confirmationService: ConfirmationService) {}
 
   public delete(event: MouseEvent): void {
     this.confirmationService.confirm({
@@ -64,7 +76,7 @@ export class ImageCardComponent {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.deleteImage.emit();
-      }
+      },
     });
   }
 
@@ -72,5 +84,4 @@ export class ImageCardComponent {
     this.imageEdited.emit(event);
     this.showEditor = false;
   }
-
 }

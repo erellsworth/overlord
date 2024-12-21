@@ -8,7 +8,7 @@ import { MediaService } from '../../../services/media.service';
 import {
   DialogService,
   DynamicDialogConfig,
-  DynamicDialogModule,
+  DynamicDialog,
 } from 'primeng/dynamicdialog';
 import { VideoInputComponent } from '../video-input/video-input.component';
 import { Subscription } from 'rxjs';
@@ -17,8 +17,7 @@ import { LinkConfig } from '../link-input/link-input.interface';
 
 @Component({
   selector: 'app-toolbar',
-  standalone: true,
-  imports: [ButtonModule, DynamicDialogModule, FontAwesomeModule],
+  imports: [ButtonModule, DynamicDialog, FontAwesomeModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss',
   providers: [DialogService],

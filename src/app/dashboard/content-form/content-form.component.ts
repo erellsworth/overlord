@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { Content } from '@tiptap/core';
 import { EditorComponent } from '../editor/editor.component';
@@ -39,7 +39,6 @@ import { FormService } from '../form.service';
 
 @Component({
   selector: 'app-content-form',
-  standalone: true,
   imports: [
     ButtonModule,
     CardModule,
@@ -51,10 +50,10 @@ import { FormService } from '../form.service';
     FloatLabelModule,
     ImageSelectorComponent,
     InplaceModule,
-    InputTextareaModule,
     InputTextModule,
     ReactiveFormsModule,
     TaxonomyInputComponent,
+    Textarea,
     TitleInputComponent,
     ToastModule,
   ],

@@ -1,9 +1,16 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
 import { InplaceModule } from 'primeng/inplace';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Textarea } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -15,12 +22,11 @@ import { CropperComponent } from './cropper/cropper.component';
 export interface ImageEditEvent {
   alt: string;
   name: string;
-  crops: { [key: string]: Crop }
+  crops: { [key: string]: Crop };
 }
 
 @Component({
   selector: 'app-image-editor',
-  standalone: true,
   imports: [
     ButtonModule,
     CropperComponent,
@@ -29,13 +35,13 @@ export interface ImageEditEvent {
     FontAwesomeModule,
     ImageModule,
     InplaceModule,
-    InputTextareaModule,
+    Textarea,
     InputTextModule,
     PanelModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './image-editor.component.html',
-  styleUrl: './image-editor.component.scss'
+  styleUrl: './image-editor.component.scss',
 })
 export class ImageEditorComponent implements OnInit {
   @Input({ required: true }) image!: Image;
@@ -47,7 +53,7 @@ export class ImageEditorComponent implements OnInit {
   public crops: { [key: string]: Crop } = {};
   public formGroup!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.buildFormGroup();
@@ -65,5 +71,4 @@ export class ImageEditorComponent implements OnInit {
       alt: this.image.data.alt,
     });
   }
-
 }

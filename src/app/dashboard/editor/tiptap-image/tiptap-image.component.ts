@@ -15,24 +15,26 @@ import { SelectedImageConfig } from '../../media-library/media-library.component
 
 @Component({
   selector: 'app-tiptap-image',
-  standalone: true,
   imports: [
     ButtonModule,
     ButtonGroupModule,
     DialogModule,
     FontAwesomeModule,
     ImageEditorComponent,
-    ImageModule
+    ImageModule,
   ],
   templateUrl: './tiptap-image.component.html',
   styleUrl: './tiptap-image.component.scss',
-  providers: [DialogService]
+  providers: [DialogService],
 })
-export class TiptapImageComponent extends AngularNodeViewComponent implements OnInit, OnDestroy {
+export class TiptapImageComponent
+  extends AngularNodeViewComponent
+  implements OnInit, OnDestroy
+{
   public caption!: string;
   public icons = {
     edit: faEdit,
-    replace: faRightLeft
+    replace: faRightLeft,
   };
   public image!: Image;
   public showButtons = false;
@@ -40,32 +42,37 @@ export class TiptapImageComponent extends AngularNodeViewComponent implements On
 
   private subs: Subscription[] = [];
 
-  constructor(private dialogService: DialogService, private media: MediaService) {
+  constructor(
+    private dialogService: DialogService,
+    private media: MediaService,
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.subs.push(
-      this.media.getImageById$(this.node.attrs.imageId).subscribe(
-        (result) => {
+      this.media
+        .getImageById$(this.node().attrs.imageId)
+        .subscribe((result) => {
           if (result.success) {
             this.image = result.data as Image;
-            this.caption = this.node.attrs.caption
+            this.caption = this.node().attrs.caption;
           }
-        }
-      )
+        }),
     );
 
-    this.subs.push(this.media.selectedImage.subscribe((data: SelectedImageConfig) => {
-      const { image, position, source } = data;
-      if (image && source === 'imageCard' && position === this.getPos()) {
-        this.image = image;
-      }
-    }));
+    this.subs.push(
+      this.media.selectedImage.subscribe((data: SelectedImageConfig) => {
+        const { image, position, source } = data;
+        if (image && source === 'imageCard' && position === this.getPos()()) {
+          this.image = image;
+        }
+      }),
+    );
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach(sub => sub.unsubscribe());
+    this.subs.forEach((sub) => sub.unsubscribe());
   }
 
   public launchEditor(): void {
@@ -75,9 +82,8 @@ export class TiptapImageComponent extends AngularNodeViewComponent implements On
   public launchMediaLibrary(): void {
     this.media.launchLibrary(this.dialogService, {
       image: this.image,
-      position: this.getPos(),
-      source: 'imageCard'
+      position: this.getPos()(),
+      source: 'imageCard',
     });
   }
-
 }

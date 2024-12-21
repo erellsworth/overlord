@@ -9,18 +9,17 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
-  selector: 'app-video-input',
-  standalone: true,
-  imports: [
-    ButtonModule,
-    DividerModule,
-    FontAwesomeModule,
-    FormsModule,
-    FloatLabelModule,
-    InputTextModule
-  ],
-  templateUrl: './video-input.component.html',
-  styleUrl: './video-input.component.scss'
+    selector: 'app-video-input',
+    imports: [
+        ButtonModule,
+        DividerModule,
+        FontAwesomeModule,
+        FormsModule,
+        FloatLabelModule,
+        InputTextModule
+    ],
+    templateUrl: './video-input.component.html',
+    styleUrl: './video-input.component.scss'
 })
 export class VideoInputComponent {
 

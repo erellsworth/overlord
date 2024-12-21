@@ -22,18 +22,17 @@ export interface uploadForm {
 }
 
 @Component({
-  selector: 'app-uploader',
-  standalone: true,
-  imports: [
-    ButtonModule,
-    DialogModule,
-    DividerModule,
-    ImageCropperComponent,
-    ImageEditorComponent,
-    ImageModule
-  ],
-  templateUrl: './uploader.component.html',
-  styleUrl: './uploader.component.scss'
+    selector: 'app-uploader',
+    imports: [
+        ButtonModule,
+        DialogModule,
+        DividerModule,
+        ImageCropperComponent,
+        ImageEditorComponent,
+        ImageModule
+    ],
+    templateUrl: './uploader.component.html',
+    styleUrl: './uploader.component.scss'
 })
 export class UploaderComponent implements OnInit {
   @Input({ required: true }) file!: uploadedFile;

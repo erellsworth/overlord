@@ -15,18 +15,17 @@ import {
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-title-input',
-  standalone: true,
-  imports: [
-    ButtonModule,
-    FloatLabelModule,
-    FontAwesomeModule,
-    InputGroupModule,
-    InputTextModule,
-    ReactiveFormsModule,
-  ],
-  templateUrl: './title-input.component.html',
-  styleUrl: './title-input.component.scss',
+    selector: 'app-title-input',
+    imports: [
+        ButtonModule,
+        FloatLabelModule,
+        FontAwesomeModule,
+        InputGroupModule,
+        InputTextModule,
+        ReactiveFormsModule,
+    ],
+    templateUrl: './title-input.component.html',
+    styleUrl: './title-input.component.scss'
 })
 export class TitleInputComponent implements OnInit, OnDestroy {
   public formGroup = input.required<FormGroup<ContentForm>>();

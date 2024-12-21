@@ -1,7 +1,7 @@
 import { Component, Injector, OnDestroy, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Content, Editor, generateJSON, JSONContent } from '@tiptap/core';
-import { NgxTiptapModule } from 'ngx-tiptap';
+import { TiptapEditorDirective } from 'ngx-tiptap';
 import { PanelModule } from 'primeng/panel';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MediaService } from '../../services/media.service';
@@ -14,12 +14,11 @@ import { FormService } from '../form.service';
 
 @Component({
   selector: 'app-editor',
-  standalone: true,
   imports: [
     ButtonModule,
     CardModule,
     FormsModule,
-    NgxTiptapModule,
+    TiptapEditorDirective,
     PanelModule,
     ToolbarComponent,
   ],

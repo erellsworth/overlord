@@ -29,21 +29,20 @@ import { ButtonModule } from 'primeng/button';
 import { slugger } from '../../../../../api/utils/misc';
 
 @Component({
-  selector: 'app-taxonomy-input',
-  standalone: true,
-  imports: [
-    AutoCompleteModule,
-    ButtonModule,
-    CardModule,
-    ChipModule,
-    CommonModule,
-    FloatLabelModule,
-    FormsModule,
-    InputTextModule,
-  ],
-  templateUrl: './taxonomy-input.component.html',
-  styleUrl: './taxonomy-input.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-taxonomy-input',
+    imports: [
+        AutoCompleteModule,
+        ButtonModule,
+        CardModule,
+        ChipModule,
+        CommonModule,
+        FloatLabelModule,
+        FormsModule,
+        InputTextModule,
+    ],
+    templateUrl: './taxonomy-input.component.html',
+    styleUrl: './taxonomy-input.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaxonomyInputComponent implements OnInit {
   @Input({ required: true }) formGroup!: FormGroup<ContentForm>;

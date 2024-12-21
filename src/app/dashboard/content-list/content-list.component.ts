@@ -19,20 +19,19 @@ import { ContentInterface } from '../../../../interfaces/content';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
-  selector: 'app-content-list',
-  standalone: true,
-  imports: [
-    ButtonModule,
-    ConfirmPopupModule,
-    FontAwesomeModule,
-    PaginatorModule,
-    RouterModule,
-    ToastModule,
-    TooltipModule,
-  ],
-  templateUrl: './content-list.component.html',
-  styleUrl: './content-list.component.scss',
-  providers: [ConfirmationService, MessageService],
+    selector: 'app-content-list',
+    imports: [
+        ButtonModule,
+        ConfirmPopupModule,
+        FontAwesomeModule,
+        PaginatorModule,
+        RouterModule,
+        ToastModule,
+        TooltipModule,
+    ],
+    templateUrl: './content-list.component.html',
+    styleUrl: './content-list.component.scss',
+    providers: [ConfirmationService, MessageService]
 })
 export class ContentListComponent {
   public contentType = input<string>();

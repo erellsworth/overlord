@@ -17,11 +17,10 @@ import { ImageModule } from 'primeng/image';
 import { delay } from 'rxjs';
 
 @Component({
-  selector: 'app-cropper',
-  standalone: true,
-  imports: [CardModule, ImageCropperComponent, ImageModule],
-  templateUrl: './cropper.component.html',
-  styleUrl: './cropper.component.scss',
+    selector: 'app-cropper',
+    imports: [CardModule, ImageCropperComponent, ImageModule],
+    templateUrl: './cropper.component.html',
+    styleUrl: './cropper.component.scss'
 })
 export class CropperComponent {
   @Input({ required: true }) image!: Image;
