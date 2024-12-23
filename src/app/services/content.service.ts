@@ -16,10 +16,12 @@ import { ConfigService } from './config.service';
 })
 export class ContentService {
   public activeContent = signal<ContentInterface>({} as ContentInterface);
-  public contentTypes = signal<OverlordContentType[]>([]);
-  public contentTypeSlugs = computed<string[]>(() =>
-    this.contentTypes().map((ct) => ct.slug as string),
-  );
+  public contentTypes = computed(() => this.configService.contentTypes());
+  public contentTypeSlugs = computed(() => {
+    return this.contentTypes()
+      .map((ct) => ct.slug)
+      .filter((slug) => Boolean(slug)) as string[];
+  });
 
   public contentLists = signal<{
     [key: string]: PaginatedResults<ContentInterface>;
@@ -136,6 +138,11 @@ export class ContentService {
       console.error('Error fetching content', result.error);
     }
   }
+
+  public getContentTypeBySlug(slug: string): OverlordContentType | undefined {
+    return this.contentTypes().find((ct) => ct.slug === slug);
+  }
+
   public async updateContent(
     content: ContentInterface,
   ): Promise<ApiResponse<ContentInterface>> {
@@ -151,27 +158,11 @@ export class ContentService {
     }
   }
 
-  public async fetchContentTypes(): Promise<void> {
-    try {
-      const result = await firstValueFrom(
-        this.http.get<ApiResponse<OverlordContentType[]>>(`api/content/types`),
-      );
-
-      if (result.success) {
-        this.contentTypes.set(result.data as OverlordContentType[]);
-      } else {
-        console.error('Problem fetching content types', result.error);
-      }
-    } catch (e) {
-      console.error('Problem fetching content types', e);
-    }
-  }
-
   private getDefaultContent(type: string): ContentInterface {
-    const noTitle = this.configService.config().contentTypes[type]?.noTitle;
+    const contentType = this.getContentTypeBySlug(type);
 
-    const title = noTitle ? uuidv4() : '';
-    const slug = noTitle ? title : '';
+    const title = contentType?.noTitle ? uuidv4() : '';
+    const slug = contentType?.noTitle ? title : '';
 
     return {
       title,

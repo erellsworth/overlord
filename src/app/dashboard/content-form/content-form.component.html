@@ -7,7 +7,7 @@
         Edit {{ formTitle }}
         <p-inplace closable="closable" class="capitalize">
           <ng-template #display>
-            {{ contentType }}
+            {{ contentTypeSlug }}
           </ng-template>
           <ng-template #content>
             <p-select formControlName="type" [options]="contentTypes" />
@@ -21,25 +21,19 @@
     }
 
     @for (field of fields; track field) {
-      @switch (field) {
+      @switch (field.type) {
         @case ("editor") {
           <app-editor></app-editor>
         }
 
-        @case ("description") {
-          <div formGroupName="seo">
-            <p-floatLabel>
-              <textarea
-                id="description"
-                class="w-full"
-                rows="5"
-                pTextarea
-                formControlName="description"
-              >
-              </textarea>
-              <label for="description">Description</label>
-            </p-floatLabel>
-          </div>
+        @case ("textarea") {
+          <app-text-input [field]="field" />
+
+          <p-divider></p-divider>
+        }
+
+        @case ("text") {
+          <app-string-input [field]="field" />
 
           <p-divider></p-divider>
         }

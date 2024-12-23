@@ -26,6 +26,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "node_modules/primeflex/primeflex.css",
+              "node_modules/primeflex/themes/primeone-dark.css",
               "src/styles.scss"
             ],
             "scripts": []

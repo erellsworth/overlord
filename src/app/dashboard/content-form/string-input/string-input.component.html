@@ -1,0 +1,14 @@
+<div [formGroup]="formGroup">
+  <div [formGroupName]="groupName()">
+    <p-floatLabel>
+      <input
+        type="text"
+        class="w-full"
+        [id]="field().name"
+        pInputText
+        [formControlName]="field().name"
+      />
+      <label [for]="field().name">{{ field().label }}</label>
+    </p-floatLabel>
+  </div>
+</div>

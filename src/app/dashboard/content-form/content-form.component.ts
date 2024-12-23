@@ -26,9 +26,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { InplaceModule } from 'primeng/inplace';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Router } from '@angular/router';
-import { ConfigService } from '../../services/config.service';
 import { FormService } from '../form.service';
 import { Select } from 'primeng/select';
+import { OverlordField } from '../../../../interfaces/overlord.config';
+import { TextInputComponent } from './text-input/text-input.component';
+import { StringInputComponent } from './string-input/string-input.component';
 
 @Component({
   selector: 'app-content-form',
@@ -45,10 +47,13 @@ import { Select } from 'primeng/select';
     InputTextModule,
     ReactiveFormsModule,
     Select,
+    StringInputComponent,
     TaxonomyInputComponent,
     Textarea,
+    TextInputComponent,
     TitleInputComponent,
     ToastModule,
+    TextInputComponent,
   ],
   templateUrl: './content-form.component.html',
   styleUrl: './content-form.component.scss',
@@ -66,7 +71,6 @@ export class ContentFormComponent implements OnInit, OnDestroy {
   private subs: Subscription[] = [];
 
   constructor(
-    private configService: ConfigService,
     private confirmationService: ConfirmationService,
     private contentService: ContentService,
     private formService: FormService,
@@ -83,13 +87,20 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.subs.forEach((sub) => sub.unsubscribe());
+  }
+
   public get buttonText(): string {
     return this.isNew ? 'Create' : 'Update';
   }
 
-  public get contentType(): string {
+  public get contentTypeSlug(): string {
     return this.formService.contentType();
+  }
+
+  public get contentType() {
+    return this.contentService.getContentTypeBySlug(this.contentTypeSlug);
   }
 
   public get contentTypes(): string[] {
@@ -105,18 +116,16 @@ export class ContentFormComponent implements OnInit, OnDestroy {
   }
 
   public get showTitle(): boolean {
-    return !Boolean(
-      this.configService.config().contentTypes[this.contentType]?.noTitle,
-    );
+    return !Boolean(this.contentType?.noTitle);
   }
 
   public get status(): string {
     return this.formGroup.get('status')?.value as string;
   }
 
-  public fields: string[] = this.configService.getActiveFields(
-    this.contentType,
-  );
+  public get fields(): OverlordField[] {
+    return this.contentType ? (this.contentType.fields as OverlordField[]) : [];
+  }
 
   public get formTitle(): string {
     return this.formGroup.get('title')?.value || '';
@@ -135,7 +144,7 @@ export class ContentFormComponent implements OnInit, OnDestroy {
   public async delete(event: MouseEvent): Promise<void> {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: `Are you sure you want to delete this ${this.contentType}?`,
+      message: `Are you sure you want to delete this ${this.contentTypeSlug}?`,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.deleteContent();

@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContentFormComponent } from './dashboard/content-form/content-form.component';
 import { ContentListComponent } from './dashboard/content-list/content-list.component';
-import { configResolver } from './config.resolver';
 import { contentResolver } from './content.resolver';
 import { NavControlComponent } from './dashboard/nav-control/nav-control.component';
 
@@ -10,7 +9,6 @@ export const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    resolve: { configResolver },
     children: [
       {
         path: '',

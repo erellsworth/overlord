@@ -1,5 +1,8 @@
-import { Injectable, signal } from '@angular/core';
-import { OverlordConfig } from '../../../interfaces/overlord.config';
+import { computed, Injectable, signal } from '@angular/core';
+import {
+  OverlordConfig,
+  OverlordField,
+} from '../../../interfaces/overlord.config';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { ApiResponse } from '../../../interfaces/misc';
@@ -8,16 +11,12 @@ import { ApiResponse } from '../../../interfaces/misc';
   providedIn: 'root',
 })
 export class ConfigService {
-  public config = signal<OverlordConfig>({ contentTypes: {}, fieldTypes: {} });
-  private defaultFields = ['editor', 'description', 'tags', 'image'];
+  public config = signal<OverlordConfig>({ contentTypes: [] });
+  public contentTypes = computed(() => {
+    return this.config().contentTypes;
+  });
 
   constructor(private http: HttpClient) {}
-
-  public getActiveFields(contentType: string): string[] {
-    return (
-      this.config().contentTypes[contentType]?.fields || this.defaultFields
-    );
-  }
 
   public async fetchConfig(): Promise<void> {
     try {
@@ -27,21 +26,12 @@ export class ConfigService {
 
       if (result.success) {
         this.config.set(result.data as OverlordConfig);
+        console.log('set', result.data);
       } else {
         console.error('Problem fetching config', result.error);
       }
     } catch (e) {
       console.error('Problem fetching config', e);
     }
-  }
-
-  public isFieldActive(contentType: string, field: string): boolean {
-    const fields = this.config().contentTypes[contentType]?.fields;
-
-    if (!fields) {
-      return true;
-    }
-
-    return fields.includes(field);
   }
 }

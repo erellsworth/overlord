@@ -1,53 +1,67 @@
 import {
   OverlordConfig,
+  OverlordConfigFile,
   OverlordContentType,
+  OverlordField,
 } from '../../interfaces/overlord.config';
 import { default as configFile } from '../../overlord.json';
 import { slugger, titleCase } from './misc';
 
 class Overlord {
   public config: OverlordConfig;
+  public configFile: OverlordConfigFile;
 
-  private defaultFieldTypes: OverlordConfig['fieldTypes'] = {
-    editor: {
+  private defaultFields: OverlordField[] = [
+    {
       name: 'content',
       type: 'editor',
     },
-    description: {
+    {
       label: 'Description',
       name: 'description',
       type: 'textarea',
+      group: 'seo',
     },
-    tags: {
+    {
       label: 'Tags',
       name: 'taxonomyIds',
       type: 'tags',
     },
-    image: {
+    {
       label: 'Content Image',
       name: 'media_id',
       type: 'image',
+      group: 'metaData',
     },
-  };
+  ];
 
-  constructor(config: OverlordConfig) {
-    this.config = {
-      ...config,
-      ...{
-        fieldTypes: {
-          ...config.fieldTypes,
-          ...this.defaultFieldTypes,
-        },
-      },
-    };
+  constructor(configFile: OverlordConfigFile) {
+    this.configFile = configFile;
+    this.config = { ...configFile, ...{ contentTypes: this.contentTypes } };
   }
 
   public get contentTypes(): OverlordContentType[] {
-    return Object.entries(this.config.contentTypes).map((entry) => {
+    return Object.entries(this.configFile.contentTypes).map((entry) => {
+      const [slug, contentType] = entry;
+
+      const fields = contentType.fields
+        ? (contentType.fields
+            .map((field) => {
+              if (typeof field === 'string') {
+                return this.defaultFields.find(
+                  (_field) => _field.type === field,
+                );
+              }
+              return field;
+            })
+            .filter((field) => Boolean(field)) as OverlordField[])
+        : this.defaultFields;
+
       return {
-        label: entry[1].label || titleCase(entry[0]),
-        slug: entry[1].slug || slugger(entry[0]),
-        plural: entry[1].plural || `${titleCase(entry[0])}s`,
+        label: contentType.label || titleCase(slug),
+        slug: contentType.slug || slugger(slug),
+        plural: contentType.plural || `${titleCase(slug)}s`,
+        fields,
       };
     });
   }

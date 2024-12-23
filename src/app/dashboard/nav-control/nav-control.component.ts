@@ -22,26 +22,26 @@ import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
-    selector: 'app-nav-control',
-    imports: [
-        ButtonModule,
-        ConfirmPopupModule,
-        DividerModule,
-        DragDropModule,
-        FontAwesomeModule,
-        FormsModule,
-        InplaceModule,
-        InputGroupAddonModule,
-        InputGroupModule,
-        InputSwitchModule,
-        InputTextModule,
-        ListboxModule,
-        TooltipModule,
-        TreeModule,
-    ],
-    templateUrl: './nav-control.component.html',
-    styleUrl: './nav-control.component.scss',
-    providers: [ConfirmationService, TreeDragDropService]
+  selector: 'app-nav-control',
+  imports: [
+    ButtonModule,
+    ConfirmPopupModule,
+    DividerModule,
+    DragDropModule,
+    FontAwesomeModule,
+    FormsModule,
+    InplaceModule,
+    InputGroupAddonModule,
+    InputGroupModule,
+    InputSwitchModule,
+    InputTextModule,
+    ListboxModule,
+    TooltipModule,
+    TreeModule,
+  ],
+  templateUrl: './nav-control.component.html',
+  styleUrl: './nav-control.component.scss',
+  providers: [ConfirmationService, TreeDragDropService],
 })
 export class NavControlComponent implements OnInit {
   public icons = {
@@ -67,7 +67,6 @@ export class NavControlComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.contentService.fetchContentTypes();
     await this.taxonomiesService.fetchTaxonomies();
 
     const menuSettings = await this.settings.getSetting<NavMenuItem[]>(

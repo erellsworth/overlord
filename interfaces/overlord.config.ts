@@ -3,29 +3,33 @@ export interface OverlordContentType {
   label?: string;
   plural?: string;
   hierarchical?: boolean;
-  fields?: string[];
+  fields?: (OverlordField | string)[];
   noTitle?: boolean;
 }
 
 export interface OverlordField {
   name: string;
   label?: string;
-  type:
-    | 'editor'
-    | 'text'
-    | 'textarea'
-    | 'image'
-    | 'tags'
-    | 'number'
-    | 'rating'
-    | 'boolean';
+  type: OverlordFieldType;
+  group?: 'seo' | 'metaData';
 }
 
+export type OverlordFieldType =
+  | 'editor'
+  | 'text'
+  | 'textarea'
+  | 'image'
+  | 'tags'
+  | 'number'
+  | 'rating'
+  | 'boolean';
+
 export interface OverlordConfig {
+  contentTypes: OverlordContentType[];
+}
+
+export interface OverlordConfigFile {
   contentTypes: {
     [key: string]: OverlordContentType;
-  };
-  fieldTypes: {
-    [key: string]: OverlordField;
   };
 }

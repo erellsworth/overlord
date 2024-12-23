@@ -1,0 +1,15 @@
+<div [formGroup]="formGroup">
+  <div [formGroupName]="groupName()">
+    <p-floatLabel>
+      <textarea
+        [id]="field().name"
+        class="w-full"
+        rows="5"
+        pTextarea
+        [formControlName]="field().name"
+      >
+      </textarea>
+      <label [for]="field().name">{{ field().label }}</label>
+    </p-floatLabel>
+  </div>
+</div>
