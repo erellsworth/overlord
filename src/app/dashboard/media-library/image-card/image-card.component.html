@@ -1,34 +1,62 @@
-@if(image){
-<p-card>
+@if (image) {
+  <p-card>
     <p-image [src]="image.thumbnail" imageClass="w-full"></p-image>
     <p-divider styleClass="py-1" />
 
     <p-floatLabel>
-        <textarea id="description" class="w-full" rows="2" pInputTextarea [(ngModel)]="caption">
-            </textarea>
-        <label for="title">Caption</label>
+      <textarea
+        id="description"
+        class="w-full"
+        rows="2"
+        pTextarea
+        [(ngModel)]="caption"
+      >
+      </textarea>
+      <label for="title">Caption</label>
     </p-floatLabel>
 
-    <ng-template pTemplate="footer">
-        <div class="card flex justify-content-center gap-2">
-            <p-button label="Insert" size="small" (click)="imageSelected.emit({image, caption})">
-                <fa-icon class="block pr-1" [icon]="icons.insert"></fa-icon>
-            </p-button>
-            <p-button label="Edit" severity="success" size="small" (onClick)="showEditor = true">
-                <fa-icon class="block pr-1" [icon]="icons.edit"></fa-icon>
-            </p-button>
-            <p-button label="Delete" severity="danger" size="small" (onClick)="delete($event)">
-                <fa-icon class="block pr-1" [icon]="icons.delete"></fa-icon>
-            </p-button>
-        </div>
+    <ng-template #footer>
+      <div class="card flex justify-content-center gap-2">
+        <p-button
+          label="Insert"
+          size="small"
+          (click)="imageSelected.emit({ image, caption })"
+        >
+          <fa-icon class="block pr-1" [icon]="icons.insert"></fa-icon>
+        </p-button>
+        <p-button
+          label="Edit"
+          severity="success"
+          size="small"
+          (onClick)="showEditor = true"
+        >
+          <fa-icon class="block pr-1" [icon]="icons.edit"></fa-icon>
+        </p-button>
+        <p-button
+          label="Delete"
+          severity="danger"
+          size="small"
+          (onClick)="delete($event)"
+        >
+          <fa-icon class="block pr-1" [icon]="icons.delete"></fa-icon>
+        </p-button>
+      </div>
     </ng-template>
-</p-card>
+  </p-card>
 
-<p-dialog [(visible)]="showEditor" [draggable]="false" [maximizable]="true" [modal]="true">
-    @if(showEditor){
-    <app-image-editor [image]="image" (saved)="handleImageEdit($event)"
-        (canceled)="showEditor = false"></app-image-editor>
+  <p-dialog
+    [(visible)]="showEditor"
+    [draggable]="false"
+    [maximizable]="true"
+    [modal]="true"
+  >
+    @if (showEditor) {
+      <app-image-editor
+        [image]="image"
+        (saved)="handleImageEdit($event)"
+        (canceled)="showEditor = false"
+      ></app-image-editor>
     }
-</p-dialog>
-<p-confirmPopup />
+  </p-dialog>
+  <p-confirmPopup />
 }

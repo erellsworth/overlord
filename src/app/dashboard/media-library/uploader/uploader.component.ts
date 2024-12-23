@@ -2,9 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
 import { Crop, Image, UploadRequest } from '../../../../../interfaces/media';
-import { ImageEditEvent, ImageEditorComponent } from '../image-editor/image-editor.component';
+import {
+  ImageEditEvent,
+  ImageEditorComponent,
+} from '../image-editor/image-editor.component';
 import { DialogModule } from 'primeng/dialog';
-import { ImageCropperComponent } from 'ngx-image-cropper';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { slugger } from '../../../../../api/utils/misc';
@@ -12,7 +14,7 @@ import { MediaService } from '../../../services/media.service';
 import { DividerModule } from 'primeng/divider';
 
 export interface uploadedFile extends File {
-  objectURL: string
+  objectURL: string;
 }
 
 export interface uploadForm {
@@ -22,17 +24,16 @@ export interface uploadForm {
 }
 
 @Component({
-    selector: 'app-uploader',
-    imports: [
-        ButtonModule,
-        DialogModule,
-        DividerModule,
-        ImageCropperComponent,
-        ImageEditorComponent,
-        ImageModule
-    ],
-    templateUrl: './uploader.component.html',
-    styleUrl: './uploader.component.scss'
+  selector: 'app-uploader',
+  imports: [
+    ButtonModule,
+    DialogModule,
+    DividerModule,
+    ImageEditorComponent,
+    ImageModule,
+  ],
+  templateUrl: './uploader.component.html',
+  styleUrl: './uploader.component.scss',
 })
 export class UploaderComponent implements OnInit {
   @Input({ required: true }) file!: uploadedFile;
@@ -47,7 +48,10 @@ export class UploaderComponent implements OnInit {
 
   private uuid = uuidv4();
 
-  constructor(private fb: FormBuilder, private media: MediaService) { }
+  constructor(
+    private fb: FormBuilder,
+    private media: MediaService,
+  ) {}
 
   ngOnInit(): void {
     this.buildFormGroup();
@@ -63,12 +67,15 @@ export class UploaderComponent implements OnInit {
     } catch (e) {
       console.error('Error reading file', e);
     }
-
   }
 
   public get image(): Image {
-    const alt = this.formGroup ? this.formGroup.get('alt')?.value as string : this.file.name;
-    const name = this.formGroup ? this.formGroup.get('name')?.value as string : this.sanitizedFileName(this.file.name);
+    const alt = this.formGroup
+      ? (this.formGroup.get('alt')?.value as string)
+      : this.file.name;
+    const name = this.formGroup
+      ? (this.formGroup.get('name')?.value as string)
+      : this.sanitizedFileName(this.file.name);
 
     return {
       full: this.dataUrl,
@@ -78,9 +85,9 @@ export class UploaderComponent implements OnInit {
         path: '',
         mimetype: this.file.type,
         name,
-        alt
-      }
-    }
+        alt,
+      },
+    };
   }
 
   public get imageWidthClass(): string {
@@ -100,8 +107,8 @@ export class UploaderComponent implements OnInit {
     if (status.error) {
       return {
         status: 'Failed',
-        error: status.error
-      }
+        error: status.error,
+      };
     }
 
     if (status.isUploading) {
@@ -134,7 +141,7 @@ export class UploaderComponent implements OnInit {
       file: this.file,
       alt: this.formGroup.value.alt as string,
       name: this.formGroup.value.name as string,
-      crops: this.formGroup.value.crops
+      crops: this.formGroup.value.crops,
     });
   }
 
@@ -142,11 +149,14 @@ export class UploaderComponent implements OnInit {
     this.formGroup = this.fb.group({
       name: this.fb.nonNullable.control(this.image.data.filename),
       alt: this.fb.nonNullable.control(this.image.data.alt),
-      crops: this.fb.nonNullable.control(this.crops)
+      crops: this.fb.nonNullable.control(this.crops),
     });
   }
 
   private sanitizedFileName(name: string): string {
-    return name.split('.').map(part => slugger(part)).join('.');
+    return name
+      .split('.')
+      .map((part) => slugger(part))
+      .join('.');
   }
 }

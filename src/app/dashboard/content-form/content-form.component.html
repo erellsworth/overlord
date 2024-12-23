@@ -1,16 +1,16 @@
 @if (formGroup) {
   <p-card [formGroup]="formGroup" class="content-form">
-    <ng-template pTemplate="title">
+    <ng-template #title>
       @if (isNew) {
-        Edit {{ title }}
-      } @else {
         Create New
+      } @else {
+        Edit {{ formTitle }}
         <p-inplace closable="closable" class="capitalize">
-          <ng-template pTemplate="display">
+          <ng-template #display>
             {{ contentType }}
           </ng-template>
-          <ng-template pTemplate="content">
-            <p-dropdown formControlName="type" [options]="contentTypes" />
+          <ng-template #content>
+            <p-select formControlName="type" [options]="contentTypes" />
           </ng-template>
         </p-inplace>
       }
@@ -33,7 +33,7 @@
                 id="description"
                 class="w-full"
                 rows="5"
-                pInputTextarea
+                pTextarea
                 formControlName="description"
               >
               </textarea>

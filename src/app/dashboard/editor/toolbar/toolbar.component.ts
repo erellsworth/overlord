@@ -56,7 +56,10 @@ export class ToolbarComponent {
   }
 
   public showLinkInput(): void {
-    const linkAttr: DynamicDialogConfig = { header: 'Link Editor' };
+    const linkAttr: DynamicDialogConfig = {
+      header: 'Link Editor',
+      closable: true,
+    };
 
     if (this.editor.isActive('link')) {
       linkAttr.data = this.editor.getAttributes('link');
@@ -77,6 +80,7 @@ export class ToolbarComponent {
   public showVideoInput(): void {
     const ref = this.dialogService.open(VideoInputComponent, {
       header: 'Video URL',
+      closable: true,
     });
     this.subs.push(
       ref.onClose.subscribe((src) => {

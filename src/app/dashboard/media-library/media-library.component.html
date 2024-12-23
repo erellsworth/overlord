@@ -1,27 +1,41 @@
-<p-fileUpload [multiple]="true" [auto]="true" [customUpload]="true" accept="image/*">
+<p-fileUpload
+  [multiple]="true"
+  [auto]="true"
+  [customUpload]="true"
+  accept="image/*"
+>
+  <ng-template #file let-file>
+    <app-uploader [file]="file" (upload)="handleUpload($event)" />
+  </ng-template>
 
-    <ng-template pTemplate="file" let-file>
-        <app-uploader [file]="file" (upload)="handleUpload($event)" />
-    </ng-template>
-
-    <ng-template pTemplate="empty">
-        <div class="flex align-items-center justify-content-center flex-column">
-            <fa-icon class="text-6xl" [icon]="uploadIcon"></fa-icon>
-            <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
-        </div>
-    </ng-template>
+  <ng-template #empty>
+    <div class="flex align-items-center justify-content-center flex-column">
+      <fa-icon class="text-6xl" [icon]="uploadIcon"></fa-icon>
+      <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
+    </div>
+  </ng-template>
 </p-fileUpload>
 
 <section class="flex flex-wrap">
-    @for (media of mediaList; track $index) {
+  @for (media of mediaList; track $index) {
     <div class="w-4">
-        <app-image-card [caption]="getCaption(media.data.id)" [image]="media" (imageSelected)="selectImage($event)"
-            (imageEdited)="editImage(media, $event)" (deleteImage)="deleteImage(media.data.id)"></app-image-card>
+      <app-image-card
+        [caption]="getCaption(media.data.id)"
+        [image]="media"
+        (imageSelected)="selectImage($event)"
+        (imageEdited)="editImage(media, $event)"
+        (deleteImage)="deleteImage(media.data.id)"
+      ></app-image-card>
     </div>
-    }
+  }
 </section>
 <div class="card flex justify-content-center">
-    <p-paginator (onPageChange)="pageChanged($event)" [first]="0" [rows]="12" [totalRecords]="total" />
+  <p-paginator
+    (onPageChange)="pageChanged($event)"
+    [first]="0"
+    [rows]="12"
+    [totalRecords]="total"
+  />
 </div>
 
 <p-toast />

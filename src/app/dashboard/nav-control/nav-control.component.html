@@ -7,7 +7,7 @@
       [(ngModel)]="selectedMenu"
       emptyMessage="Add menu to start"
     >
-      <ng-template let-menu pTemplate="item">
+      <ng-template let-menu #item>
         <div class="flex justify-content-between w-full">
           <span>{{ menu.label }}</span>
           <span (click)="deleteMenu($event, menu)">X</span>
@@ -96,15 +96,15 @@
             droppableScope="self"
             emptyMessage="Add Menu Items"
           >
-            <ng-template let-node pTemplate="default">
+            <ng-template let-node #default>
               <div
                 class="flex justify-content-between w-full align-items-center"
               >
                 <p-inplace closable="closable">
-                  <ng-template pTemplate="display">
+                  <ng-template #display>
                     <span>{{ node.label }}</span>
                   </ng-template>
-                  <ng-template pTemplate="content">
+                  <ng-template #content>
                     <input
                       type="text"
                       class="w-9"
@@ -116,10 +116,10 @@
 
                 @if (node.slug) {
                   <p-inplace closable="closable">
-                    <ng-template pTemplate="display">
+                    <ng-template #display>
                       <span>/{{ node.slug }}</span>
                     </ng-template>
-                    <ng-template pTemplate="content">
+                    <ng-template #content>
                       <input
                         type="text"
                         class="w-9"

@@ -12,7 +12,7 @@
       (onSelect)="taxonomySelected($event)"
       inputId="tag-selector"
     >
-      <ng-template pTemplate="empty">
+      <ng-template #empty>
         @if (checkCurrentFilter()) {
           No Results Found
         } @else {
@@ -25,7 +25,7 @@
     <label for="tag-selector">Add Tags</label>
   </p-floatLabel>
 
-  <ng-template pTemplate="footer">
+  <ng-template #footer>
     <div class="card flex align-items-center gap-2 flex-wrap">
       @for (tag of currentTaxonomies; track tag) {
         <p-chip

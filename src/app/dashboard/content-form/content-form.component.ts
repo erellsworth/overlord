@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -13,17 +12,11 @@ import { Textarea } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { Content } from '@tiptap/core';
 import { EditorComponent } from '../editor/editor.component';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ContentInterface } from '../../../../interfaces/content';
 import { firstValueFrom, Subscription, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
-import { ContentForm } from './content-form.interface';
 import { TitleInputComponent } from './title-input/title-input.component';
 import { TaxonomyInputComponent } from './taxonomy-input/taxonomy-input.component';
 import { ImageSelectorComponent } from './image-selector/image-selector.component';
@@ -31,11 +24,11 @@ import { DividerModule } from 'primeng/divider';
 import { ApiResponse } from '../../../../interfaces/misc';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InplaceModule } from 'primeng/inplace';
-import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { Router } from '@angular/router';
 import { ConfigService } from '../../services/config.service';
 import { FormService } from '../form.service';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-content-form',
@@ -45,13 +38,13 @@ import { FormService } from '../form.service';
     ConfirmPopupModule,
     CommonModule,
     DividerModule,
-    DropdownModule,
     EditorComponent,
     FloatLabelModule,
     ImageSelectorComponent,
     InplaceModule,
     InputTextModule,
     ReactiveFormsModule,
+    Select,
     TaxonomyInputComponent,
     Textarea,
     TitleInputComponent,
@@ -125,7 +118,7 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     this.contentType,
   );
 
-  public get title(): string {
+  public get formTitle(): string {
     return this.formGroup.get('title')?.value || '';
   }
 
