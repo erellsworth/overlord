@@ -9,6 +9,6 @@ export const contentResolver: ResolveFn<boolean> = async (route, state) => {
   const contentType = route.paramMap.get('contentType') || 'post';
   const slug = route.paramMap.get('slug') || undefined;
   await contentService.fetchContent(contentType, slug);
-  formService.prepareForm(contentService.activeContent());
+  formService.prepareForm();
   return true;
 };

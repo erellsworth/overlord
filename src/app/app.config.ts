@@ -14,7 +14,6 @@ import { ConfigService } from './services/config.service';
 const appInit = async () => {
   const configService = inject(ConfigService);
   await configService.fetchConfig();
-  console.log('done', configService.contentTypes());
 };
 
 export const appConfig: ApplicationConfig = {

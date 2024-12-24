@@ -1,8 +1,7 @@
-import { Component, computed, input } from '@angular/core';
-import { OverlordField } from '../../../../../interfaces/overlord.config';
+import { Component } from '@angular/core';
 import { FloatLabel } from 'primeng/floatlabel';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormService } from '../../form.service';
+import { AbstractInputComponent } from '../abstract-input/abstract-input.component';
 
 @Component({
   selector: 'app-text-input',
@@ -10,13 +9,4 @@ import { FormService } from '../../form.service';
   templateUrl: './text-input.component.html',
   styleUrl: './text-input.component.scss',
 })
-export class TextInputComponent {
-  public field = input.required<OverlordField>();
-  public groupName = computed(() => this.field().group || 'metaData');
-
-  constructor(private formService: FormService) {}
-
-  public get formGroup() {
-    return this.formService.form();
-  }
-}
+export class TextInputComponent extends AbstractInputComponent {}

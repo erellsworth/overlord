@@ -14,10 +14,15 @@ export type ContentType = `${ContentTypes}`;
 export type ContentStatus = 'draft' | 'published';
 
 export interface ContentMetaData {
-  media_id?: number;
-  wordCount?: number;
+  media_id: number;
+  wordCount: number;
   isAutosave?: boolean;
   [key: string]: string | number | boolean | undefined;
+}
+
+export interface ContentSeo {
+  description: string;
+  [key: string]: string;
 }
 
 export interface ContentBase extends baseInterface {
@@ -31,10 +36,7 @@ export interface ContentBase extends baseInterface {
 }
 
 export interface ContentInterface extends ContentBase {
-  seo: {
-    description: string;
-    [key: string]: string;
-  };
+  seo: ContentSeo;
   Taxonomies?: TaxonomyInterface[];
   image?: Image;
   Revisions?: RevisionInterface[];
@@ -48,12 +50,12 @@ export interface ContentCreation extends ContentInterface {
 }
 
 // Some fields are optional when calling UserModel.create() or UserModel.build()
-interface ContentCreationAttributes extends Optional<ContentInterface, 'id'> { }
+interface ContentCreationAttributes extends Optional<ContentInterface, 'id'> {}
 
 // We need to declare an interface for our model that is basically what our class would be
 export interface ContentInstance
   extends Model<ContentInterface, ContentCreationAttributes>,
-  ContentInterface { }
+    ContentInterface {}
 
 export interface ContentQuery {
   type?: string;

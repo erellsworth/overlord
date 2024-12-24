@@ -31,6 +31,7 @@ import { Select } from 'primeng/select';
 import { OverlordField } from '../../../../interfaces/overlord.config';
 import { TextInputComponent } from './text-input/text-input.component';
 import { StringInputComponent } from './string-input/string-input.component';
+import { RatingInputComponent } from './rating-input/rating-input.component';
 
 @Component({
   selector: 'app-content-form',
@@ -45,6 +46,7 @@ import { StringInputComponent } from './string-input/string-input.component';
     ImageSelectorComponent,
     InplaceModule,
     InputTextModule,
+    RatingInputComponent,
     ReactiveFormsModule,
     Select,
     StringInputComponent,

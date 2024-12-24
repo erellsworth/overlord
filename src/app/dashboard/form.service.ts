@@ -2,6 +2,8 @@ import { computed, Injectable, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContentForm } from './content-form/content-form.interface';
 import { ContentInterface } from '../../../interfaces/content';
+import { ContentService } from '../services/content.service';
+import { OverlordField } from '../../../interfaces/overlord.config';
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +17,13 @@ export class FormService {
   );
   public lastSave!: string;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private contentService: ContentService,
+    private fb: FormBuilder,
+  ) {}
 
-  public prepareForm(content: ContentInterface): void {
+  public prepareForm(): void {
+    const content = this.contentService.activeContent();
     const taxonomyIds = content.Taxonomies
       ? content.Taxonomies.filter((tax) => tax.id).map(
           (tax) => tax.id as number,
@@ -39,10 +45,8 @@ export class FormService {
       text: this.fb.nonNullable.control(content.text),
       html: this.fb.nonNullable.control(content.html),
       content: this.fb.control(content.content),
-      seo: this.fb.nonNullable.group(content?.seo || { description: '' }),
-      metaData: this.fb.nonNullable.control(
-        content?.metaData || { media_id: 0 },
-      ),
+      seo: this.fb.nonNullable.group(content?.seo || {}),
+      metaData: this.fb.nonNullable.group(content.metaData),
       taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
       newTaxonomies: this.fb.nonNullable.control([]),
     };

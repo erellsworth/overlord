@@ -10,16 +10,11 @@ import { ButtonModule } from 'primeng/button';
 import { ContentForm } from '../content-form.interface';
 
 @Component({
-    selector: 'app-image-selector',
-    imports: [
-        ButtonModule,
-        CommonModule,
-        ImageModule,
-        ReactiveFormsModule
-    ],
-    providers: [DialogService],
-    templateUrl: './image-selector.component.html',
-    styleUrl: './image-selector.component.scss'
+  selector: 'app-image-selector',
+  imports: [ButtonModule, CommonModule, ImageModule, ReactiveFormsModule],
+  providers: [DialogService],
+  templateUrl: './image-selector.component.html',
+  styleUrl: './image-selector.component.scss',
 })
 export class ImageSelectorComponent implements OnInit {
   @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
@@ -28,23 +23,30 @@ export class ImageSelectorComponent implements OnInit {
 
   private subs: Subscription[] = [];
 
-  constructor(private dialogService: DialogService, private media: MediaService) { }
+  constructor(
+    private dialogService: DialogService,
+    private media: MediaService,
+  ) {}
 
   ngOnInit(): void {
     if (this.metatDataControl?.value) {
-      this.subs.push(this.media.getImageById$(this.mediaId).subscribe(response => {
-        if (response.success) {
-          this.image.set(response.data as Image);
-        }
-      }));
+      this.subs.push(
+        this.media.getImageById$(this.mediaId).subscribe((response) => {
+          if (response.success) {
+            this.image.set(response.data as Image);
+          }
+        }),
+      );
     }
 
-    this.subs.push(this.media.selectedImage.subscribe(data => {
-      if (data.image && data.source === 'selector') {
-        this.image.set(data.image);
-        this.mediaId = data.image.data.id as number;
-      }
-    }));
+    this.subs.push(
+      this.media.selectedImage.subscribe((data) => {
+        if (data.image && data.source === 'selector') {
+          this.image.set(data.image);
+          this.mediaId = data.image.data.id as number;
+        }
+      }),
+    );
   }
 
   private get metatDataControl() {
@@ -52,7 +54,7 @@ export class ImageSelectorComponent implements OnInit {
   }
 
   private get mediaId() {
-    return this.metatDataControl?.value.media_id;
+    return this.metatDataControl?.value.media_id as number;
   }
 
   private set mediaId(id: number) {
@@ -71,7 +73,7 @@ export class ImageSelectorComponent implements OnInit {
   public showImageLibrary(): void {
     this.media.launchLibrary(this.dialogService, {
       image: this.image() as Image,
-      source: 'selector'
+      source: 'selector',
     });
   }
 }

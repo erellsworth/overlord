@@ -26,7 +26,6 @@ export class ConfigService {
 
       if (result.success) {
         this.config.set(result.data as OverlordConfig);
-        console.log('set', result.data);
       } else {
         console.error('Problem fetching config', result.error);
       }

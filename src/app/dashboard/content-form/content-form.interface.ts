@@ -13,9 +13,13 @@ export interface ContentForm {
   content: FormControl<Content>;
   seo: FormGroup<{
     description: FormControl<string>;
-    [key: string]: FormControl<string>;
+    [key: string]: FormControl<any>;
   }>;
-  metaData: FormControl<{ [key: string]: any }>;
+  metaData: FormGroup<{
+    media_id: FormControl<number>;
+    wordCount: FormControl<number>;
+    [key: string]: FormControl<any>;
+  }>;
   taxonomyIds: FormControl<number[]>;
   newTaxonomies: FormControl<string[]>;
 }

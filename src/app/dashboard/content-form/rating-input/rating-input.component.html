@@ -1,0 +1,6 @@
+<div [formGroup]="formGroup">
+  <div [formGroupName]="groupName()">
+    <label class="block py-2">{{ field().label }}:</label>
+    <p-rating [formControlName]="field().name" />
+  </div>
+</div>

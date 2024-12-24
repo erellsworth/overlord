@@ -67,6 +67,6 @@ class Overlord {
   }
 }
 
-const configurator = new Overlord(configFile as OverlordConfig);
+const configurator = new Overlord(configFile as OverlordConfigFile);
 
 export { configurator };

@@ -12,6 +12,7 @@ export interface OverlordField {
   label?: string;
   type: OverlordFieldType;
   group?: 'seo' | 'metaData';
+  defaultValue?: any;
 }
 
 export type OverlordFieldType =

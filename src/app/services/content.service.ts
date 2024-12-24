@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, signal } from '@angular/core';
-import { ContentInterface } from '../../../interfaces/content';
+import {
+  ContentInterface,
+  ContentMetaData,
+  ContentSeo,
+} from '../../../interfaces/content';
 import { firstValueFrom } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -8,7 +12,10 @@ import {
   PaginatedApiResponse,
   PaginatedResults,
 } from '../../../interfaces/misc';
-import { OverlordContentType } from '../../../interfaces/overlord.config';
+import {
+  OverlordContentType,
+  OverlordField,
+} from '../../../interfaces/overlord.config';
 import { ConfigService } from './config.service';
 
 @Injectable({
@@ -164,6 +171,8 @@ export class ContentService {
     const title = contentType?.noTitle ? uuidv4() : '';
     const slug = contentType?.noTitle ? title : '';
 
+    const { metaData, seo } = this.getDefaults(type);
+
     return {
       title,
       type,
@@ -172,14 +181,50 @@ export class ContentService {
       text: '',
       html: '',
       content: null,
-      seo: {
-        description: '',
-      },
-      metaData: {
-        media_id: 0,
-        wordCount: 0,
-      },
+      seo,
+      metaData,
       Revisions: [],
     };
+  }
+
+  private getDefaults(type: string) {
+    const metaData: ContentMetaData = {
+      media_id: 0,
+      wordCount: 0,
+    };
+    const seo: ContentSeo = { description: '' };
+
+    const contentType = this.getContentTypeBySlug(type);
+    contentType?.fields?.forEach((field) => {
+      const _field = field as OverlordField;
+      if (_field.group === 'metaData') {
+        metaData[_field.name] = this.getDefaultValue(_field);
+      }
+
+      if (_field.group === 'seo') {
+        seo[_field.name] = this.getDefaultValue(_field);
+      }
+    });
+
+    return {
+      metaData,
+      seo,
+    };
+  }
+
+  private getDefaultValue(field: OverlordField) {
+    if (typeof field.defaultValue !== 'undefined') {
+      return field.defaultValue;
+    }
+    const numTypes = ['image', 'number', 'rating'];
+    if (numTypes.includes(field.type)) {
+      return 0;
+    }
+
+    if (field.type === 'boolean') {
+      return false;
+    }
+
+    return '';
   }
 }
