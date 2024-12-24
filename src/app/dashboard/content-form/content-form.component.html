@@ -12,11 +12,11 @@
         <p-select formControlName="type" [options]="contentTypes" />
       </div>
 
-      <p-divider></p-divider>
+      <p-divider />
     </ng-template>
 
     @if (showTitle) {
-      <app-title-input [formGroup]="formGroup"></app-title-input>
+      <app-title-input />
     }
 
     @for (field of fields; track field) {
@@ -26,33 +26,33 @@
         }
 
         @case ("image") {
-          <app-image-selector [formGroup]="formGroup"></app-image-selector>
+          <app-image-selector></app-image-selector>
 
-          <p-divider></p-divider>
+          <p-divider />
         }
 
         @case ("rating") {
           <app-rating-input [field]="field" />
 
-          <p-divider></p-divider>
+          <p-divider />
         }
 
         @case ("textarea") {
           <app-text-input [field]="field" />
 
-          <p-divider></p-divider>
+          <p-divider />
         }
 
         @case ("tags") {
-          <app-taxonomy-input [formGroup]="formGroup"></app-taxonomy-input>
+          <app-taxonomy-input />
 
-          <p-divider></p-divider>
+          <p-divider />
         }
 
         @case ("text") {
           <app-string-input [field]="field" />
 
-          <p-divider></p-divider>
+          <p-divider />
         }
       }
     }

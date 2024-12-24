@@ -13,23 +13,22 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonModule } from 'primeng/button';
+import { FormService } from '../../form.service';
 
 @Component({
-    selector: 'app-title-input',
-    imports: [
-        ButtonModule,
-        FloatLabelModule,
-        FontAwesomeModule,
-        InputGroupModule,
-        InputTextModule,
-        ReactiveFormsModule,
-    ],
-    templateUrl: './title-input.component.html',
-    styleUrl: './title-input.component.scss'
+  selector: 'app-title-input',
+  imports: [
+    ButtonModule,
+    FloatLabelModule,
+    FontAwesomeModule,
+    InputGroupModule,
+    InputTextModule,
+    ReactiveFormsModule,
+  ],
+  templateUrl: './title-input.component.html',
+  styleUrl: './title-input.component.scss',
 })
 export class TitleInputComponent implements OnInit, OnDestroy {
-  public formGroup = input.required<FormGroup<ContentForm>>();
-
   public icons = {
     locked: faLock,
     unlocked: faLockOpen,
@@ -37,8 +36,10 @@ export class TitleInputComponent implements OnInit, OnDestroy {
 
   private subs: Subscription[] = [];
 
+  constructor(private formService: FormService) {}
+
   ngOnInit(): void {
-    const titleControl = this.formGroup().get('title');
+    const titleControl = this.formGroup.get('title');
     if (titleControl) {
       this.subs.push(
         titleControl.valueChanges.subscribe((title) => {
@@ -54,6 +55,10 @@ export class TitleInputComponent implements OnInit, OnDestroy {
     this.subs.forEach((sub) => sub.unsubscribe());
   }
 
+  public get formGroup() {
+    return this.formService.form();
+  }
+
   public get slugIcon(): IconDefinition {
     if (!this.slugControl) {
       return faLock;
@@ -61,8 +66,8 @@ export class TitleInputComponent implements OnInit, OnDestroy {
     return this.slugControl.disabled ? faLock : faLockOpen;
   }
 
-  private get slugControl() {
-    return this.formGroup().get('slug');
+  public get slugControl() {
+    return this.formGroup.get('slug');
   }
 
   public toggleSlugField(): void {

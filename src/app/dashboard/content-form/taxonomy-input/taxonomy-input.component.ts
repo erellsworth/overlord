@@ -5,12 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-
-  FormControl,
-  FormGroup,
-  FormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import {
   AutoComplete,
   AutoCompleteCompleteEvent,
@@ -27,31 +22,34 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { slugger } from '../../../../../api/utils/misc';
+import { FormService } from '../../form.service';
 
 @Component({
-    selector: 'app-taxonomy-input',
-    imports: [
-        AutoCompleteModule,
-        ButtonModule,
-        CardModule,
-        ChipModule,
-        CommonModule,
-        FloatLabelModule,
-        FormsModule,
-        InputTextModule,
-    ],
-    templateUrl: './taxonomy-input.component.html',
-    styleUrl: './taxonomy-input.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-taxonomy-input',
+  imports: [
+    AutoCompleteModule,
+    ButtonModule,
+    CardModule,
+    ChipModule,
+    CommonModule,
+    FloatLabelModule,
+    FormsModule,
+    InputTextModule,
+  ],
+  templateUrl: './taxonomy-input.component.html',
+  styleUrl: './taxonomy-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaxonomyInputComponent implements OnInit {
-  @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
   @ViewChild('tagSearch') tagSearch!: AutoComplete;
 
   public currentFilter = '';
   public selectedTag!: string;
 
-  constructor(private taxonomyService: TaxonomyService) { }
+  constructor(
+    private formService: FormService,
+    private taxonomyService: TaxonomyService,
+  ) {}
 
   ngOnInit(): void {
     this.taxonomyService.fetchTaxonomies();
@@ -79,6 +77,10 @@ export class TaxonomyInputComponent implements OnInit {
     return this.taxonomyService.taxonomies().filter((tag) => {
       return tag.name.toLowerCase().includes(this.currentFilter);
     });
+  }
+
+  private get formGroup() {
+    return this.formService.form();
   }
 
   private get _newTaxonomies() {

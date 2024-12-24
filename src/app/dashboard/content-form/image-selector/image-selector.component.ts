@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ContentForm } from '../content-form.interface';
+import { FormService } from '../../form.service';
 
 @Component({
   selector: 'app-image-selector',
@@ -17,14 +18,13 @@ import { ContentForm } from '../content-form.interface';
   styleUrl: './image-selector.component.scss',
 })
 export class ImageSelectorComponent implements OnInit {
-  @Input({ required: true }) formGroup!: FormGroup<ContentForm>;
-
   public image = signal<Image | null>(null);
 
   private subs: Subscription[] = [];
 
   constructor(
     private dialogService: DialogService,
+    private formService: FormService,
     private media: MediaService,
   ) {}
 
@@ -47,6 +47,10 @@ export class ImageSelectorComponent implements OnInit {
         }
       }),
     );
+  }
+
+  private get formGroup() {
+    return this.formService.form();
   }
 
   private get metatDataControl() {
