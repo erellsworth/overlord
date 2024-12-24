@@ -1,6 +1,12 @@
 <div [formGroup]="formGroup">
-  <div [formGroupName]="groupName()">
-    <label class="block py-2">{{ field().label }}:</label>
-    <p-rating [formControlName]="field().name" />
+  <div [formGroupName]="groupName()" class="flex gap-3">
+    <div>
+      <label class="block py-2">{{ field().label }}:</label>
+      <p-rating [formControlName]="field().name" [stars]="10" />
+    </div>
+    <div>
+      <label class="block">Value (out of 5):</label>
+      <p>{{ rating }}</p>
+    </div>
   </div>
 </div>

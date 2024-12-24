@@ -9,4 +9,11 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './rating-input.component.html',
   styleUrl: './rating-input.component.scss',
 })
-export class RatingInputComponent extends AbstractInputComponent {}
+export class RatingInputComponent extends AbstractInputComponent {
+  public get rating() {
+    const value = this.formGroup
+      .get(this.groupName())
+      ?.get(this.field().name)?.value;
+    return (value || 0) / 2;
+  }
+}
