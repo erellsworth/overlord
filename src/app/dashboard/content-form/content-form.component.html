@@ -1,19 +1,17 @@
 @if (formGroup) {
   <p-card [formGroup]="formGroup" class="content-form">
     <ng-template #title>
-      @if (isNew) {
-        Create New
-      } @else {
-        Edit {{ formTitle }}
-        <p-inplace closable="closable" class="capitalize">
-          <ng-template #display>
-            {{ contentTypeSlug }}
-          </ng-template>
-          <ng-template #content>
-            <p-select formControlName="type" [options]="contentTypes" />
-          </ng-template>
-        </p-inplace>
-      }
+      <div class="flex align-items-center justify-content-between">
+        <span>
+          @if (isNew) {
+            Create New
+          } @else {
+            Edit {{ formTitle }}
+          }
+        </span>
+        <p-select formControlName="type" [options]="contentTypes" />
+      </div>
+
       <p-divider></p-divider>
     </ng-template>
 

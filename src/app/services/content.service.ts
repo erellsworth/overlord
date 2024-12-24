@@ -140,7 +140,7 @@ export class ContentService {
     );
 
     if (result.success) {
-      this.activeContent.set(result.data as ContentInterface);
+      this.setContent(result.data as ContentInterface);
     } else {
       console.error('Error fetching content', result.error);
     }
@@ -226,5 +226,14 @@ export class ContentService {
     }
 
     return '';
+  }
+
+  private setContent(content: ContentInterface) {
+    const { metaData, seo } = this.getDefaults(content.type);
+
+    content.metaData = { ...metaData, ...content.metaData };
+    content.seo = { ...seo, ...content.seo };
+
+    this.activeContent.set(content);
   }
 }
