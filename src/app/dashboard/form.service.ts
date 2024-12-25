@@ -1,9 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContentForm } from './content-form/content-form.interface';
-import { ContentInterface } from '../../../interfaces/content';
 import { ContentService } from '../services/content.service';
-import { OverlordField } from '../../../interfaces/overlord.config';
 
 @Injectable({
   providedIn: 'root',
