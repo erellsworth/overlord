@@ -1,6 +1,43 @@
 {
-    "contentTypes": {
-        "post": {},
-        "page": {}
+  "contentTypes": {
+    "post": {},
+    "page": {
+      "hierarchical": true
+    },
+    "image": {
+      "fields": [
+        "image",
+        {
+          "label": "Description",
+          "name": "description",
+          "type": "textarea",
+          "group": "seo"
+        },
+        "tags"
+      ]
+    },
+    "memo": {
+      "noTitle": true,
+      "fields": ["editor", "tags", "image"]
+    },
+    "review": {
+      "fields": [
+        "editor",
+        {
+          "label": "Rating",
+          "name": "rating",
+          "type": "rating",
+          "group": "metaData"
+        },
+        {
+          "label": "Description",
+          "name": "description",
+          "type": "textarea",
+          "group": "seo"
+        },
+        "tags",
+        "image"
+      ]
     }
+  }
 }
