@@ -1,9 +1,9 @@
 import express from 'express';
 import 'dotenv/config';
-import contentRouter from './routes/content';
-import mediaRouter from './routes/media';
-import taxonomyRouter from './routes/taxonomy';
-import settingsRouter from './routes/settings';
+import contentRouter from './api/routes/content';
+import mediaRouter from './api/routes/media';
+import taxonomyRouter from './api/routes/taxonomy';
+import settingsRouter from './api/routes/settings';
 
 // Create express instance
 const app = express();

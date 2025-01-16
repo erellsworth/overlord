@@ -2,29 +2,6 @@ MIT License
 
 Overlord Copyright (c) 2024, E.R. Ellsworth
 
----
-
-Angular:
-Copyright (c) 2010-2024 Google LLC. https://angular.io/license
-
-Express:
-Copyright (c) 2009-2014 TJ Holowaychuk <tj@vision-media.ca>
-Copyright (c) 2013-2014 Roman Shtylman <shtylman+expressjs@gmail.com>
-Copyright (c) 2014-2015 Douglas Christopher Wilson <doug@somethingdoug.com>
-
-PostgreSQL:
-Portions Copyright (c) 1996-2024, The PostgreSQL Global Development Group
-Portions Copyright (c) 1994, The Regents of the University of California 
-
-Primeng:
-Copyright (c) 2016-2024 PrimeTek
-
-Tiptap:
-Copyright (c) 2023, Tiptap GmbH
-
-ngx-tiptap:
-Copyright (c) 2021 Sibiraj
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
