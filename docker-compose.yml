@@ -1,0 +1,37 @@
+services:
+  overlord.api:
+    container_name: overlord
+    image: ${API_IMAGE}
+    restart: unless-stopped
+    environment:
+      - ASSETS_URI=${ASSETS_URI}
+      - AWS_ENDPOINT=${AWS_ENDPOINT}
+      - AWS_BUCKET=${AWS_ENDPOINT}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - APP_ENV=${APP_ENV}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - CA_CERT=${CA_CERT}
+    networks:
+      - overlord
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./overlord.json:/overlord.json
+
+  overlord.app:
+    depends_on:
+      - overlord.api
+    image: ${APP_IMAGE}
+    restart: unless-stopped
+    networks:
+      - overlord
+    ports:
+      - "8666:80"
+
+networks:
+  overlord:
