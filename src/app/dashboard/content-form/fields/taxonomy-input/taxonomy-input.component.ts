@@ -1,11 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import {
   AutoComplete,
   AutoCompleteCompleteEvent,
@@ -15,14 +14,13 @@ import {
 import { ChipModule } from 'primeng/chip';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { ContentForm } from '../content-form.interface';
-import { TaxonomyService } from '../../../services/taxonomy.service';
-import { TaxonomyInterface } from '../../../../../interfaces/taxonomy';
+import { TaxonomyService } from '@services/taxonomy.service';
+import { TaxonomyInterface } from '@interfaces/taxonomy';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { slugger } from '../../../../../api/utils/misc';
-import { FormService } from '../../form.service';
+import { slugger } from '@apiUtils/misc';
+import { FormService } from '../../../form.service';
 
 @Component({
   selector: 'app-taxonomy-input',

@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
-import { OverlordField } from '../../../../../interfaces/overlord.config';
-import { FormService } from '../../form.service';
+import { OverlordField } from '@interfaces/overlord.config';
+import { FormService } from '../../../form.service';
 
 @Component({
   selector: 'app-abstract-input',

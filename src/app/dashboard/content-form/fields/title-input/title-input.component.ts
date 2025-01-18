@@ -1,11 +1,10 @@
-import { Component, input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ContentForm } from '../content-form.interface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { Subscription } from 'rxjs';
-import { slugger } from '../../../../../api/utils/misc';
+import { slugger } from '@apiUtils/misc';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faLock,
@@ -13,7 +12,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonModule } from 'primeng/button';
-import { FormService } from '../../form.service';
+import { FormService } from '../../../form.service';
 
 @Component({
   selector: 'app-title-input',
