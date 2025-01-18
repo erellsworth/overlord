@@ -17,9 +17,9 @@ import { ContentInterface } from '../../../../interfaces/content';
 import { firstValueFrom, Subscription, timer } from 'rxjs';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
-import { TitleInputComponent } from './title-input/title-input.component';
-import { TaxonomyInputComponent } from './taxonomy-input/taxonomy-input.component';
-import { ImageSelectorComponent } from './image-selector/image-selector.component';
+import { TitleInputComponent } from '@fields/title-input/title-input.component';
+import { TaxonomyInputComponent } from '@fields/taxonomy-input/taxonomy-input.component';
+import { ImageSelectorComponent } from '@fields/image-selector/image-selector.component';
 import { DividerModule } from 'primeng/divider';
 import { ApiResponse } from '../../../../interfaces/misc';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -29,9 +29,9 @@ import { Router } from '@angular/router';
 import { FormService } from '../form.service';
 import { Select } from 'primeng/select';
 import { OverlordField } from '../../../../interfaces/overlord.config';
-import { TextInputComponent } from './text-input/text-input.component';
-import { StringInputComponent } from './string-input/string-input.component';
-import { RatingInputComponent } from './rating-input/rating-input.component';
+import { TextInputComponent } from '@fields/text-input/text-input.component';
+import { StringInputComponent } from '@fields/string-input/string-input.component';
+import { RatingInputComponent } from '@fields/rating-input/rating-input.component';
 
 @Component({
   selector: 'app-content-form',

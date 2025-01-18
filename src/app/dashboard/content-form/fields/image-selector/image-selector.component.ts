@@ -1,14 +1,13 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MediaService } from '../../../services/media.service';
+import { Component, OnInit, signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MediaService } from '@services/media.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ImageModule } from 'primeng/image';
-import { Image } from '../../../../../interfaces/media';
+import { Image } from '@interfaces/media';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { ContentForm } from '../content-form.interface';
-import { FormService } from '../../form.service';
+import { FormService } from '../../../form.service';
 
 @Component({
   selector: 'app-image-selector',
