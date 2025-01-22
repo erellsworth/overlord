@@ -3,7 +3,7 @@ import { SettingsService } from '../../services/settings.service';
 import { ContentService } from '../../services/content.service';
 import { ListboxModule } from 'primeng/listbox';
 import { DividerModule } from 'primeng/divider';
-import { TreeModule } from 'primeng/tree';
+import { TreeModule, TreeNodeDropEvent } from 'primeng/tree';
 import { NavMenuItem } from './nav-control.interface';
 import { OverlordContentType } from '../../../../interfaces/overlord.config';
 import { ButtonModule } from 'primeng/button';
@@ -83,6 +83,9 @@ export class NavControlComponent implements OnInit {
 
     let items: NavMenuItem[] = [
       {
+        label: 'Home',
+      },
+      {
         label: 'Tags',
         isGenerated: true,
       },
@@ -93,7 +96,7 @@ export class NavControlComponent implements OnInit {
         this.taxonomiesService.taxonomies().map((tag) => {
           return {
             label: tag.name,
-            slug: tag.slug,
+            slug: `tag/${tag.slug}`, //TODO: make these prefixes configurable
           };
         }),
       )
@@ -101,7 +104,7 @@ export class NavControlComponent implements OnInit {
         this.contentTypes.map((ct) => {
           return {
             label: ct.plural as string,
-            slug: ct.slug,
+            slug: `type/${ct.slug}`,
           };
         }),
       );
@@ -129,6 +132,7 @@ export class NavControlComponent implements OnInit {
   public addItem() {
     if (this.selectedMenuObj) {
       this.selectedMenuObj.children?.push(this.pendingItem);
+
       this.pendingItem = {
         label: '',
         slug: '',
@@ -169,8 +173,15 @@ export class NavControlComponent implements OnInit {
 
   public itemDropped() {
     if (this.draggingItem) {
-      this.selectedMenuObj?.children?.push({ ...this.draggingItem });
+      this.selectedMenuObj?.children?.push({
+        ...this.draggingItem,
+        ...{ droppable: !this.draggingItem.isGenerated },
+      });
     }
+  }
+
+  public log() {
+    console.log(this.selectedMenuObj);
   }
 
   public removeItem(node: any) {
