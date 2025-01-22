@@ -20,6 +20,31 @@ export class FormService {
     private fb: FormBuilder,
   ) {}
 
+  public get metaData() {
+    return this.form().get('metaData') as FormGroup;
+  }
+
+  public addMetaData(key: string, value: any) {
+    this.metaData.setControl(key, this.fb.control(value));
+  }
+
+  /**
+   * Adds a value to an array in the metadata
+   * will create control and new array if needed
+   */
+  public pushMetaData(key: string, value: any) {
+    const meta = this.metaData.get(key)?.value || [];
+
+    if (!Array.isArray(meta)) {
+      console.error(`${key} control is not an array`);
+      return;
+    }
+
+    meta.push(value);
+
+    this.addMetaData(key, meta);
+  }
+
   public prepareForm(): void {
     const content = this.contentService.activeContent();
     const taxonomyIds = content.Taxonomies

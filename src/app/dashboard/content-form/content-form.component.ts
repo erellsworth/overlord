@@ -32,11 +32,14 @@ import { OverlordField } from '../../../../interfaces/overlord.config';
 import { TextInputComponent } from '@fields/text-input/text-input.component';
 import { StringInputComponent } from '@fields/string-input/string-input.component';
 import { RatingInputComponent } from '@fields/rating-input/rating-input.component';
+import { BlueSkyComponent } from './blue-sky/blue-sky.component';
+import { ShareListComponent } from './blue-sky/share-list/share-list.component';
 
 @Component({
   selector: 'app-content-form',
   imports: [
     ButtonModule,
+    BlueSkyComponent,
     CardModule,
     ConfirmPopupModule,
     CommonModule,
@@ -49,6 +52,7 @@ import { RatingInputComponent } from '@fields/rating-input/rating-input.componen
     RatingInputComponent,
     ReactiveFormsModule,
     Select,
+    ShareListComponent,
     StringInputComponent,
     TaxonomyInputComponent,
     Textarea,
@@ -97,6 +101,10 @@ export class ContentFormComponent implements OnInit, OnDestroy {
     return this.isNew ? 'Create' : 'Update';
   }
 
+  public get content() {
+    return this.contentService.activeContent();
+  }
+
   public get contentTypeSlug(): string {
     return this.formService.contentType();
   }
@@ -111,6 +119,10 @@ export class ContentFormComponent implements OnInit, OnDestroy {
 
   public get formGroup() {
     return this.formService.form();
+  }
+
+  public get id() {
+    return this.formGroup.get('id')?.value as number;
   }
 
   public get isNew(): boolean {

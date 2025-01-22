@@ -4,6 +4,7 @@ import contentRouter from './api/routes/content';
 import mediaRouter from './api/routes/media';
 import taxonomyRouter from './api/routes/taxonomy';
 import settingsRouter from './api/routes/settings';
+import atproRouter from './api/routes/atpro';
 
 // Create express instance
 const app = express();
@@ -13,6 +14,7 @@ app.use(contentRouter);
 app.use(mediaRouter);
 app.use(taxonomyRouter);
 app.use(settingsRouter);
+app.use(atproRouter);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

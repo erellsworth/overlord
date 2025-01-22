@@ -1,18 +1,37 @@
 import { NodeOAuthClient } from '@atproto/oauth-client-node';
+import { AtpAgent } from '@atproto/api';
 import { JoseKey } from '@atproto/jwk-jose';
 import { generateKeyPair } from 'jose';
 
+//NOTE: Holding back on the oauth implementation until this can be deployed to a public server
 // based on https://github.com/kaytwo/atproto-oauth-client-server-example
 
 let clientInstance: NodeOAuthClient | null = null;
 const stateStore = new Map();
 const sessionStore = new Map();
 
+export const getAtproAgent = async () => {
+  const service = process.env.AT_PRO_SERVICE || '';
+  const identifier = process.env.AT_PRO_ID || '';
+  const password = process.env.AT_PRO_PASS || '';
+
+  const agent = new AtpAgent({
+    service,
+  });
+
+  await agent.login({
+    identifier,
+    password,
+  });
+
+  return agent;
+};
+
 export const getAtproClient = async () => {
   if (clientInstance) return clientInstance;
 
   // Replace with your ngrok URL
-  const BASE_URL = 'https://cms.overlord.ing/';
+  const BASE_URL = process.env.BASE_URL;
 
   clientInstance = new NodeOAuthClient({
     clientMetadata: {

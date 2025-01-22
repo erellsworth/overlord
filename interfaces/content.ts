@@ -17,7 +17,7 @@ export interface ContentMetaData {
   media_id: number;
   wordCount: number;
   isAutosave?: boolean;
-  [key: string]: string | number | boolean | undefined;
+  [key: string]: any;
 }
 
 export interface ContentSeo {

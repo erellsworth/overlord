@@ -57,33 +57,42 @@
       }
     }
 
-    <div class="flex justify-content-left gap-3">
-      <p-button
-        [label]="buttonText"
-        (onClick)="save()"
-        [disabled]="formGroup.invalid"
-      />
-
-      @if (status === "draft") {
+    <div class="flex justify-content-between gap-3 align-items-end">
+      <div class="flex justify-content-left gap-3">
         <p-button
-          label="Publish"
-          (onClick)="publish()"
+          [label]="buttonText"
+          (onClick)="save()"
           [disabled]="formGroup.invalid"
         />
+
+        @if (status === "draft") {
+          <p-button
+            label="Publish"
+            (onClick)="publish()"
+            [disabled]="formGroup.invalid"
+          />
+        }
+        @if (status === "published") {
+          <p-button
+            label="Unpublish"
+            (onClick)="unpublish()"
+            [disabled]="formGroup.invalid"
+          />
+        }
+        @if (!isNew) {
+          <p-button
+            label="Delete"
+            (onClick)="delete($event)"
+            [disabled]="formGroup.invalid"
+          />
+        }
+      </div>
+
+      @if (content.metaData.atProShares) {
+        <app-share-list [shares]="content.metaData.atProShares" />
       }
       @if (status === "published") {
-        <p-button
-          label="Unpublish"
-          (onClick)="unpublish()"
-          [disabled]="formGroup.invalid"
-        />
-      }
-      @if (!isNew) {
-        <p-button
-          label="Delete"
-          (onClick)="delete($event)"
-          [disabled]="formGroup.invalid"
-        />
+        <app-blue-sky (shared)="save()" [id]="id" />
       }
     </div>
   </p-card>
