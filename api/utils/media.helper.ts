@@ -50,6 +50,10 @@ export const attachImage = async (
     const media: MediaInterface = await Media.findById(
       content.metaData.media_id,
     );
+
+    if (!media) {
+      return content;
+    }
     const basePath = `${process.env.ASSETS_URI}${media.path}/`;
 
     content.image = {
