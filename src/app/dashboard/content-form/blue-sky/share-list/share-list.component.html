@@ -1,0 +1,10 @@
+<section>
+  <h5>Social shares</h5>
+  <ul class="list-none">
+    @for (share of shares(); track $index) {
+      <li>
+        <a [href]="getUrl(share)" target="_blank">{{ getUrl(share) }}</a>
+      </li>
+    }
+  </ul>
+</section>

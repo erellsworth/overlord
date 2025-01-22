@@ -9,6 +9,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { FormService } from '../../form.service';
+import { ContentInterface } from '@interfaces/content';
 
 @Component({
   selector: 'app-blue-sky',
@@ -51,6 +52,7 @@ export class BlueSkyComponent {
 
     if (result) {
       this.formService.pushMetaData('atProShares', result);
+      this.shared.emit();
     }
   }
 }

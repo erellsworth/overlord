@@ -41,10 +41,14 @@ export interface ImageStorageResult extends GenericResult {
   thumbResult?: S3UploadResult;
 }
 
-export interface NuxtMeta {
-  hid: string;
-  name: string;
-  content: string;
+export interface AtproResult {
+  uri: string;
+  cid: string;
+  commit: {
+    cid: string;
+    rev: string;
+  };
+  validationStatus: string;
 }
 
 export type ContentWithMedia = ContentInterface | TaxonomyInterface;
