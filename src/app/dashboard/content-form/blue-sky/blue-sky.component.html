@@ -1,0 +1,19 @@
+<section>
+  <h3>Share to BlueSky</h3>
+  <p-floatLabel>
+    <textarea
+      id="intro_text"
+      rows="5"
+      cols="30"
+      pTextarea
+      [(ngModel)]="introText"
+    ></textarea>
+    <label for="intro_text">Intro Text</label>
+  </p-floatLabel>
+
+  <hr />
+  <p-button label="Share" [disabled]="!introText" (onClick)="confirm($event)" />
+</section>
+
+<p-toast />
+<p-confirmdialog />
