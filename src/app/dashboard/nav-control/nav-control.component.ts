@@ -202,9 +202,37 @@ export class NavControlComponent implements OnInit {
   }
 
   public async save() {
+    const menus = [...this.menus];
+
     this.settings.saveSetting({
       name: 'menus',
-      data: this.menus,
+      data: menus.map((menu) => this.cleanItems(menu)),
     });
+  }
+
+  private cleanItems(item: NavMenuItem) {
+    const returnItem = { ...item };
+    if (returnItem.children) {
+      returnItem.children = returnItem.children.map((child) =>
+        this.killParent(child),
+      );
+    }
+
+    return returnItem;
+  }
+
+  private killParent(item: NavMenuItem) {
+    const returnItem = { ...item };
+    delete returnItem.parent;
+
+    const hasChildrenWithParents = item.children?.find((child) => child.parent);
+
+    if (hasChildrenWithParents) {
+      returnItem.children = item.children?.map((child) => {
+        return this.killParent(child);
+      });
+    }
+
+    return returnItem;
   }
 }
