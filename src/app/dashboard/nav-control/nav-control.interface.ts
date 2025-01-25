@@ -3,4 +3,5 @@ export interface NavMenuItem {
   slug?: string;
   children?: NavMenuItem[];
   isGenerated?: boolean;
+  parent?: NavMenuItem;
 }
