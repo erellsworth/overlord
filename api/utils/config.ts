@@ -58,10 +58,13 @@ class Overlord {
         : this.defaultFields;
 
       return {
-        label: contentType.label || titleCase(slug),
-        slug: contentType.slug || slugger(slug),
-        plural: contentType.plural || `${titleCase(slug)}s`,
-        fields,
+        ...contentType,
+        ...{
+          label: contentType.label || titleCase(slug),
+          slug: contentType.slug || slugger(slug),
+          plural: contentType.plural || `${titleCase(slug)}s`,
+          fields,
+        },
       };
     });
   }
