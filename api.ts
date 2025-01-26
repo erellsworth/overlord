@@ -8,8 +8,8 @@ import atproRouter from './api/routes/atpro';
 
 // Create express instance
 const app = express();
-app.use(express.json()); // for parsing application/json
-app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(express.json({ limit: '10mb' })); // for parsing application/json
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(contentRouter);
 app.use(mediaRouter);
 app.use(taxonomyRouter);
