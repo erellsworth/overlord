@@ -46,6 +46,7 @@ class customStorage {
 
 const upload = multer({
   storage: new customStorage(),
+  limits: { fileSize: 5242880 /* bytes */ }, // 5mb
 });
 
 mediaRouter.get('/media/image/:id', async (req: Request, res: Response) => {
@@ -102,22 +103,6 @@ mediaRouter.get(
     successResponse(res, { validName });
   },
 );
-
-//     if (!req.query.url) {
-//         return errorResponse(res, 'Url parameter missing', 400);
-//     }
-
-//     request({
-//         url: req.query.url as string,
-//         encoding: null
-//     },
-//         (err, resp) => {
-//             if (!err && resp.statusCode === 200) {
-//                 res.set("Content-Type", resp.headers["content-type"]);
-//                 res.send(resp.body);
-//             }
-//         });
-// });
 
 mediaRouter.post(
   '/media/create',
