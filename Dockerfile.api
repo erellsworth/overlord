@@ -8,6 +8,8 @@ RUN npm install
 
 COPY ./api ./api
 
+COPY tsconfig*.json ./
+
 COPY api.ts ./
 
 CMD ["npm", "run", "api"]
