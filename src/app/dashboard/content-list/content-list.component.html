@@ -1,5 +1,11 @@
 <ul>
-  @if (!contents.length) {
+  @if (isLoading) {
+    <li>
+      <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" />
+    </li>
+  }
+
+  @if (!contents.length && !isLoading) {
     <li class="py-2">No {{ contentType() }} found</li>
   }
 

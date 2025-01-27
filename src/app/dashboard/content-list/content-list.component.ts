@@ -5,13 +5,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faEye,
   faEyeSlash,
-  faPaperPlane,
   faPenToSquare,
   faTrashCan,
 } from '@fortawesome/free-regular-svg-icons';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
@@ -19,19 +19,20 @@ import { ContentInterface } from '../../../../interfaces/content';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
-    selector: 'app-content-list',
-    imports: [
-        ButtonModule,
-        ConfirmPopupModule,
-        FontAwesomeModule,
-        PaginatorModule,
-        RouterModule,
-        ToastModule,
-        TooltipModule,
-    ],
-    templateUrl: './content-list.component.html',
-    styleUrl: './content-list.component.scss',
-    providers: [ConfirmationService, MessageService]
+  selector: 'app-content-list',
+  imports: [
+    ButtonModule,
+    ConfirmPopupModule,
+    FontAwesomeModule,
+    ProgressBarModule,
+    PaginatorModule,
+    RouterModule,
+    ToastModule,
+    TooltipModule,
+  ],
+  templateUrl: './content-list.component.html',
+  styleUrl: './content-list.component.scss',
+  providers: [ConfirmationService, MessageService],
 })
 export class ContentListComponent {
   public contentType = input<string>();
@@ -42,6 +43,7 @@ export class ContentListComponent {
     publish: faEyeSlash,
     unpublish: faEye,
   };
+  public isLoading = false;
   public page = 1;
 
   constructor(
@@ -51,9 +53,11 @@ export class ContentListComponent {
   ) {
     effect(async () => {
       if (this.contentType()) {
+        this.isLoading = true;
         await this.contentService.fetchContentsByType(
           this.contentType() as string,
         );
+        this.isLoading = false;
       }
     });
   }
