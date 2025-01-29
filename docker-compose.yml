@@ -16,6 +16,12 @@ services:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - CA_CERT=${CA_CERT}
+      - AT_PRO_SERVICE=${AT_PRO_SERVICE}
+      - AT_PRO_ID=${AT_PRO_ID}
+      - AT_PRO_PASS=${AT_PRO_PASS}
+      - FRONT_END_URL=${FRONT_END_URL}
+      - FRONT_END_CONTENT_ROUTE=${FRONT_END_CONTENT_ROUTE}
+
     networks:
       - overlord
     ports:
