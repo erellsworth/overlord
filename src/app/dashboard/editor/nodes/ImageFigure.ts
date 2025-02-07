@@ -1,13 +1,18 @@
 import { Injector } from '@angular/core';
-import { mergeAttributes, Node } from '@tiptap/core'
+import { mergeAttributes, Node } from '@tiptap/core';
 import { AngularNodeViewRenderer } from 'ngx-tiptap';
 import { TiptapImageComponent } from '../tiptap-image/tiptap-image.component';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     ImageFigure: {
-      setCustomImage: (options: { src?: string, imageId?: number, alt?: string, caption?: string }) => ReturnType,
-    }
+      setCustomImage: (options: {
+        src?: string;
+        imageId?: number;
+        alt?: string;
+        caption?: string;
+      }) => ReturnType;
+    };
   }
 }
 
@@ -18,7 +23,7 @@ const ImageFigure = (injector: Injector): Node => {
     addOptions() {
       return {
         HTMLAttributes: {},
-      }
+      };
     },
     addAttributes() {
       return {
@@ -33,24 +38,28 @@ const ImageFigure = (injector: Injector): Node => {
         },
         caption: {
           default: null,
-        }
-      }
+        },
+      };
     },
     parseHTML() {
       return [
         {
           tag: `figure[data-type="${this.name}"]`,
         },
-      ]
+      ];
     },
     renderHTML({ node, HTMLAttributes }): DOMOutputSpec {
-      const output: DOMOutputSpec = [
-        'figure',
-        { class: 'text-center' }
-      ];
+      let figureClass = 'image';
+      if (node.attrs.caption) {
+        figureClass += ' has-caption';
+      }
+      const output: DOMOutputSpec = ['figure', { class: figureClass }];
 
       if (node.attrs.imageId) {
-        const img: DOMOutputSpec = ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)];
+        const img: DOMOutputSpec = [
+          'img',
+          mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+        ];
         output.push(img);
       }
 
@@ -62,18 +71,20 @@ const ImageFigure = (injector: Injector): Node => {
     },
     addCommands() {
       return {
-        setCustomImage: options => ({ commands }) => {
-          return commands.insertContent({
-            type: this.name,
-            attrs: options
-          })
-        },
-      }
+        setCustomImage:
+          (options) =>
+          ({ commands }) => {
+            return commands.insertContent({
+              type: this.name,
+              attrs: options,
+            });
+          },
+      };
     },
     addNodeView() {
       return AngularNodeViewRenderer(TiptapImageComponent, { injector });
     },
   });
-}
+};
 
 export default ImageFigure;

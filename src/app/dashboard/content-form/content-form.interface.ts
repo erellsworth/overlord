@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormControl } from '@angular/forms';
 import { Content } from '@tiptap/core';
 import { ContentBase, ContentStatus } from '../../../../interfaces/content';
 
@@ -18,7 +18,7 @@ export interface ContentForm {
   metaData: FormGroup<{
     media_id: FormControl<number>;
     wordCount: FormControl<number>;
-    [key: string]: FormControl<any>;
+    [key: string]: UntypedFormControl;
   }>;
   taxonomyIds: FormControl<number[]>;
   newTaxonomies: FormControl<string[]>;
