@@ -1,5 +1,11 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  UntypedFormControl,
+  Validators,
+} from '@angular/forms';
 import { ContentForm } from './content-form/content-form.interface';
 import { ContentService } from '../services/content.service';
 
@@ -53,6 +59,24 @@ export class FormService {
         )
       : [];
 
+    const { media_id, wordCount } = content.metaData;
+
+    const metaData = this.fb.group({
+      media_id,
+      wordCount,
+    }) as FormGroup<{
+      media_id: FormControl<number>;
+      wordCount: FormControl<number>;
+      [key: string]: UntypedFormControl;
+    }>;
+
+    Object.keys(content.metaData).forEach((key) => {
+      if (key === 'media_id' || key === 'wordCount') {
+        return;
+      }
+      metaData.addControl(key, this.fb.control(content.metaData[key]));
+    });
+
     const formData: ContentForm = {
       id: this.fb.nonNullable.control(content.id),
       title: this.fb.nonNullable.control(content.title, Validators.required),
@@ -69,7 +93,7 @@ export class FormService {
       html: this.fb.nonNullable.control(content.html),
       content: this.fb.control(content.content),
       seo: this.fb.nonNullable.group(content?.seo || {}),
-      metaData: this.fb.nonNullable.group(content.metaData),
+      metaData,
       taxonomyIds: this.fb.nonNullable.control(taxonomyIds),
       newTaxonomies: this.fb.nonNullable.control([]),
     };
