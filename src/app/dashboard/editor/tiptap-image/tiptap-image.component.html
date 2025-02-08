@@ -1,28 +1,37 @@
-@if(image){
-<figure class="relative text-center" (mouseenter)="showButtons = true" (mouseleave)="showButtons=false">
+@if (image) {
+  <figure
+    class="relative text-center"
+    (mouseenter)="showButtons = true"
+    (mouseleave)="showButtons = false"
+  >
     <p-image [src]="image.full" [alt]="image.data.alt"></p-image>
 
-    @if(caption) {
-    <figcaption>
-        {{caption}}
-    </figcaption>
+    @if (caption) {
+      <figcaption>
+        {{ caption }}
+      </figcaption>
     }
 
     @if (showButtons) {
-    <div class="card flex justify-content-center absolute top-0 left-0 right-0">
+      <div
+        class="card flex justify-content-center absolute top-0 left-0 right-0"
+      >
         <p-buttonGroup>
-            <p-button (onClick)="launchEditor()" title="Edit">
-                <fa-icon [icon]="icons.edit"></fa-icon>
-            </p-button>
-            <p-button (onClick)="launchMediaLibrary()" title="Replace">
-                <fa-icon [icon]="icons.replace"></fa-icon>
-            </p-button>
+          <p-button (onClick)="launchEditor()" title="Edit">
+            <fa-icon [icon]="icons.edit"></fa-icon>
+          </p-button>
+          <p-button (onClick)="launchMediaLibrary()" title="Replace">
+            <fa-icon [icon]="icons.replace"></fa-icon>
+          </p-button>
+          <p-button (onClick)="remove()" title="Remove">
+            <fa-icon [icon]="icons.remove"></fa-icon>
+          </p-button>
         </p-buttonGroup>
-    </div>
+      </div>
     }
-</figure>
+  </figure>
 
-<p-dialog [(visible)]="showEditor" [maximizable]="true" [modal]="true">
+  <p-dialog [(visible)]="showEditor" [maximizable]="true" [modal]="true">
     <app-image-editor [image]="image"></app-image-editor>
-</p-dialog>
+  </p-dialog>
 }

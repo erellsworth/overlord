@@ -7,7 +7,11 @@ import { DialogModule } from 'primeng/dialog';
 import { ImageEditorComponent } from '../../media-library/image-editor/image-editor.component';
 import { ImageModule } from 'primeng/image';
 import { DialogService } from 'primeng/dynamicdialog';
-import { faEdit, faRightLeft } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEdit,
+  faRemove,
+  faRightLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import { Image } from '../../../../../interfaces/media';
 import { MediaService } from '../../../services/media.service';
 import { Subscription } from 'rxjs';
@@ -34,6 +38,7 @@ export class TiptapImageComponent
   public caption!: string;
   public icons = {
     edit: faEdit,
+    remove: faRemove,
     replace: faRightLeft,
   };
   public image!: Image;
@@ -85,5 +90,11 @@ export class TiptapImageComponent
       position: this.getPos()(),
       source: 'imageCard',
     });
+  }
+
+  public remove(): void {
+    const from = this.getPos()();
+    const to = from + this.node().nodeSize;
+    this.editor().commands.deleteRange({ from, to });
   }
 }
