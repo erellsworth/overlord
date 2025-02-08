@@ -13,9 +13,10 @@ export class ConfigService {
   public contentTypes = computed(() => {
     return this.config().contentTypes;
   });
+  public version = signal<string>('');
 
   constructor(private http: HttpClient) {
-    console.log('version', configFile.version);
+    this.version.set(configFile.version);
   }
 
   public async fetchConfig(): Promise<void> {

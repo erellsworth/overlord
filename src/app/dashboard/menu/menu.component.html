@@ -1,1 +1,12 @@
-<p-menubar [model]="items()" />
+<p-menubar [model]="items()">
+  <ng-template #end>
+    <div class="flex flex-column items-center gap-2 align-items-center">
+      <p-avatar
+        image="assets/overlord-logo.webp"
+        shape="circle"
+        styleClass="bg-white"
+      />
+      <small>{{ version }}</small>
+    </div>
+  </ng-template>
+</p-menubar>
