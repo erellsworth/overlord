@@ -1,11 +1,9 @@
 import { computed, Injectable, signal } from '@angular/core';
-import {
-  OverlordConfig,
-  OverlordField,
-} from '../../../interfaces/overlord.config';
+import { OverlordConfig } from '../../../interfaces/overlord.config';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { ApiResponse } from '../../../interfaces/misc';
+import { default as configFile } from '../../../package.json';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +14,9 @@ export class ConfigService {
     return this.config().contentTypes;
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    console.log('version', configFile.version);
+  }
 
   public async fetchConfig(): Promise<void> {
     try {
