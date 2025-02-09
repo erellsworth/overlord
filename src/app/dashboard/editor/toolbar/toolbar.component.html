@@ -66,7 +66,7 @@
   <p-button
     [severity]="buttonSeverity('columns')"
     title="Columned section"
-    (onClick)="addColumnSection()"
+    (onClick)="colInput.toggle($event)"
   >
     <fa-icon [icon]="icons.columns"></fa-icon>
   </p-button>
@@ -122,3 +122,26 @@
     <fa-icon [icon]="icons.console"></fa-icon>
   </p-button>
 </div>
+
+<p-popover #colInput>
+  <div class="flex align-items-center gap-2">
+    <div class="flex flex-column">
+      <label for="columnInput">Columns to insert</label>
+      <input
+        type="text"
+        id="columnInput"
+        pInputText
+        [(ngModel)]="columnNumber"
+        class="w-10rem mb-4"
+      />
+      <p-slider
+        [(ngModel)]="columnNumber"
+        [min]="1"
+        [max]="5"
+        [step]="1"
+        styleClass="w-10rem"
+      />
+    </div>
+    <p-button label="Insert" (onClick)="addColumnSection()" />
+  </div>
+</p-popover>

@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { Button, ButtonModule } from 'primeng/button';
 import { Editor } from '@tiptap/core';
 import { Level } from '@tiptap/extension-heading';
+import { PopoverModule } from 'primeng/popover';
+import { SliderModule } from 'primeng/slider';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Icons } from './toolbar.icons';
 import { MediaService } from '../../../services/media.service';
@@ -14,16 +16,28 @@ import { VideoInputComponent } from '../video-input/video-input.component';
 import { Subscription } from 'rxjs';
 import { LinkInputComponent } from '../link-input/link-input.component';
 import { LinkConfig } from '../link-input/link-input.interface';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-toolbar',
-  imports: [ButtonModule, DynamicDialog, FontAwesomeModule],
+  imports: [
+    ButtonModule,
+    DynamicDialog,
+    FontAwesomeModule,
+    FormsModule,
+    InputTextModule,
+    PopoverModule,
+    SliderModule,
+  ],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss',
   providers: [DialogService],
 })
 export class ToolbarComponent {
   @Input({ required: true }) editor!: Editor;
+
+  public columnNumber = 2;
 
   public headingLevels = [...Array(6).keys()].map(
     (level) => (level + 1) as Level,
@@ -42,7 +56,7 @@ export class ToolbarComponent {
   }
 
   public addColumnSection(): void {
-    this.editor.commands.setColumns(2);
+    this.editor.commands.setColumns(this.columnNumber);
   }
 
   public buttonSeverity(style: string, attributes?: {}): Button['severity'] {
