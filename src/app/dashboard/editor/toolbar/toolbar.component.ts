@@ -41,6 +41,10 @@ export class ToolbarComponent {
     return this.editor.chain().focus();
   }
 
+  public addColumnSection(): void {
+    this.editor.commands.setColumns(2);
+  }
+
   public buttonSeverity(style: string, attributes?: {}): Button['severity'] {
     return this.editor.isActive(style, attributes) ? 'info' : undefined;
   }

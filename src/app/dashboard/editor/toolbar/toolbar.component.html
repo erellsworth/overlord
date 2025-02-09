@@ -64,6 +64,14 @@
   <hr class="w-full m-0 opacity-0" />
 
   <p-button
+    [severity]="buttonSeverity('columns')"
+    title="Columned section"
+    (onClick)="addColumnSection()"
+  >
+    <fa-icon [icon]="icons.columns"></fa-icon>
+  </p-button>
+
+  <p-button
     [severity]="buttonSeverity('bulletList')"
     title="Bullet list"
     (onClick)="focus.toggleBulletList().run()"
