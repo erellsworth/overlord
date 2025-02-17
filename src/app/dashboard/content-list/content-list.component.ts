@@ -1,6 +1,6 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, input, OnDestroy, OnInit } from '@angular/core';
 import { ContentService } from '../../services/content.service';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faEye,
@@ -17,6 +17,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { ContentInterface } from '../../../../interfaces/content';
 import { TooltipModule } from 'primeng/tooltip';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-content-list',
@@ -34,8 +35,10 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrl: './content-list.component.scss',
   providers: [ConfirmationService, MessageService],
 })
-export class ContentListComponent {
-  public contentType = input<string>();
+export class ContentListComponent implements OnInit, OnDestroy {
+  public contentType = input('', {
+    transform: (value: string | undefined): string => value || 'all',
+  });
   public icons = {
     create: faSquarePlus,
     delete: faTrashCan,
@@ -46,20 +49,32 @@ export class ContentListComponent {
   public isLoading = false;
   public page = 1;
 
+  private _subs: Subscription[] = [];
+
   constructor(
     private confirmationService: ConfirmationService,
     private contentService: ContentService,
     private messageService: MessageService,
-  ) {
-    effect(async () => {
-      if (this.contentType()) {
+    private route: ActivatedRoute,
+  ) {}
+
+  ngOnInit(): void {
+    this._subs.push(
+      this.route.data.subscribe(async (data) => {
+        const params = data.queryParams || {};
         this.isLoading = true;
         await this.contentService.fetchContentsByType(
           this.contentType() as string,
+          this.page,
+          params,
         );
         this.isLoading = false;
-      }
-    });
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this._subs.forEach((sub) => sub.unsubscribe());
   }
 
   public get contents() {
