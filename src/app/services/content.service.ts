@@ -89,11 +89,13 @@ export class ContentService {
   public async fetchContentsByType(
     type: string,
     page: number = 1,
+    params: any = {},
   ): Promise<void> {
     try {
       const result = await firstValueFrom(
         this.http.get<PaginatedApiResponse<ContentInterface>>(
           `api/content/type/${type}`,
+          { params },
         ),
       );
 
@@ -125,7 +127,11 @@ export class ContentService {
     }
   }
 
-  public async fetchContent(contentType: string, slug?: string): Promise<void> {
+  public async fetchContent(
+    contentType: string,
+    slug?: string,
+    params?: any,
+  ): Promise<void> {
     if (!slug) {
       this.activeContent.set({
         ...this.getDefaultContent(contentType),
@@ -136,7 +142,9 @@ export class ContentService {
       return;
     }
     const result = await firstValueFrom(
-      this.http.get<ApiResponse<ContentInterface>>(`api/content/${slug}`),
+      this.http.get<ApiResponse<ContentInterface>>(`api/content/${slug}`, {
+        params,
+      }),
     );
 
     if (result.success) {

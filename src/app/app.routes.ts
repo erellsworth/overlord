@@ -12,11 +12,21 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: ContentFormComponent,
+        component: ContentListComponent,
         resolve: { contentResolver },
+        data: {
+          queryParams: {
+            orderBy: 'updatedAt',
+          },
+        },
       },
       {
         path: 'content/:contentType',
+        component: ContentListComponent,
+        resolve: { contentResolver },
+      },
+      {
+        path: 'content/:contentType/:page',
         component: ContentListComponent,
         resolve: { contentResolver },
       },
