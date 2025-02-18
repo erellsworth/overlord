@@ -4,7 +4,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { Subscription } from 'rxjs';
-import { slugger } from '@apiUtils/misc';
+import { slugger } from '@app/utils';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faLock,
