@@ -10,7 +10,7 @@ import { CardModule } from 'primeng/card';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
-import { Image } from '../../../../../interfaces/media';
+import { Image } from '@overlord/types';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faFileImport,

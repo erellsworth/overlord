@@ -1,21 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, Injectable, signal } from '@angular/core';
 import {
-  ContentInterface,
-  ContentMetaData,
-  ContentSeo,
-} from '../../../interfaces/content';
-import { firstValueFrom } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
-import {
   ApiResponse,
   PaginatedApiResponse,
   PaginatedResults,
-} from '../../../interfaces/misc';
-import {
+  ContentInterface,
+  ContentMetaData,
+  ContentSeo,
   OverlordContentType,
   OverlordField,
-} from '../../../interfaces/overlord.config';
+} from '@overlord/types';
+import { firstValueFrom } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
+
 import { ConfigService } from './config.service';
 
 @Injectable({

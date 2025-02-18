@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { filter, firstValueFrom, map, Observable, of } from 'rxjs';
-import { ApiResponse } from '../../../interfaces/misc';
-import { TaxonomyInterface } from '../../../interfaces/taxonomy';
+import { firstValueFrom } from 'rxjs';
+import { ApiResponse, TaxonomyInterface } from '@overlord/types';
 
 @Injectable({
   providedIn: 'root',

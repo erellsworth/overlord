@@ -7,16 +7,14 @@ import {
 import { HttpClient } from '@angular/common/http';
 import {
   ApiResponse,
-  GenericResult,
   PaginatedApiResponse,
-} from '../../../interfaces/misc';
-import {
   Image,
   MediaCreationResult,
-  MediaDeletionResult,
   MediaInterface,
   UploadRequest,
-} from '../../../interfaces/media';
+  GenericResult,
+} from '@overlord/types';
+
 import { BehaviorSubject, Observable, filter, firstValueFrom } from 'rxjs';
 import { ImageEditEvent } from '../dashboard/media-library/image-editor/image-editor.component';
 import { NavigationEnd, Router } from '@angular/router';
@@ -25,6 +23,10 @@ interface uploadStatus {
   isUploading: boolean;
   isUploaded: boolean;
   error?: string;
+}
+
+interface MediaDeletionResult extends GenericResult {
+  media?: MediaInterface;
 }
 
 export interface UploadingStatus {

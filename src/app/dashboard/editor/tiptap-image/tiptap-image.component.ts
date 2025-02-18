@@ -12,7 +12,7 @@ import {
   faRemove,
   faRightLeft,
 } from '@fortawesome/free-solid-svg-icons';
-import { Image } from '../../../../../interfaces/media';
+import { Image } from '@overlord/types';
 import { MediaService } from '../../../services/media.service';
 import { Subscription } from 'rxjs';
 import { SelectedImageConfig } from '../../media-library/media-library.component';

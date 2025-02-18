@@ -1,6 +1,5 @@
-import { Component, computed, input } from '@angular/core';
-import { ContentInterface } from '@interfaces/content';
-import { AtproResult } from '@interfaces/misc';
+import { Component, input } from '@angular/core';
+import { AtproResult } from '@overlord/types';
 
 @Component({
   selector: 'app-share-list',

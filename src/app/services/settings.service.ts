@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SettingInterface } from '../../../interfaces/setting';
+import { ApiResponse, SettingInterface } from '@overlord/types';
 import { firstValueFrom } from 'rxjs';
-import { ApiResponse } from '../../../interfaces/misc';
 
 @Injectable({
   providedIn: 'root',

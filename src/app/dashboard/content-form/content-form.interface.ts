@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, UntypedFormControl } from '@angular/forms';
 import { Content } from '@tiptap/core';
-import { ContentBase, ContentStatus } from '../../../../interfaces/content';
+import { ContentStatus } from '@overlord/types';
 
 export interface ContentForm {
   id?: FormControl<number | undefined>;

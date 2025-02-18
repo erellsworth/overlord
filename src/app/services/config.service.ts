@@ -1,8 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { OverlordConfig } from '../../../interfaces/overlord.config';
+import { ApiResponse, OverlordConfig } from '@overlord/types';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { ApiResponse } from '../../../interfaces/misc';
 import { default as configFile } from '../../../package.json';
 
 @Injectable({
