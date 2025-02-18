@@ -1,3 +1,6 @@
+@if (contentType() === "all") {
+  <h2 class="px-1">Recently Edited Content:</h2>
+}
 <ul>
   @if (isLoading) {
     <li>
@@ -14,7 +17,11 @@
       <a
         class="flex-grow-1 p-button p-button-link block text-left no-underline px-0"
         routerLink="/edit/{{ content.slug }}"
-        >{{ content.title }} ({{ content.status }})</a
+        >{{ content.title }}
+        @if (contentType() === "all") {
+          - {{ content.type }}
+        }
+        ({{ content.status }})</a
       >
       <div class="my-2 flex gap-1">
         <p-button
@@ -59,7 +66,7 @@
   }
 </ul>
 
-<a class="createButton" routerLink="/create/{{ contentType() }}">
+<a class="createButton" [routerLink]="createButtonRouterLink">
   <fa-icon [icon]="icons.create" />
 </a>
 

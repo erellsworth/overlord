@@ -84,6 +84,11 @@ export class ContentListComponent implements OnInit, OnDestroy {
     );
   }
 
+  public get createButtonRouterLink() {
+    const type = this.contentType() === 'all' ? 'post' : this.contentType();
+    return ['/', 'create', type];
+  }
+
   public get total() {
     return (
       this.contentService.contentLists()[this.contentType() as string]?.total ||

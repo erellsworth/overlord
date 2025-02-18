@@ -6,7 +6,7 @@ import { FormService } from './dashboard/form.service';
 export const contentResolver: ResolveFn<boolean> = async (route, state) => {
   const contentService = inject(ContentService);
   const formService = inject(FormService);
-  const contentType = route.paramMap.get('contentType') || 'all';
+  const contentType = route.paramMap.get('contentType') || 'post';
   const slug = route.paramMap.get('slug') || undefined;
   await contentService.fetchContent(contentType, slug);
   formService.prepareForm();
