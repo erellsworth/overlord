@@ -24,7 +24,7 @@
       "@fields/*": ["./src/app/dashboard/content-form/fields/*"],
       "@interfaces/*": ["./interfaces/*"],
       "@services/*": ["./src/app/services/*"],
-      "@apiUtils/*": ["./api/utils/*"]
+      "@app/*": ["./src/app/*"]
     }
   },
   "angularCompilerOptions": {

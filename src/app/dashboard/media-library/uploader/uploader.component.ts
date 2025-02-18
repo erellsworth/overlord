@@ -9,7 +9,7 @@ import {
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
-import { slugger } from '../../../../../api/utils/misc';
+import { slugger } from '@app/utils';
 import { MediaService } from '../../../services/media.service';
 import { DividerModule } from 'primeng/divider';
 

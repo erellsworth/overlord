@@ -19,7 +19,7 @@ import { TaxonomyInterface } from '@interfaces/taxonomy';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { slugger } from '@apiUtils/misc';
+import { slugger } from '@app/utils';
 import { FormService } from '../../../form.service';
 
 @Component({
