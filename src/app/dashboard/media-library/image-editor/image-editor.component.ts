@@ -14,7 +14,7 @@ import { Textarea } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Crop, CropEvent, Image } from '../../../../../interfaces/media';
+import { Crop, CropEvent, Image } from '@overlord/types';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { CropperComponent } from './cropper/cropper.component';

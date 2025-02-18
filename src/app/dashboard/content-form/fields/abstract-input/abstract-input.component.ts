@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { OverlordField } from '@interfaces/overlord.config';
+import { OverlordField } from '@overlord/types';
 import { FormService } from '../../../form.service';
 
 @Component({

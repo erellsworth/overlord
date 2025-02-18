@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FileBeforeUploadEvent, FileUploadEvent, FileUploadHandlerEvent, FileUploadModule } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { MediaService } from '../../services/media.service';
-import { Image, UploadRequest } from '../../../../interfaces/media';
+import { Image, UploadRequest } from '@overlord/types';
 import { CommonModule } from '@angular/common';
 import { ImageCardComponent } from './image-card/image-card.component';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
@@ -14,31 +14,28 @@ import { UploaderComponent } from './uploader/uploader.component';
 import { ImageEditEvent } from './image-editor/image-editor.component';
 
 export interface SelectedImageConfig {
-  image?: Image,
-  position?: number,
-  source: 'editor' | 'selector' | 'imageCard',
+  image?: Image;
+  position?: number;
+  source: 'editor' | 'selector' | 'imageCard';
   caption?: string;
 }
 
 @Component({
-    selector: 'app-media-library',
-    imports: [
-        CommonModule,
-        FileUploadModule,
-        FontAwesomeModule,
-        ImageCardComponent,
-        PaginatorModule,
-        ToastModule,
-        UploaderComponent
-    ],
-    templateUrl: './media-library.component.html',
-    styleUrl: './media-library.component.scss',
-    providers: [
-        MessageService
-    ]
+  selector: 'app-media-library',
+  imports: [
+    CommonModule,
+    FileUploadModule,
+    FontAwesomeModule,
+    ImageCardComponent,
+    PaginatorModule,
+    ToastModule,
+    UploaderComponent,
+  ],
+  templateUrl: './media-library.component.html',
+  styleUrl: './media-library.component.scss',
+  providers: [MessageService],
 })
 export class MediaLibraryComponent implements OnInit {
-
   public uploadIcon = faUpload;
 
   private currentPage = 1;
@@ -46,8 +43,8 @@ export class MediaLibraryComponent implements OnInit {
   constructor(
     private config: DynamicDialogConfig<SelectedImageConfig>,
     private media: MediaService,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+  ) {}
 
   ngOnInit(): void {
     if (!this.media.hasInitiated) {
@@ -75,13 +72,13 @@ export class MediaLibraryComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'File deleted',
-          detail: `Image removed from library and deleted from storage`
+          detail: `Image removed from library and deleted from storage`,
         });
       } else {
         this.messageService.add({
           severity: 'error',
           summary: 'Error deleting image',
-          detail: result.error?.message
+          detail: result.error?.message,
         });
       }
     }
@@ -95,39 +92,39 @@ export class MediaLibraryComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: 'File update',
-        detail: `${image.data.filename} updated`
+        detail: `${image.data.filename} updated`,
       });
     } else {
       this.messageService.add({
         severity: 'error',
         summary: 'Error editing image',
-        detail: result.error?.message
+        detail: result.error?.message,
       });
     }
   }
 
   public getCaption(id?: number): string {
-    if (!id) { return ''; }
+    if (!id) {
+      return '';
+    }
     return this.media.imageCaptions[id] || '';
   }
 
   public async handleUpload(request: UploadRequest): Promise<void> {
-
     const result = await this.media.upload(request);
     if (result.success && result.data?.image) {
-
       this.media.loadMedia(this.currentPage);
 
       this.messageService.add({
         severity: 'success',
         summary: 'Uploaded!',
-        detail: `${result.data?.image.data.filename} added to media library`
+        detail: `${result.data?.image.data.filename} added to media library`,
       });
     } else {
       this.messageService.add({
         severity: 'error',
         summary: 'Uploaded failed',
-        detail: result.error?.message
+        detail: result.error?.message,
       });
     }
   }
@@ -139,8 +136,10 @@ export class MediaLibraryComponent implements OnInit {
     }
   }
 
-  public selectImage(event: { image: Image, caption?: string }): void {
-    if (!this.config.data) { return; }
+  public selectImage(event: { image: Image; caption?: string }): void {
+    if (!this.config.data) {
+      return;
+    }
     const { caption, image } = event;
     const { position, source } = this.config.data;
     this.media.selectedImage.next({ caption, image, position, source });

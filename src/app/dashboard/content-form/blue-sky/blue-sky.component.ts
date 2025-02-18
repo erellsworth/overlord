@@ -1,6 +1,5 @@
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AtproResult } from '@interfaces/misc';
 import { ATProService } from '@services/atpro.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -9,7 +8,6 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { FormService } from '../../form.service';
-import { ContentInterface } from '@interfaces/content';
 
 @Component({
   selector: 'app-blue-sky',

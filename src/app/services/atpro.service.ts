@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ApiResponse, AtproResult } from '@interfaces/misc';
+import { ApiResponse, AtproResult } from '@overlord/types';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({

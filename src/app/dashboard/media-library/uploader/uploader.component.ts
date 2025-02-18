@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
-import { Crop, Image, UploadRequest } from '../../../../../interfaces/media';
+import { Crop, Image, UploadRequest } from '@overlord/types';
 import {
   ImageEditEvent,
   ImageEditorComponent,

@@ -15,7 +15,7 @@ import { ChipModule } from 'primeng/chip';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TaxonomyService } from '@services/taxonomy.service';
-import { TaxonomyInterface } from '@interfaces/taxonomy';
+import { TaxonomyInterface } from '@overlord/types';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';

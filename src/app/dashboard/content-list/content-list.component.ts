@@ -15,7 +15,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
-import { ContentInterface } from '../../../../interfaces/content';
+import { ContentInterface } from '@overlord/types';
 import { TooltipModule } from 'primeng/tooltip';
 import { Subscription } from 'rxjs';
 

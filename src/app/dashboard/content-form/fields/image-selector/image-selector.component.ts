@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MediaService } from '@services/media.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ImageModule } from 'primeng/image';
-import { Image } from '@interfaces/media';
+import { Image } from '@overlord/types';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';

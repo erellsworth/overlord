@@ -1,26 +1,14 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import {
-  CropperPosition,
-  ImageCroppedEvent,
-  ImageCropperComponent,
-} from 'ngx-image-cropper';
-import { CropEvent, Image } from '../../../../../../interfaces/media';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { CropEvent, Image } from '@overlord/types';
 import { CardModule } from 'primeng/card';
 import { ImageModule } from 'primeng/image';
-import { delay } from 'rxjs';
 
 @Component({
-    selector: 'app-cropper',
-    imports: [CardModule, ImageCropperComponent, ImageModule],
-    templateUrl: './cropper.component.html',
-    styleUrl: './cropper.component.scss'
+  selector: 'app-cropper',
+  imports: [CardModule, ImageCropperComponent, ImageModule],
+  templateUrl: './cropper.component.html',
+  styleUrl: './cropper.component.scss',
 })
 export class CropperComponent {
   @Input({ required: true }) image!: Image;
