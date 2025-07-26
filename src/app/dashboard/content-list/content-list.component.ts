@@ -1,6 +1,11 @@
 import { Component, input, OnDestroy, OnInit } from '@angular/core';
 import { ContentService } from '../../services/content.service';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faEye,
@@ -17,7 +22,15 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { ContentInterface } from '@overlord/types';
 import { TooltipModule } from 'primeng/tooltip';
-import { Subscription } from 'rxjs';
+import {
+  combineLatest,
+  combineLatestWith,
+  filter,
+  last,
+  startWith,
+  Subscription,
+  takeLast,
+} from 'rxjs';
 
 @Component({
   selector: 'app-content-list',
@@ -50,32 +63,70 @@ export class ContentListComponent implements OnInit, OnDestroy {
   public page = 1;
   public first = 0;
 
-  private _subs: Subscription[] = [];
+  private _lastResolved: string = '';
+  private _subs = new Subscription();
 
   constructor(
     private confirmationService: ConfirmationService,
     private contentService: ContentService,
     private messageService: MessageService,
+    private router: Router,
     private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this._subs.push(
-      this.route.data.subscribe(async (data) => {
-        const params = data.queryParams || {};
-        this.isLoading = true;
-        await this.contentService.fetchContentsByType(
-          this.contentType() as string,
-          this.page,
-          params,
-        );
-        this.isLoading = false;
-      }),
-    );
+    this.route.data
+      .pipe(
+        combineLatestWith(
+          this.router.events.pipe(
+            filter((event) => event instanceof NavigationEnd),
+            startWith(this.router),
+          ),
+        ),
+      )
+      .subscribe(async ([data, event]) => {
+        if (this._lastResolved !== data.contentResolver) {
+          const params = data.queryParams || {};
+          const type = data.contentResolver || 'all';
+          this.isLoading = true;
+          await this.contentService.fetchContentsByType(
+            type,
+            this.page,
+            params,
+          );
+          this.isLoading = false;
+          this._lastResolved = data.contentResolver;
+        }
+      });
+
+    // this._subs.add(
+    //   combineLatest([
+    //     this.route.data,
+    //     this.router.events.pipe(
+    //       filter((event) => event instanceof NavigationEnd),
+    //       startWith(this.router),
+    //     ),
+    //   ]).subscribe(async ([data, event]) => {
+    //     console.log('data', data, this._lastResolved);
+    //     if (this._lastResolved !== data.contentResolver) {
+    //       console.log('load...', this.contentType());
+    //       const params = data.queryParams || {};
+    //       this.isLoading = true;
+    //       await this.contentService.fetchContentsByType(
+    //         this.contentType() as string,
+    //         this.page,
+    //         params,
+    //       );
+    //       console.log('contents', this.contents);
+    //       this.isLoading = false;
+    //       this._lastResolved = data.contentResolver;
+    //     }
+    //   }),
+    // );
   }
 
   ngOnDestroy(): void {
-    this._subs.forEach((sub) => sub.unsubscribe());
+    this._subs.unsubscribe();
   }
 
   public get contents() {
