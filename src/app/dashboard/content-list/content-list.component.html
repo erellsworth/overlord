@@ -73,7 +73,7 @@
 @if (total > 10) {
   <p-paginator
     (onPageChange)="pageChanged($event)"
-    [first]="0"
+    [first]="first"
     [rows]="10"
     [totalRecords]="total"
   />

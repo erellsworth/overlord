@@ -48,6 +48,7 @@ export class ContentListComponent implements OnInit, OnDestroy {
   };
   public isLoading = false;
   public page = 1;
+  public first = 0;
 
   private _subs: Subscription[] = [];
 
@@ -111,10 +112,9 @@ export class ContentListComponent implements OnInit, OnDestroy {
   }
 
   public pageChanged(state: PaginatorState): void {
-    if (state.page) {
-      this.page = state.page;
-      this.refreshContents();
-    }
+    this.first = state.first ?? 0;
+    this.page = state.page ? state.page + 1 : 1;
+    this.refreshContents();
   }
 
   public async setStatus(

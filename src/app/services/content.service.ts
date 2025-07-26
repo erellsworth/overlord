@@ -91,7 +91,7 @@ export class ContentService {
     try {
       const result = await firstValueFrom(
         this.http.get<PaginatedApiResponse<ContentInterface>>(
-          `api/content/type/${type}`,
+          `api/content/type/${type}/${page}`,
           { params },
         ),
       );
