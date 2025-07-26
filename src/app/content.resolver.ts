@@ -3,12 +3,15 @@ import { ResolveFn } from '@angular/router';
 import { ContentService } from './services/content.service';
 import { FormService } from './dashboard/form.service';
 
-export const contentResolver: ResolveFn<boolean> = async (route, state) => {
+export const contentResolver: ResolveFn<string | null> = async (
+  route,
+  state,
+) => {
   const contentService = inject(ContentService);
   const formService = inject(FormService);
   const contentType = route.paramMap.get('contentType') || 'post';
   const slug = route.paramMap.get('slug') || undefined;
   await contentService.fetchContent(contentType, slug);
   formService.prepareForm();
-  return true;
+  return route.paramMap.get('contentType');
 };
