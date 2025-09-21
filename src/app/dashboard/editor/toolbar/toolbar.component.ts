@@ -10,7 +10,7 @@ import { MediaService } from '../../../services/media.service';
 import {
   DialogService,
   DynamicDialogConfig,
-  DynamicDialog,
+  DynamicDialogModule,
 } from 'primeng/dynamicdialog';
 import { VideoInputComponent } from '../video-input/video-input.component';
 import { Subscription } from 'rxjs';
@@ -23,7 +23,7 @@ import { InputTextModule } from 'primeng/inputtext';
   selector: 'app-toolbar',
   imports: [
     ButtonModule,
-    DynamicDialog,
+    DynamicDialogModule,
     FontAwesomeModule,
     FormsModule,
     InputTextModule,

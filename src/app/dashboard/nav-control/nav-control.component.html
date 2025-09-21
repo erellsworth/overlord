@@ -1,5 +1,5 @@
-<div class="grid mt-2">
-  <div class="col-3">
+<div class="grid grid-cols-12 gap-4 mt-2">
+  <div class="col-span-3">
     <h3 class="mt-0">Menus:</h3>
     <p-listbox
       [options]="menus"
@@ -8,7 +8,7 @@
       emptyMessage="Add menu to start"
     >
       <ng-template let-menu #item>
-        <div class="flex justify-content-between w-full">
+        <div class="flex justify-between w-full">
           <span>{{ menu.label }}</span>
           <span (click)="deleteMenu($event, menu)">X</span>
         </div>
@@ -39,18 +39,18 @@
     <button pButton class="p-button-success" (click)="log()">Log</button>
   </div>
   @if (selectedMenuObj) {
-    <div class="col-9 border-left-1">
+    <div class="col-span-9 border-l">
       <div class="flex gap-2">
         <div class="dragzone">
           <h3>Available Nav Items</h3>
-          <ul class="list-none flex flex-column gap-2 p-2 m-0 border-1">
+          <ul class="list-none flex flex-col gap-2 p-2 m-0 border">
             @for (item of selectableItems; track $index) {
               <li>
                 <div
                   pDraggable
                   (onDragStart)="dragStart(item)"
                   (onDragEnd)="dragEnd()"
-                  class="p-2 border-round bg-primary cursor-move flex gap-2 justify-content-between"
+                  class="p-2 rounded-border bg-primary text-primary-contrast cursor-move flex gap-2 justify-between"
                 >
                   <span>{{ item.label }}</span>
 
@@ -70,7 +70,7 @@
                   <ul>
                     @for (child of item.children; track $index) {
                       <li
-                        class="p-2 border-round bg-primary cursor-move"
+                        class="p-2 rounded-border bg-primary text-primary-contrast cursor-move"
                         pDraggable
                         (onDragStart)="dragStart(child)"
                         (onDragEnd)="dragEnd()"
@@ -84,13 +84,13 @@
             }
           </ul>
         </div>
-        <div class="dropzone border-1" pDroppable (onDrop)="itemDropped()">
+        <div class="dropzone border" pDroppable (onDrop)="itemDropped()">
           <div class="flex">
-            <div class="w-6 text-center py-1">Label</div>
-            <div class="w-6 py-1 pl-4">Route</div>
+            <div class="w-6/12 text-center py-1">Label</div>
+            <div class="w-6/12 py-1 pl-6">Route</div>
           </div>
           <p-tree
-            class="w-full md:w-30rem"
+            class="w-full md:w-[30rem]"
             [value]="selectedMenuObj.children"
             [draggableNodes]="true"
             [droppableNodes]="true"
@@ -100,7 +100,7 @@
           >
             <ng-template let-node pTemplate="default">
               <div
-                class="flex justify-content-between w-full align-items-center"
+                class="flex justify-between w-full items-center"
               >
                 <p-inplace closable="closable">
                   <ng-template #display>
@@ -109,7 +109,7 @@
                   <ng-template #content>
                     <input
                       type="text"
-                      class="w-9"
+                      class="w-9/12"
                       pInputText
                       [(ngModel)]="node.label"
                     />
@@ -127,7 +127,7 @@
                     <ng-template #content>
                       <input
                         type="text"
-                        class="w-9"
+                        class="w-9/12"
                         pInputText
                         [(ngModel)]="node.slug"
                       />
@@ -179,4 +179,4 @@
   }
 </div>
 
-<p-confirmPopup />
+<p-confirmpopup />

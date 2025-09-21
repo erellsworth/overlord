@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
 import { InplaceModule } from 'primeng/inplace';
-import { Textarea } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -35,7 +35,7 @@ export interface ImageEditEvent {
     FontAwesomeModule,
     ImageModule,
     InplaceModule,
-    Textarea,
+    TextareaModule,
     InputTextModule,
     PanelModule,
     ReactiveFormsModule,

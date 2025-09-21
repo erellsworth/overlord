@@ -4,13 +4,13 @@ ul {
   width: 90vw;
   margin: 0 auto;
   li {
-    border-bottom: 1px solid var(--primary-color);
+    border-bottom: 1px solid var(--p-primary-color);
   }
 }
 
 .createButton {
   font-size: 3rem;
-  color: var(--primary-color);
+  color: var(--p-primary-color);
   position: fixed;
   right: 5vw;
   bottom: 1vw;

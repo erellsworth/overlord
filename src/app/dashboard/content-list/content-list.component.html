@@ -13,9 +13,9 @@
   }
 
   @for (content of contents; track $index) {
-    <li class="flex justify-content-between align-items-center my-1">
+    <li class="flex justify-between items-center my-1">
       <a
-        class="flex-grow-1 p-button p-button-link block text-left no-underline px-0"
+        class="grow p-button p-button-link block text-left no-underline px-0"
         routerLink="/edit/{{ content.slug }}"
         >{{ content.title }}
         @if (contentType() === "all") {
@@ -81,4 +81,4 @@
 
 <p-toast />
 
-<p-confirmPopup />
+<p-confirmpopup />

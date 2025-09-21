@@ -16,7 +16,7 @@ import { TaxonomyService } from '../../services/taxonomy.service';
 import { ConfirmationService, TreeDragDropService } from 'primeng/api';
 import { DragDropModule } from 'primeng/dragdrop';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { InplaceModule } from 'primeng/inplace';
 import { InputTextModule } from 'primeng/inputtext';
@@ -33,7 +33,7 @@ import { InputTextModule } from 'primeng/inputtext';
     InplaceModule,
     InputGroupAddonModule,
     InputGroupModule,
-    InputSwitchModule,
+    ToggleSwitchModule,
     InputTextModule,
     ListboxModule,
     TooltipModule,

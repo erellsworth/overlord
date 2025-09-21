@@ -91,7 +91,7 @@ export class UploaderComponent implements OnInit {
   }
 
   public get imageWidthClass(): string {
-    return this.status.status === 'Uploaded' ? 'w-1' : 'w-4';
+    return this.status.status === 'Uploaded' ? 'w-1/12' : 'w-4/12';
   }
 
   public get status(): {
