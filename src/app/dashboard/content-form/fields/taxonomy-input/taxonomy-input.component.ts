@@ -82,6 +82,9 @@ export class TaxonomyInputComponent implements OnInit {
       Boolean(this.currentFilter) &&
       !this.filteredTaxonomies
         .map((t) => t.name.toLowerCase())
+        .includes(this.currentFilter.toLowerCase()) &&
+      !this.currentTaxonomies
+        .map((t) => t.name.toLowerCase())
         .includes(this.currentFilter.toLowerCase())
     );
   }
