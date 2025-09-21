@@ -1,35 +1,40 @@
 <p-card>
   <h3 class="pb-2 mt-0">Tags:</h3>
-  <p-floatLabel>
-    <p-autoComplete
-      #tagSearch
-      [(ngModel)]="selectedTag"
-      inputStyleClass="w-full"
-      styleClass="w-full"
-      [suggestions]="filteredTaxonomies"
-      (completeMethod)="filterTaxonomies($event)"
-      field="name"
-      (onSelect)="taxonomySelected($event)"
-      inputId="tag-selector"
-    >
-      <ng-template #empty>
-        @if (checkCurrentFilter()) {
-          No Results Found
-        } @else {
-          <p-button title="Add new tag" (onClick)="createNewTag()">
+  <p-autoComplete
+    #tagSearch
+    [(ngModel)]="selectedTag"
+    inputStyleClass="w-full"
+    class="w-full"
+    [suggestions]="filteredTaxonomies"
+    (completeMethod)="filterTaxonomies($event)"
+    optionLabel="name"
+    (onSelect)="taxonomySelected($event)"
+    inputId="tag-selector"
+  >
+    <ng-template #footer>
+      @if (showAddNew) {
+        <div class="p-3 w-full">
+          <p-button
+            title="Add New Tag"
+            fluid
+            severity="info"
+            text
+            size="small"
+            icon="pi pi-plus"
+            styleClass="w-full text-left"
+          >
             Add new tag named: {{ currentFilter | titlecase }}
           </p-button>
-        }
-      </ng-template>
-    </p-autoComplete>
-    <label for="tag-selector">Add Tags</label>
-  </p-floatLabel>
+        </div>
+      }
+    </ng-template>
+  </p-autoComplete>
 
   <ng-template #footer>
     <div class="card flex items-center gap-2 flex-wrap">
       @for (tag of currentTaxonomies; track tag) {
         <p-chip
-          [styleClass]="getChipClass(tag.name)"
+          [class]="getChipClass(tag.name)"
           [label]="tag.name"
           [removable]="true"
           (onRemove)="taxonomyRemoved(tag)"

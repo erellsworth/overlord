@@ -77,6 +77,15 @@ export class TaxonomyInputComponent implements OnInit {
     });
   }
 
+  public get showAddNew(): boolean {
+    return (
+      Boolean(this.currentFilter) &&
+      !this.filteredTaxonomies
+        .map((t) => t.name.toLowerCase())
+        .includes(this.currentFilter.toLowerCase())
+    );
+  }
+
   private get formGroup() {
     return this.formService.form();
   }
@@ -112,7 +121,9 @@ export class TaxonomyInputComponent implements OnInit {
   }
 
   public getChipClass(name: string): string {
-    return this._newTagNames.includes(name.toLowerCase()) ? 'bg-primary text-primary-contrast' : '';
+    return this._newTagNames.includes(name.toLowerCase())
+      ? 'bg-primary text-primary-contrast'
+      : '';
   }
 
   public taxonomyRemoved(tag: TaxonomyInterface): void {

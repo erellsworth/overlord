@@ -1,9 +1,17 @@
 <p-card>
-    <app-toolbar [editor]="editor"></app-toolbar>
+  <app-toolbar [editor]="editor"></app-toolbar>
 
-    <div class="bg-blue-900">
-        <tiptap-editor [editor]="editor" [(ngModel)]="content" (ngModelChange)="handleContentChange()">
-        </tiptap-editor>
-    </div>
-    <p><small>Words: {{counts.words}} - Charcters: {{counts.characters}}</small></p>
+  <div class="bg-sky-950">
+    <tiptap-editor
+      [editor]="editor"
+      [(ngModel)]="content"
+      (ngModelChange)="handleContentChange()"
+    >
+    </tiptap-editor>
+  </div>
+  <p>
+    <small
+      >Words: {{ counts.words }} - Charcters: {{ counts.characters }}</small
+    >
+  </p>
 </p-card>
