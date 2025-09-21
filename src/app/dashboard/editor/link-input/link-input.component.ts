@@ -9,22 +9,20 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { LinkConfig, LinkForm } from './link-input.interface';
 
 @Component({
-    selector: 'app-link-input',
-    imports: [
-        ButtonModule,
-        DividerModule,
-        FloatLabelModule,
-        InputTextModule,
-        InputSwitchModule,
-        ReactiveFormsModule,
-    ],
-    templateUrl: './link-input.component.html',
-    styleUrl: './link-input.component.scss'
+  selector: 'app-link-input',
+  imports: [
+    ButtonModule,
+    DividerModule,
+    FloatLabelModule,
+    ToggleSwitchModule,
+    ReactiveFormsModule,
+  ],
+  templateUrl: './link-input.component.html',
+  styleUrl: './link-input.component.scss',
 })
 export class LinkInputComponent implements OnInit {
   public formGroup!: FormGroup<LinkForm>;

@@ -112,7 +112,7 @@ export class TaxonomyInputComponent implements OnInit {
   }
 
   public getChipClass(name: string): string {
-    return this._newTagNames.includes(name.toLowerCase()) ? 'bg-primary' : '';
+    return this._newTagNames.includes(name.toLowerCase()) ? 'bg-primary text-primary-contrast' : '';
   }
 
   public taxonomyRemoved(tag: TaxonomyInterface): void {

@@ -26,7 +26,7 @@
   </p-floatLabel>
 
   <ng-template #footer>
-    <div class="card flex align-items-center gap-2 flex-wrap">
+    <div class="card flex items-center gap-2 flex-wrap">
       @for (tag of currentTaxonomies; track tag) {
         <p-chip
           [styleClass]="getChipClass(tag.name)"

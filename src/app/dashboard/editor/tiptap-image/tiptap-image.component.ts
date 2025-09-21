@@ -94,6 +94,9 @@ export class TiptapImageComponent
 
   public remove(): void {
     const from = this.getPos()();
+    if (!from) {
+      return console.warn('error removing image');
+    }
     const to = from + this.node().nodeSize;
     this.editor().commands.deleteRange({ from, to });
   }

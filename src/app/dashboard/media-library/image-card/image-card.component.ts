@@ -23,7 +23,7 @@ import {
 } from '../image-editor/image-editor.component';
 import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { Textarea } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { ConfirmationService } from 'primeng/api';
@@ -42,7 +42,7 @@ import { ConfirmationService } from 'primeng/api';
     FormsModule,
     ImageEditorComponent,
     ImageModule,
-    Textarea,
+    TextareaModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './image-card.component.html',

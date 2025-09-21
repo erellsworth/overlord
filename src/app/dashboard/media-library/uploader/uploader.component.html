@@ -1,7 +1,7 @@
 @if(dataUrl && !done){
-<div class="flex justify-content-left gap-3">
+<div class="flex justify-content-left gap-4">
     <p-image [src]="dataUrl" [class]="imageWidthClass" imageClass="w-full" />
-    <div class="flex gap-2 flex-column flex-grow-1">
+    <div class="flex gap-2 flex-col grow">
         @if(status.status === 'Uploaded'){
         <p-button label="Done" (onClick)="done = true"></p-button>
         } @else {

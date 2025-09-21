@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { Textarea } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { Content } from '@tiptap/core';
 import { EditorComponent } from '../editor/editor.component';
@@ -53,7 +53,7 @@ import { ShareListComponent } from './blue-sky/share-list/share-list.component';
     ShareListComponent,
     StringInputComponent,
     TaxonomyInputComponent,
-    Textarea,
+    TextareaModule,
     TextInputComponent,
     TitleInputComponent,
     ToastModule,

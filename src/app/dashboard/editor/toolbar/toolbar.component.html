@@ -1,4 +1,4 @@
-<div class="flex justify-content-center pb-3 flex-wrap">
+<div class="flex justify-center pb-4 flex-wrap">
   <p-button
     [severity]="buttonSeverity('bold')"
     title="Bold"
@@ -124,22 +124,22 @@
 </div>
 
 <p-popover #colInput>
-  <div class="flex align-items-center gap-2">
-    <div class="flex flex-column">
+  <div class="flex items-center gap-2">
+    <div class="flex flex-col">
       <label for="columnInput">Columns to insert</label>
       <input
         type="text"
         id="columnInput"
         pInputText
         [(ngModel)]="columnNumber"
-        class="w-10rem mb-4"
+        class="w-40 mb-6"
       />
       <p-slider
         [(ngModel)]="columnNumber"
         [min]="1"
         [max]="5"
         [step]="1"
-        styleClass="w-10rem"
+        styleClass="w-40"
       />
     </div>
     <p-button label="Insert" (onClick)="addColumnSection()" />
