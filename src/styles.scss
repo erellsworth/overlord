@@ -8,3 +8,14 @@ body {
     font-size: 1.5em;
   }
 }
+
+@layer components {
+  .ProseMirror {
+    a {
+      color: var(--color-green-500);
+      &:hover {
+        color: var(--color-green-800);
+      }
+    }
+  }
+}
