@@ -1,0 +1,61 @@
+@if (formGroup) {
+  <div [formGroup]="formGroup">
+    <p-floatLabel>
+      <textarea
+        id="text"
+        class="w-full bg-sky-950"
+        rows="5"
+        pTextarea
+        formControlName="text"
+      >
+      </textarea>
+      <label for="text">Quote Text</label>
+    </p-floatLabel>
+
+    <p-divider class="py-1" />
+
+    <p-floatLabel>
+      <input
+        id="author"
+        type="text"
+        class="w-full"
+        pInputText
+        formControlName="author"
+      />
+      <label for="author">Author</label>
+    </p-floatLabel>
+
+    <p-divider class="py-1" />
+
+    <p-floatLabel>
+      <input
+        id="work"
+        type="text"
+        class="w-full"
+        pInputText
+        formControlName="work"
+      />
+      <label for="cssClass">Work</label>
+    </p-floatLabel>
+
+    <p-divider class="py-1" />
+
+    <p-floatLabel>
+      <input
+        id="date"
+        type="text"
+        class="w-full"
+        pInputText
+        formControlName="date"
+      />
+      <label for="rel">Date</label>
+    </p-floatLabel>
+
+    <p-divider class="py-1" />
+
+    <div class="flex gap-2">
+      <p-button label="Insert" (onClick)="insertQuote()" />
+      <p-button label="Remove" />
+    </div>
+  </div>
+}

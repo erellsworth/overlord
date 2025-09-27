@@ -18,6 +18,8 @@ import { LinkInputComponent } from '../link-input/link-input.component';
 import { LinkConfig } from '../link-input/link-input.interface';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { QuoteInputComponent } from '../quote-input/quote-input.component';
+import { QuoteConfig } from '../quote-input/quote-input.interface';
 
 @Component({
   selector: 'app-toolbar',
@@ -55,6 +57,12 @@ export class ToolbarComponent {
     return this.editor.chain().focus();
   }
 
+  private get selectedText() {
+    const { view, state } = this.editor;
+    const { from, to } = view.state.selection;
+    return state.doc.textBetween(from, to, '');
+  }
+
   public addColumnSection(): void {
     this.editor.commands.setColumns(this.columnNumber);
   }
@@ -90,6 +98,32 @@ export class ToolbarComponent {
           this.focus.extendMarkRange('link').setLink(link).run();
         } else {
           this.focus.extendMarkRange('link').unsetLink().run();
+        }
+      }),
+    );
+  }
+
+  public showQuoteInput(): void {
+    const quoteAttr: DynamicDialogConfig = {
+      header: 'Quote Editor',
+      closable: true,
+      data: {
+        text: this.selectedText,
+      },
+    };
+
+    if (this.editor.isActive('quote')) {
+      quoteAttr.data = this.editor.getAttributes('quote');
+    }
+
+    const ref = this.dialogService.open(QuoteInputComponent, quoteAttr);
+    this.subs.push(
+      ref.onClose.subscribe((quote: QuoteConfig) => {
+        console.log('quote', quote);
+        if (quote) {
+          this.editor.commands.setQuote(quote);
+        } else {
+          this.editor.commands.unsetQuote();
         }
       }),
     );

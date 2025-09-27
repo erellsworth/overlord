@@ -7,6 +7,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import ColumnExtension from './columns';
+import Quote from './Quote';
 
 type ExtensionTypes = Node | Mark | Extension;
 
@@ -19,6 +20,7 @@ const Extensions = (injector: Injector): ExtensionTypes[] => {
     FigCaption(injector),
     ImageFigure(injector),
     VideoNode(injector),
+    Quote,
   ];
 };
 
