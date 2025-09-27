@@ -8,17 +8,17 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { LinkConfig, LinkForm } from './link-input.interface';
 
 @Component({
   selector: 'app-link-input',
   imports: [
     ButtonModule,
+    InputTextModule,
     DividerModule,
     FloatLabelModule,
-    ToggleSwitchModule,
     ReactiveFormsModule,
   ],
   templateUrl: './link-input.component.html',

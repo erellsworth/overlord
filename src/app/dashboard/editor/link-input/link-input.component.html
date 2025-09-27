@@ -1,38 +1,60 @@
 @if (formGroup) {
-<div [formGroup]="formGroup">
+  <div [formGroup]="formGroup">
     <p-floatLabel>
-        <input id="URL" type="text" class="w-full" pInputText formControlName="href" />
-        <label for="URL">Link URL</label>
+      <input
+        id="URL"
+        type="text"
+        class="w-full"
+        pInputText
+        formControlName="href"
+      />
+      <label for="URL">Link URL</label>
     </p-floatLabel>
 
-    <p-divider styleClass="py-1" />
+    <p-divider class="py-1" />
 
     <p-floatLabel>
-        <input id="target" type="text" class="w-full" pInputText formControlName="target" />
-        <label for="target">Link Target</label>
+      <input
+        id="target"
+        type="text"
+        class="w-full"
+        pInputText
+        formControlName="target"
+      />
+      <label for="target">Link Target</label>
     </p-floatLabel>
 
-    <p-divider styleClass="py-1" />
+    <p-divider class="py-1" />
 
     <p-floatLabel>
-        <input id="cssClass" type="text" class="w-full" pInputText formControlName="class" />
-        <label for="cssClass">Css Class Name(s)</label>
+      <input
+        id="cssClass"
+        type="text"
+        class="w-full"
+        pInputText
+        formControlName="class"
+      />
+      <label for="cssClass">Css Class Name(s)</label>
     </p-floatLabel>
 
-    <p-divider styleClass="py-1" />
+    <p-divider class="py-1" />
 
     <p-floatLabel>
-        <input id="rel" type="text" class="w-full" pInputText formControlName="rel" />
-        <label for="rel">Link Relationship</label>
+      <input
+        id="rel"
+        type="text"
+        class="w-full"
+        pInputText
+        formControlName="rel"
+      />
+      <label for="rel">Link Relationship</label>
     </p-floatLabel>
 
-    <p-divider styleClass="py-1" />
-
+    <p-divider class="py-1" />
 
     <div class="flex gap-2">
-        <p-button label="Insert" (onClick)="insertLink()" />
-        <p-button label="Remove" />
+      <p-button label="Insert" (onClick)="insertLink()" />
+      <p-button label="Remove" />
     </div>
-
-</div>
+  </div>
 }
