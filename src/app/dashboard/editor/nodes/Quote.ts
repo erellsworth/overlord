@@ -1,5 +1,5 @@
 import Blockquote, { BlockquoteOptions } from '@tiptap/extension-blockquote';
-import { mergeAttributes } from '@tiptap/core';
+import { mergeAttributes, Node } from '@tiptap/core';
 import { QuoteConfig } from '../quote-input/quote-input.interface';
 
 interface QuoteOptions extends BlockquoteOptions {
@@ -68,6 +68,9 @@ const Quote = Blockquote.extend<QuoteOptions>({
     return [{ tag: 'div.quote' }];
   },
   renderHTML({ node, HTMLAttributes }): DOMOutputSpec {
+    console.log('render', node.attrs);
+    //node.attrs.text is a JSONContent object
+
     const output: DOMOutputSpec = [
       'div',
       { class: 'quote' },

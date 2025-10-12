@@ -108,7 +108,7 @@ export class ToolbarComponent {
       header: 'Quote Editor',
       closable: true,
       data: {
-        text: this.selectedText,
+        text: this.editor.view.state.selection.content().content.toJSON(),
       },
     };
 

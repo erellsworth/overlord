@@ -1,16 +1,8 @@
 @if (formGroup) {
   <div [formGroup]="formGroup">
-    <p-floatLabel>
-      <textarea
-        id="text"
-        class="w-full bg-sky-950"
-        rows="5"
-        pTextarea
-        formControlName="text"
-      >
-      </textarea>
-      <label for="text">Quote Text</label>
-    </p-floatLabel>
+    <div class="bg-sky-950">
+      <tiptap-editor [editor]="editor"> </tiptap-editor>
+    </div>
 
     <p-divider class="py-1" />
 

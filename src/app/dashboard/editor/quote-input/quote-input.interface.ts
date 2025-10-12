@@ -1,14 +1,14 @@
 import { FormControl } from '@angular/forms';
+import { JSONContent } from '@tiptap/core';
 
 export interface QuoteConfig {
-  text: string;
+  text: any;
   author?: string;
   work?: string;
   date?: string;
 }
 
 export interface QuoteForm {
-  text: FormControl<string>;
   author?: FormControl<string>;
   work?: FormControl<string>;
   date?: FormControl<string>;
