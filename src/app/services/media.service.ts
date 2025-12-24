@@ -119,12 +119,16 @@ export class MediaService {
     service: DialogService,
     data: SelectedImageConfig,
   ): void {
-    this.ref = service.open(MediaLibraryComponent, {
+    const ref = service.open(MediaLibraryComponent, {
       header: 'Select an Image',
       closable: true,
       focusOnShow: false,
       data,
     });
+
+    if (ref) {
+      this.ref = ref;
+    }
   }
 
   public async loadMedia(page: number): Promise<void> {

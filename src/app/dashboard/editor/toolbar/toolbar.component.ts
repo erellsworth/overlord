@@ -46,7 +46,7 @@ export class ToolbarComponent {
   );
   public icons = Icons;
 
-  private subs: Subscription[] = [];
+  private sub = new Subscription();
 
   constructor(
     private dialogService: DialogService,
@@ -92,8 +92,8 @@ export class ToolbarComponent {
     }
 
     const ref = this.dialogService.open(LinkInputComponent, linkAttr);
-    this.subs.push(
-      ref.onClose.subscribe((link: LinkConfig) => {
+    this.sub.add(
+      ref?.onClose.subscribe((link: LinkConfig) => {
         if (link) {
           this.focus.extendMarkRange('link').setLink(link).run();
         } else {
@@ -117,8 +117,8 @@ export class ToolbarComponent {
     }
 
     const ref = this.dialogService.open(QuoteInputComponent, quoteAttr);
-    this.subs.push(
-      ref.onClose.subscribe((quote: QuoteConfig) => {
+    this.sub.add(
+      ref?.onClose.subscribe((quote: QuoteConfig) => {
         console.log('quote', quote);
         if (quote) {
           this.editor.commands.setQuote(quote);
@@ -134,8 +134,8 @@ export class ToolbarComponent {
       header: 'Video URL',
       closable: true,
     });
-    this.subs.push(
-      ref.onClose.subscribe((src) => {
+    this.sub.add(
+      ref?.onClose.subscribe((src) => {
         this.editor.commands.setExternalVideo({ src });
       }),
     );
