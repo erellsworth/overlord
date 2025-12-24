@@ -5,13 +5,13 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ImageModule } from 'primeng/image';
 import { Image } from '@overlord/types';
 import { Subscription } from 'rxjs';
-import { CommonModule } from '@angular/common';
+
 import { ButtonModule } from 'primeng/button';
 import { FormService } from '../../../form.service';
 
 @Component({
   selector: 'app-image-selector',
-  imports: [ButtonModule, CommonModule, ImageModule, ReactiveFormsModule],
+  imports: [ButtonModule, ImageModule, ReactiveFormsModule],
   providers: [DialogService],
   templateUrl: './image-selector.component.html',
   styleUrl: './image-selector.component.scss',

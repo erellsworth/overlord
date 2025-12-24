@@ -14,7 +14,7 @@ import { Content } from '@tiptap/core';
 import { EditorComponent } from '../editor/editor.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { firstValueFrom, Subscription, timer } from 'rxjs';
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import { ContentService } from '../../services/content.service';
 import { TitleInputComponent } from '@fields/title-input/title-input.component';
 import { TaxonomyInputComponent } from '@fields/taxonomy-input/taxonomy-input.component';
@@ -40,7 +40,6 @@ import { ShareListComponent } from './blue-sky/share-list/share-list.component';
     BlueSkyComponent,
     CardModule,
     ConfirmPopupModule,
-    CommonModule,
     DividerModule,
     EditorComponent,
     FloatLabelModule,
@@ -57,8 +56,8 @@ import { ShareListComponent } from './blue-sky/share-list/share-list.component';
     TextInputComponent,
     TitleInputComponent,
     ToastModule,
-    TextInputComponent,
-  ],
+    TextInputComponent
+],
   templateUrl: './content-form.component.html',
   styleUrl: './content-form.component.scss',
   providers: [ConfirmationService, MessageService],

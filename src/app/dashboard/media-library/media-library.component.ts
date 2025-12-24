@@ -3,7 +3,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { MediaService } from '../../services/media.service';
 import { Image, UploadRequest } from '@overlord/types';
-import { CommonModule } from '@angular/common';
+
 import { ImageCardComponent } from './image-card/image-card.component';
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -23,14 +23,13 @@ export interface SelectedImageConfig {
 @Component({
   selector: 'app-media-library',
   imports: [
-    CommonModule,
     FileUploadModule,
     FontAwesomeModule,
     ImageCardComponent,
     PaginatorModule,
     ToastModule,
-    UploaderComponent,
-  ],
+    UploaderComponent
+],
   templateUrl: './media-library.component.html',
   styleUrl: './media-library.component.scss',
   providers: [MessageService],
