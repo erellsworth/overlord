@@ -8,14 +8,26 @@ import { default as configFile } from '../../../package.json';
   providedIn: 'root',
 })
 export class ConfigService {
-  public config = signal<OverlordConfig>({ contentTypes: [] });
+  public config = signal<OverlordConfig>({
+    contentTypes: [],
+    frontEnd: {
+      url: '',
+      contentRoute: '',
+    },
+  });
   public contentTypes = computed(() => {
     return this.config().contentTypes;
   });
+
   public version = signal<string>('');
 
   constructor(private http: HttpClient) {
     this.version.set(configFile.version);
+  }
+
+  public getPermalink(id: number) {
+    const { url, contentRoute } = this.config().frontEnd;
+    return `${url}${contentRoute}/${id}`;
   }
 
   public async fetchConfig(): Promise<void> {

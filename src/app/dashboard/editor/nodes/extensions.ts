@@ -5,7 +5,6 @@ import FigCaption from './FigCaption';
 import VideoNode from './VideoNode';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
 import ColumnExtension from './columns';
 import Quote from './Quote';
 
@@ -16,7 +15,6 @@ const Extensions = (injector: Injector): ExtensionTypes[] => {
     ColumnExtension,
     StarterKit,
     Image,
-    Link,
     FigCaption(injector),
     ImageFigure(injector),
     VideoNode(injector),

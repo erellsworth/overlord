@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ATProService } from '@services/atpro.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -7,17 +7,24 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 import { FormService } from '../../form.service';
+import { DividerModule } from 'primeng/divider';
+import { ConfigService } from '@services/config.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-blue-sky',
   imports: [
     ButtonModule,
     ConfirmDialogModule,
+    DividerModule,
     FloatLabelModule,
     FormsModule,
+    MessageModule,
     TextareaModule,
     ToastModule,
+    TooltipModule,
   ],
   templateUrl: './blue-sky.component.html',
   styleUrl: './blue-sky.component.scss',
@@ -25,12 +32,17 @@ import { FormService } from '../../form.service';
 })
 export class BlueSkyComponent {
   public id = input.required<number>();
-  public introText!: string;
-
+  public introText: string = '';
   public shared = output();
+  public characterLimit = computed(() => {
+    return 300 - this.permalink().length;
+  });
+
+  public permalink = computed(() => this.config.getPermalink(this.id()));
 
   constructor(
     private atPro: ATProService,
+    private config: ConfigService,
     private confirmationService: ConfirmationService,
     private formService: FormService,
   ) {}

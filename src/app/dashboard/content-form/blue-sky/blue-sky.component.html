@@ -1,18 +1,33 @@
 <section>
   <h3>Share to BlueSky</h3>
-  <p-floatLabel>
+  <p-floatLabel variant="in">
     <textarea
       id="intro_text"
       rows="5"
       cols="30"
       pTextarea
       [(ngModel)]="introText"
+      [invalid]="introText.length > characterLimit()"
     ></textarea>
     <label for="intro_text">Intro Text</label>
   </p-floatLabel>
 
-  <hr />
-  <p-button label="Share" [disabled]="!introText" (onClick)="confirm($event)" />
+  <p-message
+    size="small"
+    [severity]="introText.length > characterLimit() ? 'error' : 'info'"
+    pTooltip="based on permalink: {{ permalink() }}"
+    tooltipPosition="bottom"
+  >
+    {{ introText.length }} characters ({{ characterLimit() }} max)
+  </p-message>
+
+  <p-divider />
+
+  <p-button
+    label="Share"
+    [disabled]="!introText || introText.length > characterLimit()"
+    (onClick)="confirm($event)"
+  />
 </section>
 
 <p-toast />
