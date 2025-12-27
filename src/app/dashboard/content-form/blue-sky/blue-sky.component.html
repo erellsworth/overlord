@@ -1,4 +1,7 @@
 <section>
+  @if (content().metaData.atProShares) {
+    <app-share-list [shares]="content().metaData.atProShares" />
+  }
   <h3>Share to BlueSky</h3>
   <p-floatLabel variant="in">
     <textarea

@@ -31,7 +31,6 @@ import { TextInputComponent } from '@fields/text-input/text-input.component';
 import { StringInputComponent } from '@fields/string-input/string-input.component';
 import { RatingInputComponent } from '@fields/rating-input/rating-input.component';
 import { BlueSkyComponent } from './blue-sky/blue-sky.component';
-import { ShareListComponent } from './blue-sky/share-list/share-list.component';
 
 @Component({
   selector: 'app-content-form',
@@ -49,15 +48,14 @@ import { ShareListComponent } from './blue-sky/share-list/share-list.component';
     RatingInputComponent,
     ReactiveFormsModule,
     Select,
-    ShareListComponent,
     StringInputComponent,
     TaxonomyInputComponent,
     TextareaModule,
     TextInputComponent,
     TitleInputComponent,
     ToastModule,
-    TextInputComponent
-],
+    TextInputComponent,
+  ],
   templateUrl: './content-form.component.html',
   styleUrl: './content-form.component.scss',
   providers: [ConfirmationService, MessageService],

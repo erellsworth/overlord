@@ -12,6 +12,8 @@ import { FormService } from '../../form.service';
 import { DividerModule } from 'primeng/divider';
 import { ConfigService } from '@services/config.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { ContentInterface } from '@overlord/types';
+import { ShareListComponent } from './share-list/share-list.component';
 
 @Component({
   selector: 'app-blue-sky',
@@ -22,6 +24,7 @@ import { TooltipModule } from 'primeng/tooltip';
     FloatLabelModule,
     FormsModule,
     MessageModule,
+    ShareListComponent,
     TextareaModule,
     ToastModule,
     TooltipModule,
@@ -31,14 +34,15 @@ import { TooltipModule } from 'primeng/tooltip';
   providers: [ConfirmationService, MessageService],
 })
 export class BlueSkyComponent {
-  public id = input.required<number>();
+  public content = input.required<ContentInterface>();
   public introText: string = '';
   public shared = output();
   public characterLimit = computed(() => {
     return 300 - this.permalink().length;
   });
-
   public permalink = computed(() => this.config.getPermalink(this.id()));
+
+  private id = computed(() => this.content().id as number);
 
   constructor(
     private atPro: ATProService,

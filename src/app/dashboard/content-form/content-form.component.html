@@ -88,11 +88,8 @@
         }
       </div>
 
-      @if (content.metaData.atProShares) {
-        <app-share-list [shares]="content.metaData.atProShares" />
-      }
       @if (status === "published") {
-        <app-blue-sky (shared)="save()" [id]="id" />
+        <app-blue-sky (shared)="save()" [content]="content" />
       }
     </div>
   </p-card>

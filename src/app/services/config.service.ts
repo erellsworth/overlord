@@ -14,6 +14,9 @@ export class ConfigService {
       url: '',
       contentRoute: '',
     },
+    atPro: {
+      profile: '',
+    },
   });
   public contentTypes = computed(() => {
     return this.config().contentTypes;
